@@ -18,8 +18,7 @@ import lombok.Builder;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "crawling_data", uniqueConstraints = @UniqueConstraint(columnNames = { "song_id", "platform",
-        "created_at" }))
+@Table(name = "crawling_data")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
