@@ -66,4 +66,13 @@ public class RightHolderController {
         model.addAttribute("contractDate", contractDateStr);
         return "right_holder/list";
     }
+
+    @GetMapping("/register")
+    public String registerForm(HttpSession session, Model model) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+        model.addAttribute("user", user);
+        // (추후: 등록 폼 DTO 등 추가)
+        return "right_holder/register";
+    }
 }

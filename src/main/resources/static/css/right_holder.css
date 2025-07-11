@@ -127,3 +127,89 @@
     color: #fff;
     font-weight: bold;
 } 
+
+/* 권리자 등록 폼 세부 레이아웃 */
+.register-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    align-items: flex-start;
+}
+.register-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    background: #fafbfc;
+    padding: 32px 32px 24px 32px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.register-form label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.required-star {
+    color: #e74c3c;
+    font-size: 17px;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+.register-form input[type="text"],
+.register-form input[type="date"],
+.register-form input[type="password"],
+.register-form select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+.register-form input:focus,
+.register-form select:focus {
+    border: 2px solid #2d7cf2;
+}
+.register-btn {
+    margin-top: 10px;
+}
+.register-guide {
+    min-width: 220px;
+    margin-top: 8px;
+}
+.guide-box {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 15px;
+    color: #222;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.guide-box ul {
+    margin: 10px 0 0 0;
+    padding-left: 18px;
+}
+.guide-box li {
+    margin-bottom: 4px;
+    list-style: disc;
+} 
+
+/* 권리자 등록 폼 2열 그리드 */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 32px;
+    margin-bottom: 10px;
+}
+@media (max-width: 700px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+} 

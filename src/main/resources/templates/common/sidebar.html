@@ -6,8 +6,9 @@
 <body>
 <div th:fragment="sidebar">
     <aside class="sidebar">
-        <div class="sidebar-title">권리자 등록</div>
-        <div class="sidebar-menu disabled">음원 등록</div>
+        <div class="sidebar-title">UNEARTH 관리</div>
+        <a th:href="@{/right-holder/list}" th:classappend="${activeMenu == 'rightHolderList'} ? ' active'" class="sidebar-menu">권리자 목록</a>
+        <a th:href="@{/right-holder/register}" th:classappend="${activeMenu == 'rightHolderRegister'} ? ' active'" class="sidebar-menu">권리자 등록</a>
     </aside>
 </div>
 </body>

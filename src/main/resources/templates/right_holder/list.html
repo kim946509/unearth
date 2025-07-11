@@ -9,7 +9,7 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:replace="~{common/sidebar :: sidebar}"></div>
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
     <section class="content">
         <form class="search-form" method="get" th:action="@{/right-holder/list}">
             <div class="search-row">

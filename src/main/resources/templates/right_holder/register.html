@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 권리자 등록</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/right_holder.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderRegister')}"></div>
+    <section class="content">
+        <h2>권리자 등록</h2>
+        <div class="register-layout">
+            <form class="register-form" method="post" th:action="@{/right-holder/register}">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>계약 시작일 <span class="required-star">*</span></label>
+                        <input type="date" name="contractStart" required />
+                    </div>
+                    <div class="form-row">
+                        <label>계약 종료일 <span class="required-star">*</span></label>
+                        <input type="date" name="contractEnd" required />
+                    </div>
+                    <div class="form-row">
+                        <label>사업자 번호</label>
+                        <input type="text" name="businessNumber" maxlength="20" placeholder="숫자만 입력" />
+                    </div>
+                    <div class="form-row">
+                        <label>사업자 타입 <span class="required-star">*</span></label>
+                        <select name="holderType" required>
+                            <option value="PERSONAL">개인</option>
+                            <option value="BUSINESS">사업자</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>사업자 이름 <span class="required-star">*</span></label>
+                        <input type="text" name="holderName" required />
+                    </div>
+                    <div class="form-row">
+                        <label>로그인 아이디(username) <span class="required-star">*</span></label>
+                        <input type="text" name="username" required />
+                    </div>
+                    <div class="form-row">
+                        <label>로그인 비밀번호(password) <span class="required-star">*</span></label>
+                        <input type="password" name="password" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <button type="submit" class="register-btn">권리자 등록</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+</body>
+</html> 
