@@ -17,8 +17,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import jakarta.servlet.http.HttpSession;
+import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDate;
+import com.rhoonart.unearth.common.exception.BaseException;
 
 @Controller
 @RequestMapping("/right-holder")
@@ -67,12 +73,14 @@ public class RightHolderController {
         return "right_holder/list";
     }
 
-    @GetMapping("/register")
-    public String registerForm(HttpSession session, Model model) {
+    @PostMapping("/register")
+    public String registerSubmit(@Valid @ModelAttribute RightHolderRegisterRequestDto dto,
+            HttpSession session,
+            Model model) {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
         UserDto user = SessionUserUtil.requireAdminRole(session);
-        model.addAttribute("user", user);
-        // (추후: 등록 폼 DTO 등 추가)
-        return "right_holder/register";
+        rightHolderService.register(dto);
+        // 등록 성공 시 목록으로 이동
+        return "redirect:/right-holder/list";
     }
 }

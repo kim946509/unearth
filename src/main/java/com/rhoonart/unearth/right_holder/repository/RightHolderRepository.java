@@ -31,4 +31,6 @@ public interface RightHolderRepository
             @Param("holderName") String holderName,
             @Param("contractDate") LocalDate contractDate,
             Pageable pageable);
+
+    boolean existsByHolderName(String holderName);
 }

@@ -40,8 +40,9 @@
                 <div class="search-group search-btn-group">
                     <button type="submit" class="search-btn">검색</button>
                 </div>
+                <!-- 기존 '권리자 등록하기' 버튼을 모달 오픈 버튼으로 변경 -->
                 <div class="search-group register-btn-group">
-                    <a th:href="@{/right-holder/register}" class="register-btn">권리자 등록하기</a>
+                    <button type="button" class="register-btn" id="openRegisterModalBtn">권리자 등록하기</button>
                 </div>
             </div>
         </form>
@@ -50,6 +51,43 @@
             <script th:inline="javascript">
                 alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
             </script>
+        </div>
+        <!-- 권리자 등록 모달 -->
+        <div id="registerModal" class="modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:1000; align-items:center; justify-content:center;">
+          <div class="modal-content" style="background:#fff; border-radius:12px; padding:32px 32px 24px 32px; min-width:340px; max-width:420px; margin:auto; position:relative; box-shadow:0 2px 16px rgba(0,0,0,0.12);">
+            <button type="button" id="closeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+            <h3 style="margin-bottom:18px;">권리자 등록</h3>
+            <form id="registerForm" method="post" th:action="@{/right-holder/register}">
+              <div class="form-row">
+                <label>계약 시작일 <span class="required-star">*</span></label>
+                <input type="date" name="contractStart" required />
+              </div>
+              <div class="form-row">
+                <label>계약 종료일 <span class="required-star">*</span></label>
+                <input type="date" name="contractEnd" required />
+              </div>
+              <div class="form-row">
+                <label>사업자 번호 <span class="required-star">*</span></label>
+                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" />
+              </div>
+              <div class="form-row">
+                <label>사업자 타입 <span class="required-star">*</span></label>
+                <select name="holderType" required>
+                  <option value="개인">개인</option>
+                  <option value="사업자">사업자</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>권리자명 <span class="required-star">*</span></label>
+                <input type="text" name="holderName" required />
+              </div>
+              <input type="hidden" name="username" />
+              <input type="hidden" name="password" value="1234" />
+              <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="register-btn" style="width:100%;">등록</button>
+              </div>
+            </form>
+          </div>
         </div>
         <table class="holder-table">
             <thead>
@@ -84,5 +122,49 @@
         </div>
     </section>
 </div>
+<script>
+// 모달 열기/닫기
+const openBtn = document.getElementById('openRegisterModalBtn');
+const modal = document.getElementById('registerModal');
+const closeBtn = document.getElementById('closeModalBtn');
+openBtn && openBtn.addEventListener('click', () => { modal.classList.add('show'); });
+closeBtn && closeBtn.addEventListener('click', () => { modal.classList.remove('show'); });
+window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+// 폼 유효성 및 등록 전 확인
+const form = document.getElementById('registerForm');
+if (form) {
+  form.onsubmit = function(e) {
+    // 필수값 체크
+    const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
+    for (const name of required) {
+      const el = form.elements[name];
+      if (!el || !el.value || el.value.trim() === '') {
+        alert(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+        el && el.focus();
+        e.preventDefault();
+        return false;
+      }
+    }
+    // 날짜 논리 체크
+    const start = form.elements['contractStart'].value;
+    const end = form.elements['contractEnd'].value;
+    if (start && end && start > end) {
+      alert('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
+      form.elements['contractStart'].focus();
+      e.preventDefault();
+      return false;
+    }
+    // username=holderName, password=1234 자동 설정
+    form.elements['username'].value = form.elements['holderName'].value;
+    form.elements['password'].value = '1234';
+    // 등록 확인
+    if (!confirm('등록하시겠습니까?')) {
+      e.preventDefault();
+      return false;
+    }
+    // 등록 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
+  };
+}
+</script>
 </body>
 </html> 

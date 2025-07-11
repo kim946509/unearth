@@ -213,3 +213,94 @@
         grid-template-columns: 1fr;
     }
 } 
+
+/* 권리자 등록 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.25);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.modal.show {
+    display: flex;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 32px 28px 32px;
+    min-width: 340px;
+    max-width: 420px;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.modal-content h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+#closeModalBtn {
+    position: absolute;
+    right: 18px; top: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #222;
+    transition: color 0.15s;
+}
+#closeModalBtn:hover {
+    color: #e74c3c;
+}
+#registerForm .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+#registerForm label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+#registerForm input[type="text"],
+#registerForm input[type="date"],
+#registerForm select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+#registerForm input:focus,
+#registerForm select:focus {
+    border: 2px solid #2d7cf2;
+}
+#registerForm .register-btn {
+    width: 100%;
+    padding: 14px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+@media (max-width: 600px) {
+    .modal-content {
+        min-width: 0;
+        width: 95vw;
+        padding: 18px 6vw 18px 6vw;
+    }
+} 
