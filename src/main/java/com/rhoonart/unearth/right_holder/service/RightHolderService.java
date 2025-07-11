@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,10 @@ public class RightHolderService {
                 rh.getContractStart(),
                 rh.getContractEnd(),
                 songInfoRepository.countByRightHolder(rh)));
+    }
+
+    public List<String> findAllForDropdown() {
+        return rightHolderRepository.findAllHolderNames();
     }
 
     @Transactional

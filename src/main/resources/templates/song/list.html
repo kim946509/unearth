@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 음원 등록</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/song.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='songRegister')}"></div>
+    <section class="content">
+        <h2>음원 등록</h2>
+        <form id="songRegisterForm" class="register-form" method="post" th:action="@{/song/register}">
+            <div class="song-form-grid">
+                <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
+                <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
+                <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
+                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
+                <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
+                <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
+                <div class="form-row"><label>유튜브 공식 URL <span class="required-star">*</span></label><input type="text" name="youtubeUrl" required /></div>
+                <div class="form-row">
+                    <label>권리자명 <span class="required-star">*</span></label>
+                    <select name="rightHolderName" required>
+                        <option value="">권리자를 선택하세요</option>
+                        <option th:each="holder : ${rightHolders}" th:value="${holder}" th:text="${holder}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="register-btn" id="songRegisterBtn" disabled>음원 등록하기</button>
+            </div>
+        </form>
+        <form class="search-form" method="get" th:action="@{/song/list}">
+            <div class="search-row">
+                <div class="search-group"><label>검색</label><input type="text" name="search" class="search-input" th:value="${search}" placeholder="검색어 입력" /></div>
+                <div class="search-group search-btn-group"><button type="submit" class="search-btn">검색</button></div>
+            </div>
+        </form>
+        <table class="holder-table song-table">
+            <thead>
+            <tr>
+                <th>아티스트명(국문)</th><th>앨범명(국문)</th><th>트랙명(국문)</th><th>유튜브 공식 URL</th><th>권리자명</th><th>크롤링 실행</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="song : ${response.data.content}">
+                <td th:text="${song.artistKo}"></td>
+                <td th:text="${song.albumKo}"></td>
+                <td th:text="${song.titleKo}"></td>
+                <td><a th:href="${song.youtubeUrl}" target="_blank" class="ellipsis" th:text="${song.youtubeUrl}"></a></td>
+                <td th:text="${song.rightHolder.holderName}"></td>
+                <td class="crawling-column">
+                    <button type="button" class="crawling-btn">🕹️</button>
+                    <span class="crawling-period" th:if="${song.crawlingStartDate != null and song.crawlingEndDate != null}" 
+                          th:text="${#temporals.format(song.crawlingStartDate, 'yy.MM.dd')} + ' ~ ' + ${#temporals.format(song.crawlingEndDate, 'yy.MM.dd')}"></span>
+                    <span class="crawling-period empty" th:if="${song.crawlingStartDate == null or song.crawlingEndDate == null}">-</span>
+                </td>
+            </tr>
+            <tr th:if="${response.data.content.size() == 0}"><td colspan="6" style="text-align:center;">음원이 없습니다.</td></tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${response.data.totalPages > 0}">
+            <a th:if="${response.data.hasPrevious()}" th:href="@{/song/list(page=${response.data.number - 1}, size=${size}, search=${search})}" class="page-btn">이전</a>
+            <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
+                <a th:if="${i != response.data.number}" th:href="@{/song/list(page=${i}, size=${size}, search=${search})}" th:text="${i + 1}" class="page-btn"></a>
+                <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
+            </span>
+            <a th:if="${response.data.hasNext()}" th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search})}" class="page-btn">다음</a>
+        </div>
+    </section>
+</div>
+<script>
+// 폼 유효성 검사 및 버튼 활성화
+const form = document.getElementById('songRegisterForm');
+const btn = document.getElementById('songRegisterBtn');
+function validateForm() {
+    let valid = true;
+    ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'].forEach(name => {
+        const el = form.elements[name];
+        if (!el || !el.value || el.value.trim() === '') valid = false;
+    });
+    btn.disabled = !valid;
+}
+form && form.addEventListener('input', validateForm);
+form && form.addEventListener('change', validateForm);
+form && form.addEventListener('submit', function(e) {
+    if (btn.disabled) { e.preventDefault(); return false; }
+    if (!confirm('음원을 등록하시겠습니까?')) { e.preventDefault(); return false; }
+});
+</script>
+</body>
+</html> 

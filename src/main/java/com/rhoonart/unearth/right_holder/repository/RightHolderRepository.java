@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RightHolderRepository
@@ -33,4 +35,9 @@ public interface RightHolderRepository
             Pageable pageable);
 
     boolean existsByHolderName(String holderName);
+
+    @Query("SELECT rh.holderName FROM RightHolder rh ORDER BY rh.holderName")
+    List<String> findAllHolderNames();
+
+    Optional<RightHolder> findByHolderName(String holderName);
 }

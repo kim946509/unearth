@@ -47,10 +47,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BaseException.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public CommonResponse<Void> handleBaseException(BaseException ex) {
-        return CommonResponse.fail(ex.getCode(), ex.getMessage());
+    public ModelAndView handleBaseException(BaseException ex) {
+        // 팝업 에러로 처리
+        ModelAndView mav = new ModelAndView("common/error_popup");
+        mav.addObject("errorMessage", ex.getMessage());
+        return mav;
     }
 
     @ExceptionHandler(Exception.class)

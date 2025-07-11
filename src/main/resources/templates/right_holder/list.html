@@ -53,8 +53,8 @@
             </script>
         </div>
         <!-- 권리자 등록 모달 -->
-        <div id="registerModal" class="modal" style="display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.25); z-index:1000; align-items:center; justify-content:center;">
-          <div class="modal-content" style="background:#fff; border-radius:12px; padding:32px 32px 24px 32px; min-width:340px; max-width:420px; margin:auto; position:relative; box-shadow:0 2px 16px rgba(0,0,0,0.12);">
+        <div id="registerModal" class="modal">
+          <div class="modal-content">
             <button type="button" id="closeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
             <h3 style="margin-bottom:18px;">권리자 등록</h3>
             <form id="registerForm" method="post" th:action="@{/right-holder/register}">
