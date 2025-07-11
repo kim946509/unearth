@@ -77,7 +77,6 @@ img {
     color: #aaa;
     margin-left: 32px;
     margin-bottom: 18px;
-    cursor: not-allowed;
 }
 .sidebar-menu.active {
     color: #111;

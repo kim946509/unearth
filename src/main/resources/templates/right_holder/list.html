@@ -45,8 +45,12 @@
                 </div>
             </div>
         </form>
-        <!-- 안내문구 영역 -->
-        <div th:if="${response.code != 'SUCCESS' and response.message != null and !#strings.isEmpty(response.message)}" class="error-message" th:text="${response.message}"></div>
+        <!-- 안내문구 영역 제거 및 팝업 처리 -->
+        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+            <script th:inline="javascript">
+                alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
+            </script>
+        </div>
         <table class="holder-table">
             <thead>
             <tr>
@@ -70,7 +74,7 @@
             </tr>
             </tbody>
         </table>
-        <div class="pagination">
+        <div class="pagination" th:if="${response.data.totalPages > 0}">
             <a th:if="${response.data.hasPrevious()}" th:href="@{/right-holder/list(page=${response.data.number - 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" class="page-btn">이전</a>
             <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
                 <a th:if="${i != response.data.number}" th:href="@{/right-holder/list(page=${i}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" th:text="${i + 1}" class="page-btn"></a>
