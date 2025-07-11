@@ -1,10 +1,12 @@
 package com.rhoonart.unearth.song.controller;
 
+import com.rhoonart.unearth.common.util.SessionUserUtil;
 import com.rhoonart.unearth.song.dto.SongInfoRegisterRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoWithCrawlingDto;
 import com.rhoonart.unearth.song.service.SongInfoService;
 import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.common.CommonResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +28,10 @@ public class SongInfoController {
             @RequestParam(value = "search", required = false) String search,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-            Model model) {
+            Model model,
+            HttpSession session
+    ) {
+        SessionUserUtil.requireAdminRole(session);
         Pageable pageable = PageRequest.of(page, size);
         Page<SongInfoWithCrawlingDto> songPage = songInfoService.findSongsWithCrawling(search, pageable);
         model.addAttribute("response", CommonResponse.success(songPage));
@@ -40,7 +45,10 @@ public class SongInfoController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute SongInfoRegisterRequestDto dto) {
+    public String register(@Valid @ModelAttribute SongInfoRegisterRequestDto dto,
+                           HttpSession session
+                           ) {
+        SessionUserUtil.requireAdminRole(session);
         songInfoService.register(dto);
         return "redirect:/song/list";
     }

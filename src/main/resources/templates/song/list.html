@@ -54,7 +54,11 @@
                 <td><a th:href="${song.youtubeUrl}" target="_blank" class="ellipsis" th:text="${song.youtubeUrl}"></a></td>
                 <td th:text="${song.rightHolder.holderName}"></td>
                 <td class="crawling-column">
-                    <button type="button" class="crawling-btn">🕹️</button>
+                    <button type="button" class="crawling-btn" 
+                            th:data-song-id="${song.id}" 
+                            th:data-artist-ko="${song.artistKo}" 
+                            th:data-title-ko="${song.titleKo}" 
+                            th:data-has-crawling="${song.crawlingStartDate != null}">🕹️</button>
                     <span class="crawling-period" th:if="${song.crawlingStartDate != null and song.crawlingEndDate != null}" 
                           th:text="${#temporals.format(song.crawlingStartDate, 'yy.MM.dd')} + ' ~ ' + ${#temporals.format(song.crawlingEndDate, 'yy.MM.dd')}"></span>
                     <span class="crawling-period empty" th:if="${song.crawlingStartDate == null or song.crawlingEndDate == null}">-</span>
@@ -73,6 +77,36 @@
         </div>
     </section>
 </div>
+
+<!-- 크롤링 실행 모달 -->
+<div id="crawlingModal" class="modal">
+    <div class="modal-content crawling-modal-content">
+        <button type="button" id="closeCrawlingModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+        <h3 id="crawlingModalTitle" style="margin-bottom:18px;">크롤링 실행</h3>
+        <form id="crawlingForm" method="post" action="/crawling/execute">
+            <input type="hidden" id="crawlingSongId" name="songId" />
+            <div class="form-row">
+                <label>채널명 <span class="required-star">*</span></label>
+                <input type="text" name="channel" required />
+            </div>
+            <div class="form-row">
+                <label>유튜브 영상 제목 <span class="required-star">*</span></label>
+                <input type="text" name="youtubeTitle" required />
+            </div>
+            <div class="form-row">
+                <label>유튜브 영상 URL <span class="required-star">*</span></label>
+                <input type="text" name="youtubeUrl" required />
+            </div>
+            <div class="form-row">
+                <label>수록 순서 <span class="required-star">*</span></label>
+                <input type="number" name="songOrder" min="1" required />
+            </div>
+            <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="crawling-execute-btn" style="width:100%;">크롤링 실행</button>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
 // 폼 유효성 검사 및 버튼 활성화
 const form = document.getElementById('songRegisterForm');
@@ -90,6 +124,81 @@ form && form.addEventListener('change', validateForm);
 form && form.addEventListener('submit', function(e) {
     if (btn.disabled) { e.preventDefault(); return false; }
     if (!confirm('음원을 등록하시겠습니까?')) { e.preventDefault(); return false; }
+});
+
+// 크롤링 실행 모달 제어
+const crawlingModal = document.getElementById('crawlingModal');
+const closeCrawlingModalBtn = document.getElementById('closeCrawlingModalBtn');
+const crawlingForm = document.getElementById('crawlingForm');
+const crawlingModalTitle = document.getElementById('crawlingModalTitle');
+const crawlingSongId = document.getElementById('crawlingSongId');
+
+// 크롤링 버튼 이벤트 리스너 등록
+document.addEventListener('DOMContentLoaded', function() {
+    const crawlingBtns = document.querySelectorAll('.crawling-btn');
+    crawlingBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const songId = this.dataset.songId;
+            const artistKo = this.dataset.artistKo;
+            const titleKo = this.dataset.titleKo;
+            const hasCrawlingHistory = this.dataset.hasCrawling === 'true';
+            
+            handleCrawlingClick(songId, artistKo, titleKo, hasCrawlingHistory);
+        });
+    });
+});
+
+function handleCrawlingClick(songId, artistKo, titleKo, hasCrawlingHistory) {
+    if (hasCrawlingHistory) {
+        // 이미 크롤링 기록이 있는 경우 먼저 확인 팝업
+        if (!confirm('크롤링을 다시 시작하시겠습니까?')) {
+            return; // 취소하면 모달 열지 않음
+        }
+    }
+    // 확인했거나 처음 크롤링인 경우 모달 열기
+    openCrawlingModal(songId, artistKo, titleKo);
+}
+
+function openCrawlingModal(songId, artistKo, titleKo) {
+    crawlingModalTitle.textContent = artistKo + ' - ' + titleKo;
+    crawlingSongId.value = songId;
+    crawlingModal.classList.add('show');
+}
+
+closeCrawlingModalBtn && closeCrawlingModalBtn.addEventListener('click', () => {
+    crawlingModal.classList.remove('show');
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === crawlingModal) {
+        crawlingModal.classList.remove('show');
+    }
+});
+
+// 크롤링 폼 제출
+crawlingForm && crawlingForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(crawlingForm);
+    
+    fetch('/crawling/execute', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 'SUCCESS') {
+            alert('크롤링이 성공적으로 실행되었습니다.');
+            crawlingModal.classList.remove('show');
+            location.reload(); // 페이지 새로고침으로 크롤링 기간 업데이트
+        } else {
+            alert('크롤링 실행 중 오류가 발생했습니다: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('크롤링 실행 중 오류가 발생했습니다.');
+    });
 });
 </script>
 </body>
