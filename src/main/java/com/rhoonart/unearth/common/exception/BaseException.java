@@ -1,5 +1,6 @@
-package com.rhoonart.unearth.common;
+package com.rhoonart.unearth.common.exception;
 
+import com.rhoonart.unearth.common.ResponseCode;
 import lombok.Getter;
 
 @Getter

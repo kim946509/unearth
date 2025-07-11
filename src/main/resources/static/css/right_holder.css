@@ -1,0 +1,129 @@
+/* right_holder.css - 권리자 목록 페이지 전용 스타일 */
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.content {
+    flex: 1;
+    padding: 40px 40px 0 40px;
+    background: #fff;
+}
+
+.search-form {
+    margin-bottom: 32px;
+}
+.search-row {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: flex-end;
+}
+.search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 120px;
+}
+.search-input {
+    padding: 10px 12px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+}
+.search-btn-group {
+    min-width: 90px;
+}
+.search-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.register-btn-group {
+    min-width: 160px;
+    display: flex;
+    align-items: flex-end;
+}
+.register-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.holder-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    background: #fff;
+}
+.holder-table th, .holder-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 14px 10px;
+    text-align: left;
+    font-size: 16px;
+}
+.holder-table th {
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+    font-size: 17px;
+}
+.holder-table td {
+    color: #222;
+}
+.move-btn {
+    padding: 8px 24px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.pagination {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+}
+.page-btn {
+    padding: 7px 15px;
+    border-radius: 6px;
+    border: none;
+    background: #eee;
+    color: #111;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 2px;
+}
+.page-btn.current {
+    background: #111;
+    color: #fff;
+    font-weight: bold;
+} 

@@ -51,4 +51,36 @@ img {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 16px;
+}
+
+/* sidebar.css - 공통 사이드바 전용 스타일 */
+
+.sidebar {
+    width: 220px;
+    background: #f7f7f7;
+    border-right: 2px solid #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 0 0 0;
+}
+.sidebar-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #111;
+    margin-left: 32px;
+    margin-bottom: 32px;
+}
+.sidebar-menu {
+    font-size: 18px;
+    color: #aaa;
+    margin-left: 32px;
+    margin-bottom: 18px;
+    cursor: not-allowed;
+}
+.sidebar-menu.active {
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
 } 

@@ -1,6 +1,6 @@
 package com.rhoonart.unearth.user.exception;
 
-import com.rhoonart.unearth.common.BaseException;
+import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.ResponseCode;
 
 public class LoginException extends BaseException {

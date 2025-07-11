@@ -40,7 +40,12 @@
             });
             const result = await response.json();
             if (result.code === 'SUCCESS') {
-                window.location.href = '/home';
+                const role = result.data && result.data.userDto && result.data.userDto.role;
+                if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
+                    window.location.href = '/right-holder/list';
+                } else {
+                    window.location.href = '/home';
+                }
             } else {
                 document.getElementById('errorMessage').innerText = result.message || '로그인에 실패했습니다.';
             }

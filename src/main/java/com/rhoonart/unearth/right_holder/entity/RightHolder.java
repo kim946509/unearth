@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -40,10 +41,10 @@ public class RightHolder extends BaseEntity {
     private String holderName;
 
     @Column(name = "contract_start", nullable = false)
-    private java.time.LocalDate contractStart;
+    private LocalDate contractStart;
 
     @Column(name = "contract_end", nullable = false)
-    private java.time.LocalDate contractEnd;
+    private     LocalDate contractEnd;
 
     @Column(name = "business_number")
     private String businessNumber;
