@@ -22,7 +22,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class User extends BaseEntity {
     @Id
     @UuidGenerator
-    @Column(length = 32, nullable = false, updatable = false, unique = true)
+    @Column(length = 36, nullable = false, updatable = false, unique = true)
     private String id;
 
     @Column(nullable = false, unique = true)

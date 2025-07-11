@@ -9,7 +9,7 @@ description:📌 [0] 기본 원칙 (철학)
 코드 생성 시 중복 방지, 명확한 책임 분리, 의존성 최소화를 최우선으로 고려한다.
 
 각 계층의 경계는 의도적으로 설계한다 (ex: controller ↔ service ↔ model ↔ repository).
-globs:
+globs: ["src/**/*"]
 alwaysApply: true
 ---
 

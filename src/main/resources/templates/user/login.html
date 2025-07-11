@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 로그인</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div th:replace="common/header :: header"></div>
+    <div class="login-container">
+        <form id="loginForm" class="login-form" autocomplete="off">
+            <div>
+                <div class="login-label">아이디</div>
+                <input type="text" name="username" class="login-input" required autofocus />
+            </div>
+            <div>
+                <div class="login-label">비밀번호</div>
+                <input type="password" name="password" class="login-input" required />
+            </div>
+            <div class="btn-row">
+                <button type="submit" class="login-btn">로그인</button>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+            for (const pair of formData) {
+                params.append(pair[0], pair[1]);
+            }
+            const response = await fetch('/user/login', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: params
+            });
+            const result = await response.json();
+            if (result.code === 'SUCCESS') {
+                window.location.href = '/home';
+            } else {
+                document.getElementById('errorMessage').innerText = result.message || '로그인에 실패했습니다.';
+            }
+        });
+    </script>
+</body>
+</html> 

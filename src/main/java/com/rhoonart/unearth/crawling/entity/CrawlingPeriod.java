@@ -24,7 +24,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class CrawlingPeriod extends BaseEntity {
     @Id
     @UuidGenerator
-    @Column(length = 32, nullable = false, updatable = false, unique = true)
+    @Column(length = 36, nullable = false, updatable = false, unique = true)
     private String id;
 
     @ManyToOne(optional = false)
@@ -49,6 +49,6 @@ public class CrawlingPeriod extends BaseEntity {
     @Column(name = "youtube_url", nullable = false)
     private String youtubeUrl;
 
-    @Column(name = "track_order", nullable = false)
-    private int track_order;
+    @Column(name = "song_order", nullable = false)
+    private int song_order;
 }
