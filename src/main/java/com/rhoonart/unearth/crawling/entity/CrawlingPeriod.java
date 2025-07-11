@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -31,10 +32,10 @@ public class CrawlingPeriod extends BaseEntity {
     private SongInfo song;
 
     @Column(name = "start_date", nullable = false)
-    private java.time.LocalDate startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
-    private java.time.LocalDate endDate;
+    private LocalDate endDate;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
@@ -48,6 +49,6 @@ public class CrawlingPeriod extends BaseEntity {
     @Column(name = "youtube_url", nullable = false)
     private String youtubeUrl;
 
-    @Column(name = "order", nullable = false)
-    private int order;
+    @Column(name = "track_order", nullable = false)
+    private int track_order;
 }
