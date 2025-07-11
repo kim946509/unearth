@@ -23,7 +23,6 @@ public class SuperAdminInitializer implements CommandLineRunner {
             User superAdmin = User.builder()
                     .username("superadmin")
                     .password(passwordEncoder.encode("superadmin1234"))
-                    .email("superadmin@unearth.com")
                     .role(Role.SUPER_ADMIN)
                     .isLoginEnabled(true)
                     .build();

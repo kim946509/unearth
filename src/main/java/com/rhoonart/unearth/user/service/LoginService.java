@@ -39,7 +39,6 @@ public class LoginService {
         UserDto userDto = UserDto.of(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail(),
                 user.getRole());
         return LoginResponseDto.of(userDto);
     }
