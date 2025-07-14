@@ -1,0 +1,76 @@
+2025-07-09 18:18:01,842 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-09 18:18:01,842 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-09
+2025-07-09 18:18:01,842 - __main__ - INFO - ⏰ 시작 시간: 2025-07-09 18:18:01
+2025-07-09 18:18:01,842 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-09 18:18:01,842 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-09 18:18:01,843 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-09
+2025-07-09 18:18:01,864 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-09 18:18:01,869 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-09 18:18:01,869 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-09 18:18:01,870 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-09 18:18:01,870 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-09 18:18:01,870 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-09 18:18:01,870 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:18:02,787 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:18:02,932 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:18:02,995 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:18:04,068 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:18:04,069 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 18:18:23,219 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 18:18:26,056 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 18:18:26,074 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-09 18:18:26,109 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-09 18:18:26,110 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-09 18:18:26,112 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158497
+2025-07-09 18:18:26,113 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2576598
+2025-07-09 18:18:26,113 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-09 18:18:26,113 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2576598)
+2025-07-09 18:18:26,113 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 18:18:32,348 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 18:18:34,963 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 18:18:34,973 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-09 18:18:34,997 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-09 18:18:34,998 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-09 18:18:35,000 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830486
+2025-07-09 18:18:35,000 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13835176
+2025-07-09 18:18:35,000 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-09 18:18:35,001 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13835176)
+2025-07-09 18:18:37,100 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 18:18:37,101 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-09 18:18:37,101 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (35.23초)
+2025-07-09 18:18:37,101 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-09 18:18:37,101 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-09 18:18:37,101 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-09 18:18:37,102 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-09 18:18:37,102 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:18:37,959 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:18:38,121 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:18:38,556 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:18:39,645 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:18:39,645 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📝 저장된 쿠키가 없습니다. 일반 로그인을 시도합니다.
+2025-07-09 18:18:39,646 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-09 18:18:39,653 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (수동 로그인 시작): data:,
+2025-07-09 18:18:50,704 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 1): https://www.youtube.com/musicpremium
+2025-07-09 18:18:50,705 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 18:18:50,705 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔄 YouTube Music 페이지로 재시도...
+2025-07-09 18:18:56,693 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 2): https://www.youtube.com/musicpremium
+2025-07-09 18:18:56,693 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 18:18:56,693 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔄 YouTube Music 페이지로 재시도...
+2025-07-09 18:19:03,216 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 3): https://www.youtube.com/musicpremium
+2025-07-09 18:19:03,217 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 18:19:03,217 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ YouTube Music 페이지 이동 실패
+2025-07-09 18:19:03,217 - crawling_view.view.youtube_music.youtube_music_main - ERROR - ❌ YouTube Music 로그인 실패
+2025-07-09 18:19:05,381 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 18:19:05,382 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 0개 성공 (28.28초)
+2025-07-09 18:19:05,382 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 0개 성공, 2개 실패
+2025-07-09 18:19:05,383 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 2개 곡
+2025-07-09 18:19:05,383 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 2개 곡
+2025-07-09 18:19:05,384 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 2개 URL
+2025-07-09 18:19:05,384 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:19:06,325 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:19:06,586 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:19:06,782 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:19:07,916 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:19:14,634 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000267D1BD43E0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/cd7925af0fc6d14ebc152f0807a88b2a
+2025-07-09 18:19:18,719 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000267D1BD4510>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/cd7925af0fc6d14ebc152f0807a88b2a
+2025-07-09 18:19:22,808 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000267D1BB8290>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/cd7925af0fc6d14ebc152f0807a88b2a

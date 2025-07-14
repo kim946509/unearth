@@ -1,0 +1,19 @@
+2025-07-08 14:23:00,909 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-08 14:23:00,909 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-08
+2025-07-08 14:23:00,909 - __main__ - INFO - ⏰ 시작 시간: 2025-07-08 14:23:00
+2025-07-08 14:23:00,909 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-08 14:23:00,909 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-08 14:23:00,910 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-08
+2025-07-08 14:23:00,929 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-08 14:23:00,932 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-08 14:23:00,933 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-08 14:23:00,933 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-08 14:23:00,933 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-08 14:23:00,933 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-08 14:23:00,934 - WDM - INFO - ====== WebDriver manager ======
+2025-07-08 14:23:01,965 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:23:01,998 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:23:02,023 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.92\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-08 14:23:03,266 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-08 14:23:03,266 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-08 14:23:06,634 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, '현재 연결은 원격 호스트에 의해 강제로 끊겼습니다', None, 10054, None)': /session/726c34118ccaf0448220b17f2686e943

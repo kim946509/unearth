@@ -1,0 +1,113 @@
+2025-07-14 14:12:34,643 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 14:12:34,643 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 14:12:34,643 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 14:12:34
+2025-07-14 14:12:34,644 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 14:12:34,644 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 14:12:34,644 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 14:12:34,663 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 14:12:34,667 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 14:12:34,667 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 14:12:34,668 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 14:12:34,668 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 14:12:34,668 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 14:12:34,668 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:12:35,639 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:12:35,779 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:12:35,843 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:12:36,956 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:12:36,956 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 14:12:36,956 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:44,236 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:44,252 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:44,269 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:12:44,320 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 사건의 지평선
+2025-07-14 14:12:44,321 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 윤하 (YOUNHA)
+2025-07-14 14:12:44,327 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2340624
+2025-07-14 14:12:44,327 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 86760709
+2025-07-14 14:12:44,327 - crawling_view.view.genie.genie_logic - INFO - ✅ '사건의 지평선' - '윤하 (YOUNHA)' 파싱 성공!
+2025-07-14 14:12:44,327 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (YOUNHA) (조회수: 86760709)
+2025-07-14 14:12:44,328 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 14:12:44,328 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:50,961 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:50,980 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:50,999 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:51,033 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 14:12:51,035 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: AKMU (악뮤)
+2025-07-14 14:12:51,038 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 4002816
+2025-07-14 14:12:51,038 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 150378828
+2025-07-14 14:12:51,038 - crawling_view.view.genie.genie_logic - INFO - ✅ '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'AKMU (악뮤)' 파싱 성공!
+2025-07-14 14:12:51,039 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - AKMU (악뮤) (조회수: 150378828)
+2025-07-14 14:12:51,043 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 14:12:51,043 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:57,146 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:57,355 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:57,365 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,383 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,384 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,385 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,385 - crawling_view.view.genie.genie_logic - INFO - [시도 2/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,408 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,410 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,411 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,411 - crawling_view.view.genie.genie_logic - INFO - [시도 3/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,430 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,432 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,432 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,432 - crawling_view.view.genie.genie_logic - INFO - [시도 4/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,460 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,462 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,462 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,463 - crawling_view.view.genie.genie_logic - INFO - [시도 5/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,481 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,482 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,483 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,483 - crawling_view.view.genie.genie_logic - INFO - [시도 6/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:57,508 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: In the Rain (Acoustic) (Feat. Kelsey Kuan)
+2025-07-14 14:12:57,510 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 뎁트
+2025-07-14 14:12:57,511 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:57,511 - crawling_view.view.genie.genie_logic - WARNING - ❌ '한 페이지가 될 수 있게' 파싱 실패 - 모든 시도 실패
+2025-07-14 14:12:57,511 - crawling_view.view.genie.genie_logic - INFO - 🔍 영문으로 검색 시도
+2025-07-14 14:13:02,815 - crawling_view.view.genie.genie_logic - ERROR - ❌ 곡 정보 버튼 클릭 실패: Alert Text: 검색어를 입력해주세요.
+Message: unexpected alert open: {Alert text : 검색어를 입력해주세요.}
+  (Session info: chrome=138.0.7204.101)
+Stacktrace:
+	GetHandleVerifier [0x0x3444a3+62419]
+	GetHandleVerifier [0x0x3444e4+62484]
+	(No symbol) [0x0x182133]
+	(No symbol) [0x0x211130]
+	(No symbol) [0x0x1ef266]
+	(No symbol) [0x0x1be852]
+	(No symbol) [0x0x1bf6f4]
+	GetHandleVerifier [0x0x5b4793+2619075]
+	GetHandleVerifier [0x0x5afbaa+2599642]
+	GetHandleVerifier [0x0x36b04a+221050]
+	GetHandleVerifier [0x0x35b2c8+156152]
+	GetHandleVerifier [0x0x361c7d+183213]
+	GetHandleVerifier [0x0x34c388+94904]
+	GetHandleVerifier [0x0x34c512+95298]
+	GetHandleVerifier [0x0x33766a+9626]
+	BaseThreadInitThunk [0x0x76a75d49+25]
+	RtlInitializeExceptionChain [0x0x77b6d1ab+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77b6d131+561]
+	(No symbol) [0x0]
+
+2025-07-14 14:13:02,816 - crawling_view.view.genie.genie_logic - WARNING - ❌ 모든 검색 시도 실패: {'title_ko': '한 페이지가 될 수 있게', 'title_en': '', 'artist_ko': '데이식스', 'artist_en': '', 'song_id': 'fabd6648-f05d-4bc1-8ad5-af151eff98d1'}
+2025-07-14 14:13:02,816 - crawling_view.view.genie.genie_main - WARNING - ❌ 크롤링 실패: 한 페이지가 될 수 있게 - 데이식스
+2025-07-14 14:13:04,938 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 14:13:04,938 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-14 14:13:04,938 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (30.27초)
+2025-07-14 14:13:04,939 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 1개 실패
+2025-07-14 14:13:04,939 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 3개 곡
+2025-07-14 14:13:04,939 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 3개 곡
+2025-07-14 14:13:04,939 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 3곡
+2025-07-14 14:13:04,939 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:13:05,885 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:05,923 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:05,955 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:13:07,140 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:13:07,151 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-14 14:13:07,152 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 만료됨 (expiry): GPS
+2025-07-14 14:13:07,152 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.
+2025-07-14 14:13:07,152 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-14 14:13:11,880 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002DB4511D450>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/1cd54498c7010ae2c67100f6ebb2bbb8
+2025-07-14 14:13:15,934 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002DB456B89D0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/1cd54498c7010ae2c67100f6ebb2bbb8

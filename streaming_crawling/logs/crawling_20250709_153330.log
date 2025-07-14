@@ -1,0 +1,205 @@
+2025-07-09 15:33:30,801 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-09 15:33:30,802 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-09
+2025-07-09 15:33:30,802 - __main__ - INFO - ⏰ 시작 시간: 2025-07-09 15:33:30
+2025-07-09 15:33:30,802 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-09 15:33:30,802 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-09 15:33:30,803 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-09
+2025-07-09 15:33:30,858 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-09 15:33:30,864 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-09 15:33:30,864 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-09 15:33:30,865 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-09 15:33:30,865 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-09 15:33:30,865 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-09 15:33:30,904 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 15:33:31,942 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:33:31,997 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:33:32,065 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 15:33:33,057 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 15:33:33,058 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 15:33:39,222 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 15:33:39,237 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 15:33:39,249 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-09 15:33:39,270 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-09 15:33:39,271 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-09 15:33:39,274 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158476
+2025-07-09 15:33:39,274 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2576080
+2025-07-09 15:33:39,274 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-09 15:33:39,275 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2576080)
+2025-07-09 15:33:39,275 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 15:33:45,285 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 15:33:45,461 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 15:33:45,470 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-09 15:33:45,496 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-09 15:33:45,534 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-09 15:33:45,537 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830453
+2025-07-09 15:33:45,538 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13834085
+2025-07-09 15:33:45,539 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-09 15:33:45,539 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13834085)
+2025-07-09 15:33:47,861 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 15:33:47,862 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-09 15:33:47,862 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (17.00초)
+2025-07-09 15:33:47,862 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-09 15:33:47,862 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-09 15:33:47,863 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-09 15:33:47,863 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-09 15:33:47,893 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 15:33:48,942 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:33:49,116 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:33:49,386 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 15:33:50,285 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 15:33:50,286 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-09 15:33:50,286 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 만료됨 (expiry): GPS
+2025-07-09 15:33:50,287 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.
+2025-07-09 15:33:50,287 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-09 15:34:46,966 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ 수동 로그인 실패: 비밀번호 입력창을 찾을 수 없습니다.
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube_music\youtube_music_logic.py", line 255, in _perform_manual_login
+    raise Exception("비밀번호 입력창을 찾을 수 없습니다.")
+Exception: 비밀번호 입력창을 찾을 수 없습니다.
+2025-07-09 15:34:46,977 - crawling_view.view.youtube_music.youtube_music_main - ERROR - ❌ YouTube Music 로그인 실패
+2025-07-09 15:34:49,204 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 15:34:49,204 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 0개 성공 (61.34초)
+2025-07-09 15:34:49,205 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 0개 성공, 2개 실패
+2025-07-09 15:34:49,205 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 2개 곡
+2025-07-09 15:34:49,205 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 2개 곡
+2025-07-09 15:34:49,205 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 2개 URL
+2025-07-09 15:34:49,235 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 15:34:50,157 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:34:50,250 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 15:34:50,397 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 15:34:51,307 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 15:35:00,307 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC47294640>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/element
+2025-07-09 15:35:04,347 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC472942B0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/element
+2025-07-09 15:35:08,398 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC47252B10>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/element
+2025-07-09 15:35:12,456 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 단일 비디오 크롤링 실패: 제목 selector를 찾지 못함
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube\youtube_logic.py", line 78, in _crawl_single_video
+    raise Exception("제목 selector를 찾지 못함")
+Exception: 제목 selector를 찾지 못함
+2025-07-09 15:35:12,457 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 크롤링 실패: 실리카겔 - https://www.youtube.com/watch?v=JaIMSzE5yLA
+2025-07-09 15:35:16,532 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC46EEBDF0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/url
+2025-07-09 15:35:20,610 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC472B4050>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/url
+2025-07-09 15:35:24,648 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC472B4270>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/6c183b2ad881763af7bfbcd440e60bf1/url
+2025-07-09 15:35:28,707 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 단일 비디오 크롤링 실패: HTTPConnectionPool(host='localhost', port=49896): Max retries exceeded with url: /session/6c183b2ad881763af7bfbcd440e60bf1/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC472B4490>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다'))
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connection.py", line 198, in _new_conn
+    sock = connection.create_connection(
+        (self._dns_host, self.port),
+    ...<2 lines>...
+        socket_options=self.socket_options,
+    )
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\util\connection.py", line 85, in create_connection
+    raise err
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\util\connection.py", line 73, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+        conn,
+    ...<10 lines>...
+        **response_kw,
+    )
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 493, in _make_request
+    conn.request(
+    ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<6 lines>...
+        enforce_content_length=enforce_content_length,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connection.py", line 445, in request
+    self.endheaders()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Users\kim94\AppData\Local\Programs\Python\Python313\Lib\http\client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\AppData\Local\Programs\Python\Python313\Lib\http\client.py", line 1093, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "C:\Users\kim94\AppData\Local\Programs\Python\Python313\Lib\http\client.py", line 1037, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connection.py", line 276, in connect
+    self.sock = self._new_conn()
+                ~~~~~~~~~~~~~~^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connection.py", line 213, in _new_conn
+    raise NewConnectionError(
+        self, f"Failed to establish a new connection: {e}"
+    ) from e
+urllib3.exceptions.NewConnectionError: <urllib3.connection.HTTPConnection object at 0x000001EC472B4490>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube\youtube_logic.py", line 74, in _crawl_single_video
+    self.driver.get(url)
+    ~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 472, in get
+    self.execute(Command.GET, {"url": url})
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 445, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 404, in execute
+    return self._request(command_info[0], url, body=data)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\remote_connection.py", line 428, in _request
+    response = self._conn.request(method, url, body=body, headers=headers, timeout=self._client_config.timeout)
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\_request_methods.py", line 143, in request
+    return self.request_encode_body(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        method, url, fields=fields, headers=headers, **urlopen_kw
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\_request_methods.py", line 278, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\poolmanager.py", line 443, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 871, in urlopen
+    return self.urlopen(
+           ~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<13 lines>...
+        **response_kw,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+        method, url, error=new_e, _pool=self, _stacktrace=sys.exc_info()[2]
+    )
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='localhost', port=49896): Max retries exceeded with url: /session/6c183b2ad881763af7bfbcd440e60bf1/url (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC472B4490>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다'))
+2025-07-09 15:35:28,733 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 크롤링 실패: 우효 - https://www.youtube.com/watch?v=Kaq4LFM47I0&list=RDKaq4LFM47I0
+2025-07-09 15:35:28,733 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 완료 - 성공: 0개

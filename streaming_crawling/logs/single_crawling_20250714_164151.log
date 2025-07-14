@@ -1,0 +1,3 @@
+2025-07-14 16:41:51,883 - __main__ - INFO - 🚀 단일 곡 크롤링 시작: song_id=0a499b8d-d0d7-4548-9117-265a090b9350, platform=all, save_csv=True, save_db=True
+2025-07-14 16:41:52,039 - crawling_view.controller.single_crawling_manager - INFO - 🚀 단일 곡 크롤링 프로세스 시작
+2025-07-14 16:41:52,040 - __main__ - ERROR - ❌ 크롤링 중 오류 발생: 'dict' object has no attribute 'is_platform_available'

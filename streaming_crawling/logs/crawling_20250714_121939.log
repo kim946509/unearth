@@ -1,0 +1,217 @@
+2025-07-14 12:19:39,825 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 12:19:39,826 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 12:19:39,826 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 12:19:39
+2025-07-14 12:19:39,826 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 12:19:39,826 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 12:19:39,827 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 12:19:39,921 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 12:19:39,931 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 12:19:39,931 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 12:19:39,931 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 12:19:39,932 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 12:19:39,932 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 12:19:39,932 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 12:19:41,024 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:19:41,072 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:19:41,096 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 12:19:42,369 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 12:19:42,369 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 12:19:42,369 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:19:49,679 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 12:19:49,756 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 12:19:49,772 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 12:19:49,829 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 사건의 지평선
+2025-07-14 12:19:49,831 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 윤하 (YOUNHA)
+2025-07-14 12:19:49,836 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2340565
+2025-07-14 12:19:49,837 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 86757029
+2025-07-14 12:19:49,838 - crawling_view.view.genie.genie_logic - INFO - ✅ '사건의 지평선' - '윤하 (YOUNHA)' 파싱 성공!
+2025-07-14 12:19:49,839 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (YOUNHA) (조회수: 86757029)
+2025-07-14 12:19:49,839 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 12:19:49,839 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:19:55,374 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 12:19:55,386 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 12:19:55,403 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 12:19:55,431 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 12:19:55,433 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: AKMU (악뮤)
+2025-07-14 12:19:55,435 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 4002772
+2025-07-14 12:19:55,436 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 150375007
+2025-07-14 12:19:55,436 - crawling_view.view.genie.genie_logic - INFO - ✅ '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'AKMU (악뮤)' 파싱 성공!
+2025-07-14 12:19:55,436 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - AKMU (악뮤) (조회수: 150375007)
+2025-07-14 12:19:55,436 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 12:19:55,437 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:20:01,418 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 12:20:01,433 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 12:20:01,443 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 12:20:01,470 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 한 페이지가 될 수 있게
+2025-07-14 12:20:01,472 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: DAY6 (데이식스)
+2025-07-14 12:20:01,474 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2288456
+2025-07-14 12:20:01,475 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 72155879
+2025-07-14 12:20:01,475 - crawling_view.view.genie.genie_logic - INFO - ✅ '한 페이지가 될 수 있게' - 'DAY6 (데이식스)' 파싱 성공!
+2025-07-14 12:20:01,475 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 한 페이지가 될 수 있게 - DAY6 (데이식스) (조회수: 72155879)
+2025-07-14 12:20:03,713 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 12:20:03,714 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 3곡
+2025-07-14 12:20:03,714 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 3개 성공 (23.78초)
+2025-07-14 12:20:03,714 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 12:20:03,715 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 3개 곡
+2025-07-14 12:20:03,715 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 3개 곡
+2025-07-14 12:20:03,715 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 3곡
+2025-07-14 12:20:03,716 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 12:20:04,767 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:20:04,862 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:20:04,937 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 12:20:06,037 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 12:20:06,038 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-14 12:20:06,039 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 만료됨 (expiry): GPS
+2025-07-14 12:20:06,039 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.
+2025-07-14 12:20:06,039 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-14 12:20:34,267 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 본인 인증(추가 인증) 화면이 감지되었습니다. 자동화가 중단될 수 있습니다.
+2025-07-14 12:21:36,294 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 저장 완료: 24개
+2025-07-14 12:21:45,323 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 로그인된 상태 확인됨 (지표: ytmusic-settings-button)
+2025-07-14 12:21:45,324 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 일반 로그인 성공
+2025-07-14 12:21:45,324 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 12:21:45,324 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:21:45,324 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 윤하 사건의 지평선
+2025-07-14 12:21:45,324 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 12:21:45,349 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 12:21:45,363 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 12:21:46,406 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 12:21:47,485 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 12:21:48,546 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]
+2025-07-14 12:21:50,647 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 윤하 - 사건의 지평선
+2025-07-14 12:21:50,648 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 12:21:51,040 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 60개 곡 발견 (셀렉터: div#contents.style-scope.ytmusic-shelf-renderer > ytmusic-responsive-list-item-renderer)
+2025-07-14 12:21:51,042 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [1] 곡명: '사건의 지평선' / 아티스트: '윤하'
+2025-07-14 12:21:51,043 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [2] 곡명: '오르트구름' / 아티스트: '윤하 (YOUNHA)'
+2025-07-14 12:21:51,043 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [3] 곡명: '혜성' / 아티스트: '윤하 (Younha/ユンナ)'
+2025-07-14 12:21:51,044 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [4] 곡명: '오르트구름' / 아티스트: '윤하'
+2025-07-14 12:21:51,044 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [5] 곡명: 'Event Horizon (사건의 지평선) (By YOUNHA(윤하)) (Instrumental Karaoke Version)' / 아티스트: 'ZZang KARAOKE 2024 K-POP Vol.131'
+2025-07-14 12:21:51,044 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/60
+2025-07-14 12:21:51,045 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사건의 지평선' - '윤하'
+2025-07-14 12:21:51,046 - crawling_view.utils.utils - ERROR - ❌ 조회수 변환 실패: '윤하 • younha 6th album repackage 'end theory : final edition' • 5분 1초' (오류: could not convert string to float: "윤하 • younha 6th alum repackage 'end theory : final edition' • 5분 1초")
+2025-07-14 12:21:51,046 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: 사건의 지평선 - 윤하 (윤하 • YOUNHA 6th Album Repackage 'END THEORY : Final Edition' • 5분 1초)
+2025-07-14 12:21:51,046 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (조회수: None)
+2025-07-14 12:21:51,047 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 12:21:51,047 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:21:51,047 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 악뮤 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 12:21:51,047 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 12:21:51,066 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 12:21:51,088 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 12:21:52,109 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 기존 검색어 제거: 윤하 사건의 지평선
+2025-07-14 12:21:53,153 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 12:21:54,205 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 12:21:55,246 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]
+2025-07-14 12:21:57,377 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 12:21:57,378 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 12:21:57,992 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 60개 곡 발견 (셀렉터: div#contents.style-scope.ytmusic-shelf-renderer > ytmusic-responsive-list-item-renderer)
+2025-07-14 12:21:57,996 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [1] 곡명: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love)' / 아티스트: '악동뮤지션'
+2025-07-14 12:21:57,996 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [2] 곡명: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 (Live)' / 아티스트: 'AKMU'
+2025-07-14 12:21:57,997 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [3] 곡명: 'Last Goodbye' / 아티스트: '악동뮤지션'
+2025-07-14 12:21:57,997 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [4] 곡명: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 How Can I Love the Heartbreak, You're the One I Love' / 아티스트: '짱군 Zzanggoon'
+2025-07-14 12:21:57,998 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [5] 곡명: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' / 아티스트: 'Kpop Playlist Vol.3'
+2025-07-14 12:21:57,998 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/60
+2025-07-14 12:21:57,999 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love)' - '악동뮤지션'
+2025-07-14 12:21:58,000 - crawling_view.utils.utils - ERROR - ❌ 조회수 변환 실패: '2.6억 재생' (오류: could not convert string to float: '2.6 재생')
+2025-07-14 12:21:58,000 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love) - 악동뮤지션 (2.6억회 재생)
+2025-07-14 12:21:58,001 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love) - 악동뮤지션 (조회수: None)
+2025-07-14 12:21:58,001 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 12:21:58,001 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 12:21:58,001 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 데이식스 한 페이지가 될 수 있게
+2025-07-14 12:21:58,002 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 12:21:58,021 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 12:21:58,034 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 12:21:59,056 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 기존 검색어 제거: 악뮤 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 12:22:00,094 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 12:22:01,136 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 12:22:02,200 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]
+2025-07-14 12:22:04,392 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 데이식스 - 한 페이지가 될 수 있게
+2025-07-14 12:22:04,393 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 12:22:04,830 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 60개 곡 발견 (셀렉터: div#contents.style-scope.ytmusic-shelf-renderer > ytmusic-responsive-list-item-renderer)
+2025-07-14 12:22:04,832 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [1] 곡명: '한 페이지가 될 수 있게 Time of Our Life' / 아티스트: 'DAY6(데이식스)'
+2025-07-14 12:22:04,833 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [2] 곡명: 'Welcome to the Show' / 아티스트: 'DAY6'
+2025-07-14 12:22:04,833 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [3] 곡명: '예뻤어 You Were Beautiful' / 아티스트: 'DAY6(데이식스)'
+2025-07-14 12:22:04,834 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [4] 곡명: 'Congratulations' / 아티스트: 'DAY6(데이식스)'
+2025-07-14 12:22:04,834 - crawling_view.view.youtube_music.youtube_music_logic - INFO -   [5] 곡명: 'HAPPY' / 아티스트: 'DAY6'
+2025-07-14 12:22:04,835 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/60
+2025-07-14 12:22:04,835 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '한 페이지가 될 수 있게 Time of Our Life' - 'DAY6(데이식스)'
+2025-07-14 12:22:04,836 - crawling_view.utils.utils - ERROR - ❌ 조회수 변환 실패: 'day6(데이식스) • the book of us : gravity • 3분 26초' (오류: could not convert string to float: 'day6(데이식스) • the ook of us : gravity • 3분 26초')
+2025-07-14 12:22:04,836 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: 한 페이지가 될 수 있게 Time of Our Life - DAY6(데이식스) (DAY6(데이식스) • The Book of Us : Gravity • 3분 26초)
+2025-07-14 12:22:04,837 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: 한 페이지가 될 수 있게 Time of Our Life - DAY6(데이식스) (조회수: None)
+2025-07-14 12:22:07,308 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 12:22:07,309 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 완료 - 성공: 3곡
+2025-07-14 12:22:07,309 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 3개 성공 (123.59초)
+2025-07-14 12:22:07,310 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 12:22:07,310 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 3개 곡
+2025-07-14 12:22:07,310 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 3개 곡
+2025-07-14 12:22:07,311 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 3개 URL
+2025-07-14 12:22:07,311 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 12:22:08,673 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:22:08,705 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 12:22:08,757 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 12:22:09,954 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 12:22:15,350 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 윤하, 제목: 윤하(YOUNHA) - 사건의 지평선 M/V, 조회수: 35710000, 업로드일: 2022.03.30
+2025-07-14 12:22:20,589 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 악뮤, 제목: AKMU - '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you`re the one I love)' M/V, 조회수: 70200000, 업로드일: 2019.09.25
+2025-07-14 12:22:25,416 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 데이식스, 제목: DAY6(데이식스) "한 페이지가 될 수 있게" M/V, 조회수: 36570000, 업로드일: 2019.07.15
+2025-07-14 12:22:25,416 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 완료 - 성공: 3개
+2025-07-14 12:22:27,700 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 12:22:27,700 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube 크롤링 완료: 3개 성공 (20.39초)
+2025-07-14 12:22:27,701 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 12:22:27,701 - crawling_view.controller.crawling_manager - INFO - 🍈 Melon 크롤링 시작: 3개 곡
+2025-07-14 12:22:27,702 - crawling_view.controller.platform_crawlers - INFO - 🎯 melon 크롤링 시작: 3개 곡
+2025-07-14 12:22:27,702 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 시작 - 총 3곡
+2025-07-14 12:22:31,845 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 완료 - 성공: 3곡
+2025-07-14 12:22:31,846 - crawling_view.controller.platform_crawlers - INFO - ✅ melon 크롤링 완료: 3개 성공 (4.14초)
+2025-07-14 12:22:31,846 - crawling_view.controller.crawling_manager - INFO - ✅ Melon 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 12:22:31,846 - crawling_view.controller.crawling_manager - INFO - 💾 3단계: DB 저장
+2025-07-14 12:22:32,117 - crawling_view.data.db_writer - INFO - ✅ genie DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,117 - crawling_view.data.db_writer - ERROR - ❌ youtube_music song_id 누락 - 저장 차단: {'song_title': '사건의 지평선', 'artist_name': '윤하', 'views': None, 'listeners': -1, 'crawl_date': '2025-07-14 12:21:51'}
+2025-07-14 12:22:32,117 - crawling_view.data.db_writer - ERROR - ❌ youtube_music song_id 누락 - 저장 차단: {'song_title': "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love)", 'artist_name': '악동뮤지션', 'views': None, 'listeners': -1, 'crawl_date': '2025-07-14 12:21:58'}
+2025-07-14 12:22:32,117 - crawling_view.data.db_writer - ERROR - ❌ youtube_music song_id 누락 - 저장 차단: {'song_title': '한 페이지가 될 수 있게 Time of Our Life', 'artist_name': 'DAY6(데이식스)', 'views': None, 'listeners': -1, 'crawl_date': '2025-07-14 12:22:04'}
+2025-07-14 12:22:32,117 - crawling_view.data.db_writer - INFO - ✅ youtube_music DB 저장 완료: 0개 생성, 0개 교체, 0개 실패, 3개 스킵
+2025-07-14 12:22:32,196 - crawling_view.data.db_writer - INFO - ✅ youtube DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,268 - crawling_view.data.db_writer - INFO - ✅ melon DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,269 - crawling_view.controller.crawling_manager - INFO - 📄 4단계: CSV 저장
+2025-07-14 12:22:32,269 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 genie 폴더 생성 완료
+2025-07-14 12:22:32,359 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 youtube_music 폴더 생성 완료
+2025-07-14 12:22:32,402 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 youtube 폴더 생성 완료
+2025-07-14 12:22:32,466 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 melon 폴더 생성 완료
+2025-07-14 12:22:32,527 - crawling_view.controller.crawling_manager - INFO - ✅ 크롤링 프로세스 완료
+2025-07-14 12:22:32,527 - crawling_view.controller.crawling_manager - INFO - 📊 결과 요약: 3개 곡, 4개 플랫폼
+2025-07-14 12:22:32,527 - __main__ - INFO - ================================================================================
+2025-07-14 12:22:32,527 - __main__ - INFO - 📊 크롤링 결과 상세 분석
+2025-07-14 12:22:32,528 - __main__ - INFO - ================================================================================
+2025-07-14 12:22:32,528 - __main__ - INFO - 📅 대상 날짜: 2025-07-14
+2025-07-14 12:22:32,528 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 12:19:39
+2025-07-14 12:22:32,528 - __main__ - INFO - ⏰ 종료 시간: 2025-07-14 12:22:32
+2025-07-14 12:22:32,528 - __main__ - INFO - ⏱️  총 실행 시간: 172.70초 (2.88분)
+2025-07-14 12:22:32,528 - __main__ - INFO - 🎵 전체 대상 곡: 3개
+2025-07-14 12:22:32,528 - __main__ - INFO - 
+📈 플랫폼별 상세 결과:
+2025-07-14 12:22:32,529 - __main__ - INFO - ------------------------------------------------------------
+2025-07-14 12:22:32,529 - __main__ - INFO - ✅ GENIE:
+2025-07-14 12:22:32,529 - __main__ - INFO -    크롤링: 3개
+2025-07-14 12:22:32,529 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,529 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 12:22:32,529 - __main__ - INFO - ✅ YOUTUBE_MUSIC:
+2025-07-14 12:22:32,529 - __main__ - INFO -    크롤링: 3개
+2025-07-14 12:22:32,530 - __main__ - INFO -    DB 저장: 0개 생성, 0개 교체, 0개 실패, 3개 스킵
+2025-07-14 12:22:32,530 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 12:22:32,530 - __main__ - INFO - ✅ YOUTUBE:
+2025-07-14 12:22:32,530 - __main__ - INFO -    크롤링: 3개
+2025-07-14 12:22:32,530 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,531 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 12:22:32,531 - __main__ - INFO - ✅ MELON:
+2025-07-14 12:22:32,531 - __main__ - INFO -    크롤링: 3개
+2025-07-14 12:22:32,531 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 12:22:32,531 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 12:22:32,532 - __main__ - INFO - 
+📊 전체 요약:
+2025-07-14 12:22:32,532 - __main__ - INFO - ------------------------------------------------------------
+2025-07-14 12:22:32,532 - __main__ - INFO - 🎵 대상 곡: 3개
+2025-07-14 12:22:32,532 - __main__ - INFO - 🌐 플랫폼: 4개
+2025-07-14 12:22:32,532 - __main__ - INFO - 🎯 총 크롤링 시도: 12개
+2025-07-14 12:22:32,533 - __main__ - INFO - 💾 DB 저장: 9개
+2025-07-14 12:22:32,533 - __main__ - INFO - 📄 CSV 저장: 12개 파일
+2025-07-14 12:22:32,533 - __main__ - INFO - ❌ 실패: 0개
+2025-07-14 12:22:32,533 - __main__ - INFO - 📈 성공률: 100.0%
+2025-07-14 12:22:32,534 - __main__ - INFO - ⚡ 곡당 평균 처리 시간: 14.39초
+2025-07-14 12:22:32,534 - __main__ - INFO - ================================================================================

@@ -1,0 +1,197 @@
+2025-07-14 14:13:23,244 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 14:13:23,244 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 14:13:23,244 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 14:13:23
+2025-07-14 14:13:23,244 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 14:13:23,244 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 14:13:23,245 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 14:13:23,264 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 14:13:23,268 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 14:13:23,268 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 14:13:23,269 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 14:13:23,269 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 14:13:23,269 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 14:13:23,269 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:13:24,228 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:24,267 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:24,317 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:13:25,446 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:13:25,446 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 14:13:25,446 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:13:32,920 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:13:32,949 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:13:32,966 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:13:33,020 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 사건의 지평선
+2025-07-14 14:13:33,022 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 윤하 (YOUNHA)
+2025-07-14 14:13:33,027 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2340624
+2025-07-14 14:13:33,028 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 86760733
+2025-07-14 14:13:33,028 - crawling_view.view.genie.genie_logic - INFO - ✅ '사건의 지평선' - '윤하 (YOUNHA)' 파싱 성공!
+2025-07-14 14:13:33,029 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (YOUNHA) (조회수: 86760733)
+2025-07-14 14:13:33,029 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 14:13:33,030 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:13:39,892 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:13:39,900 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:13:39,915 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:13:39,956 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 14:13:39,958 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: AKMU (악뮤)
+2025-07-14 14:13:39,961 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 4002816
+2025-07-14 14:13:39,962 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 150378863
+2025-07-14 14:13:39,962 - crawling_view.view.genie.genie_logic - INFO - ✅ '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'AKMU (악뮤)' 파싱 성공!
+2025-07-14 14:13:39,963 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - AKMU (악뮤) (조회수: 150378863)
+2025-07-14 14:13:39,963 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 14:13:39,964 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:13:46,050 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:13:46,072 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:13:46,084 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:13:46,111 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 한 페이지가 될 수 있게
+2025-07-14 14:13:46,112 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: DAY6 (데이식스)
+2025-07-14 14:13:46,115 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2288536
+2025-07-14 14:13:46,115 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 72161873
+2025-07-14 14:13:46,115 - crawling_view.view.genie.genie_logic - INFO - ✅ '한 페이지가 될 수 있게' - 'DAY6 (데이식스)' 파싱 성공!
+2025-07-14 14:13:46,116 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 한 페이지가 될 수 있게 - DAY6 (데이식스) (조회수: 72161873)
+2025-07-14 14:13:48,368 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 14:13:48,369 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 3곡
+2025-07-14 14:13:48,369 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 3개 성공 (25.10초)
+2025-07-14 14:13:48,369 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 14:13:48,369 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 3개 곡
+2025-07-14 14:13:48,369 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 3개 곡
+2025-07-14 14:13:48,369 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 3곡
+2025-07-14 14:13:48,370 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:13:49,304 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:49,338 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:13:49,367 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:13:50,499 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:13:50,500 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-14 14:13:50,501 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 만료됨 (expiry): GPS
+2025-07-14 14:13:50,501 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.
+2025-07-14 14:13:50,501 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-14 14:14:15,998 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ 수동 로그인 실패: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x3444a3+62419]
+	GetHandleVerifier [0x0x3444e4+62484]
+	(No symbol) [0x0x182133]
+	(No symbol) [0x0x1ca8fe]
+	(No symbol) [0x0x1cac9b]
+	(No symbol) [0x0x213052]
+	(No symbol) [0x0x1ef4b4]
+	(No symbol) [0x0x21087a]
+	(No symbol) [0x0x1ef266]
+	(No symbol) [0x0x1be852]
+	(No symbol) [0x0x1bf6f4]
+	GetHandleVerifier [0x0x5b4793+2619075]
+	GetHandleVerifier [0x0x5afbaa+2599642]
+	GetHandleVerifier [0x0x36b04a+221050]
+	GetHandleVerifier [0x0x35b2c8+156152]
+	GetHandleVerifier [0x0x361c7d+183213]
+	GetHandleVerifier [0x0x34c388+94904]
+	GetHandleVerifier [0x0x34c512+95298]
+	GetHandleVerifier [0x0x33766a+9626]
+	BaseThreadInitThunk [0x0x76a75d49+25]
+	RtlInitializeExceptionChain [0x0x77b6d1ab+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77b6d131+561]
+	(No symbol) [0x0]
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube_music\youtube_music_logic.py", line 342, in _perform_manual_login
+    password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "Passwd")))
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\support\wait.py", line 138, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x3444a3+62419]
+	GetHandleVerifier [0x0x3444e4+62484]
+	(No symbol) [0x0x182133]
+	(No symbol) [0x0x1ca8fe]
+	(No symbol) [0x0x1cac9b]
+	(No symbol) [0x0x213052]
+	(No symbol) [0x0x1ef4b4]
+	(No symbol) [0x0x21087a]
+	(No symbol) [0x0x1ef266]
+	(No symbol) [0x0x1be852]
+	(No symbol) [0x0x1bf6f4]
+	GetHandleVerifier [0x0x5b4793+2619075]
+	GetHandleVerifier [0x0x5afbaa+2599642]
+	GetHandleVerifier [0x0x36b04a+221050]
+	GetHandleVerifier [0x0x35b2c8+156152]
+	GetHandleVerifier [0x0x361c7d+183213]
+	GetHandleVerifier [0x0x34c388+94904]
+	GetHandleVerifier [0x0x34c512+95298]
+	GetHandleVerifier [0x0x33766a+9626]
+	BaseThreadInitThunk [0x0x76a75d49+25]
+	RtlInitializeExceptionChain [0x0x77b6d1ab+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77b6d131+561]
+	(No symbol) [0x0]
+
+2025-07-14 14:14:16,019 - crawling_view.view.youtube_music.youtube_music_main - ERROR - ❌ YouTube Music 로그인 실패
+2025-07-14 14:14:18,424 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 14:14:18,424 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 0개 성공 (30.06초)
+2025-07-14 14:14:18,425 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 0개 성공, 3개 실패
+2025-07-14 14:14:18,425 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 3개 곡
+2025-07-14 14:14:18,426 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 3개 곡
+2025-07-14 14:14:18,426 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 3개 URL
+2025-07-14 14:14:18,426 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:14:19,339 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:14:19,367 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:14:19,387 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:14:20,511 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:14:25,505 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 윤하, 제목: 윤하(YOUNHA) - 사건의 지평선 M/V, 조회수: 35710000, 업로드일: 2022.03.30
+2025-07-14 14:14:30,659 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 악뮤, 제목: AKMU - '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you`re the one I love)' M/V, 조회수: 70210000, 업로드일: 2019.09.25
+2025-07-14 14:14:35,360 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 데이식스, 제목: DAY6(데이식스) "한 페이지가 될 수 있게" M/V, 조회수: 36570000, 업로드일: 2019.07.15
+2025-07-14 14:14:35,361 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 완료 - 성공: 3개
+2025-07-14 14:14:37,530 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 14:14:37,530 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube 크롤링 완료: 3개 성공 (19.10초)
+2025-07-14 14:14:37,530 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 14:14:37,531 - crawling_view.controller.crawling_manager - INFO - 🍈 Melon 크롤링 시작: 3개 곡
+2025-07-14 14:14:37,531 - crawling_view.controller.platform_crawlers - INFO - 🎯 melon 크롤링 시작: 3개 곡
+2025-07-14 14:14:37,531 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 시작 - 총 3곡
+2025-07-14 14:14:41,401 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 완료 - 성공: 3곡
+2025-07-14 14:14:41,402 - crawling_view.controller.platform_crawlers - INFO - ✅ melon 크롤링 완료: 3개 성공 (3.87초)
+2025-07-14 14:14:41,402 - crawling_view.controller.crawling_manager - INFO - ✅ Melon 크롤링 완료: 3개 성공, 0개 실패
+2025-07-14 14:14:41,402 - crawling_view.controller.crawling_manager - INFO - 💾 3단계: DB 저장
+2025-07-14 14:14:41,546 - crawling_view.data.db_writer - INFO - ✅ genie DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,546 - crawling_view.data.db_writer - WARNING - ⚠️ youtube_music 크롤링 결과가 없음
+2025-07-14 14:14:41,623 - crawling_view.data.db_writer - INFO - ✅ youtube DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,692 - crawling_view.data.db_writer - INFO - ✅ melon DB 저장 완료: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,693 - crawling_view.controller.crawling_manager - INFO - 📄 4단계: CSV 저장
+2025-07-14 14:14:41,694 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 genie 폴더 생성 완료
+2025-07-14 14:14:41,800 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 youtube 폴더 생성 완료
+2025-07-14 14:14:41,890 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 melon 폴더 생성 완료
+2025-07-14 14:14:41,976 - crawling_view.controller.crawling_manager - INFO - ✅ 크롤링 프로세스 완료
+2025-07-14 14:14:41,976 - crawling_view.controller.crawling_manager - INFO - 📊 결과 요약: 3개 곡, 4개 플랫폼
+2025-07-14 14:14:41,976 - __main__ - INFO - ================================================================================
+2025-07-14 14:14:41,977 - __main__ - INFO - 📊 크롤링 결과 상세 분석
+2025-07-14 14:14:41,977 - __main__ - INFO - ================================================================================
+2025-07-14 14:14:41,977 - __main__ - INFO - 📅 대상 날짜: 2025-07-14
+2025-07-14 14:14:41,977 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 14:13:23
+2025-07-14 14:14:41,978 - __main__ - INFO - ⏰ 종료 시간: 2025-07-14 14:14:41
+2025-07-14 14:14:41,978 - __main__ - INFO - ⏱️  총 실행 시간: 78.73초 (1.31분)
+2025-07-14 14:14:41,978 - __main__ - INFO - 🎵 전체 대상 곡: 3개
+2025-07-14 14:14:41,978 - __main__ - INFO - 
+📈 플랫폼별 상세 결과:
+2025-07-14 14:14:41,979 - __main__ - INFO - ------------------------------------------------------------
+2025-07-14 14:14:41,979 - __main__ - INFO - ✅ GENIE:
+2025-07-14 14:14:41,979 - __main__ - INFO -    크롤링: 3개
+2025-07-14 14:14:41,979 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,979 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 14:14:41,980 - __main__ - INFO - ✅ YOUTUBE_MUSIC:
+2025-07-14 14:14:41,980 - __main__ - INFO -    크롤링: 0개
+2025-07-14 14:14:41,980 - __main__ - INFO -    DB 저장: 0개 생성, 0개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,980 - __main__ - INFO -    CSV 저장: 0개 파일
+2025-07-14 14:14:41,981 - __main__ - INFO - ✅ YOUTUBE:
+2025-07-14 14:14:41,981 - __main__ - INFO -    크롤링: 3개
+2025-07-14 14:14:41,981 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,981 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 14:14:41,981 - __main__ - INFO - ✅ MELON:
+2025-07-14 14:14:41,982 - __main__ - INFO -    크롤링: 3개
+2025-07-14 14:14:41,982 - __main__ - INFO -    DB 저장: 0개 생성, 3개 교체, 0개 실패, 0개 스킵
+2025-07-14 14:14:41,982 - __main__ - INFO -    CSV 저장: 3개 파일
+2025-07-14 14:14:41,983 - __main__ - INFO - 
+📊 전체 요약:
+2025-07-14 14:14:41,983 - __main__ - INFO - ------------------------------------------------------------
+2025-07-14 14:14:41,983 - __main__ - INFO - 🎵 대상 곡: 3개
+2025-07-14 14:14:41,984 - __main__ - INFO - 🌐 플랫폼: 4개
+2025-07-14 14:14:41,984 - __main__ - INFO - 🎯 총 크롤링 시도: 12개
+2025-07-14 14:14:41,984 - __main__ - INFO - 💾 DB 저장: 9개
+2025-07-14 14:14:41,984 - __main__ - INFO - 📄 CSV 저장: 9개 파일
+2025-07-14 14:14:41,985 - __main__ - INFO - ❌ 실패: 3개
+2025-07-14 14:14:41,985 - __main__ - INFO - 📈 성공률: 75.0%
+2025-07-14 14:14:41,985 - __main__ - INFO - ⚡ 곡당 평균 처리 시간: 8.75초
+2025-07-14 14:14:41,985 - __main__ - INFO - ================================================================================

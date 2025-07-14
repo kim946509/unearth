@@ -1,0 +1,356 @@
+2025-07-14 11:57:22,803 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 11:57:22,803 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 11:57:22,803 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 11:57:22
+2025-07-14 11:57:22,803 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 11:57:22,804 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 11:57:22,804 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 11:57:22,872 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 11:57:22,881 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 11:57:22,881 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 11:57:22,881 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 11:57:22,881 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 11:57:22,882 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 11:57:22,882 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 11:57:23,917 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 11:57:23,958 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 11:57:23,990 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 11:57:25,252 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 11:57:25,253 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 11:57:25,253 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 11:57:31,554 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 11:57:32,422 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 11:57:32,459 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 11:57:32,503 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 사건의 지평선
+2025-07-14 11:57:32,505 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 윤하 (YOUNHA)
+2025-07-14 11:57:32,510 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2340555
+2025-07-14 11:57:32,510 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 86756392
+2025-07-14 11:57:32,511 - crawling_view.view.genie.genie_logic - INFO - ✅ '사건의 지평선' - '윤하 (YOUNHA)' 파싱 성공!
+2025-07-14 11:57:32,511 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (YOUNHA) (조회수: 86756392)
+2025-07-14 11:57:32,511 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 11:57:32,511 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 11:57:38,783 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 11:57:38,799 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 11:57:38,832 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 11:57:38,870 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 11:57:38,872 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: AKMU (악뮤)
+2025-07-14 11:57:38,877 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 4002764
+2025-07-14 11:57:38,877 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 150374312
+2025-07-14 11:57:38,878 - crawling_view.view.genie.genie_logic - INFO - ✅ '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'AKMU (악뮤)' 파싱 성공!
+2025-07-14 11:57:38,878 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - AKMU (악뮤) (조회수: 150374312)
+2025-07-14 11:57:38,878 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 11:57:38,878 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 11:57:44,868 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 11:57:45,018 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 11:57:45,029 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,047 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,048 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,049 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,049 - crawling_view.view.genie.genie_logic - INFO - [시도 2/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,070 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,073 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,073 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,074 - crawling_view.view.genie.genie_logic - INFO - [시도 3/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,097 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,098 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,098 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,098 - crawling_view.view.genie.genie_logic - INFO - [시도 4/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,120 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,122 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,125 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,126 - crawling_view.view.genie.genie_logic - INFO - [시도 5/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,151 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,152 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,152 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,153 - crawling_view.view.genie.genie_logic - INFO - [시도 6/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 11:57:45,175 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: hypocritical
+2025-07-14 11:57:45,176 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Lyle Kam
+2025-07-14 11:57:45,177 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 11:57:45,177 - crawling_view.view.genie.genie_logic - WARNING - ❌ '한 페이지가 될 수 있게' 파싱 실패 - 모든 시도 실패
+2025-07-14 11:57:45,177 - crawling_view.view.genie.genie_logic - INFO - 🔍 영문으로 검색 시도
+2025-07-14 11:57:51,093 - crawling_view.view.genie.genie_logic - ERROR - ❌ 곡 정보 버튼 클릭 실패: Alert Text: 검색어를 입력해주세요.
+Message: unexpected alert open: {Alert text : 검색어를 입력해주세요.}
+  (Session info: chrome=138.0.7204.101)
+Stacktrace:
+	GetHandleVerifier [0x0x4244a3+62419]
+	GetHandleVerifier [0x0x4244e4+62484]
+	(No symbol) [0x0x262133]
+	(No symbol) [0x0x2f1130]
+	(No symbol) [0x0x2cf266]
+	(No symbol) [0x0x29e852]
+	(No symbol) [0x0x29f6f4]
+	GetHandleVerifier [0x0x694793+2619075]
+	GetHandleVerifier [0x0x68fbaa+2599642]
+	GetHandleVerifier [0x0x44b04a+221050]
+	GetHandleVerifier [0x0x43b2c8+156152]
+	GetHandleVerifier [0x0x441c7d+183213]
+	GetHandleVerifier [0x0x42c388+94904]
+	GetHandleVerifier [0x0x42c512+95298]
+	GetHandleVerifier [0x0x41766a+9626]
+	BaseThreadInitThunk [0x0x76a75d49+25]
+	RtlInitializeExceptionChain [0x0x77b6d1ab+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77b6d131+561]
+
+2025-07-14 11:57:51,095 - crawling_view.view.genie.genie_logic - WARNING - ❌ 모든 검색 시도 실패: {'title_ko': '한 페이지가 될 수 있게', 'title_en': '', 'artist_ko': '데이식스', 'artist_en': '', 'song_id': 'fabd6648-f05d-4bc1-8ad5-af151eff98d1'}
+2025-07-14 11:57:51,096 - crawling_view.view.genie.genie_main - WARNING - ❌ 크롤링 실패: 한 페이지가 될 수 있게 - 데이식스
+2025-07-14 11:57:53,389 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-14 11:57:53,416 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-14 11:57:53,426 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (30.54초)
+2025-07-14 11:57:53,426 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 1개 실패
+2025-07-14 11:57:53,427 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 3개 곡
+2025-07-14 11:57:53,427 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 3개 곡
+2025-07-14 11:57:53,427 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 3곡
+2025-07-14 11:57:53,428 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 11:57:55,770 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 11:57:55,830 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 11:57:55,860 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 11:57:57,176 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 11:57:57,281 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-14 11:57:57,282 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키로 로그인 시도
+2025-07-14 11:58:06,466 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 적용 완료 (24/24개 성공)
+2025-07-14 11:58:09,810 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 현재 브라우저에 설정된 쿠키 수: 32
+2025-07-14 11:58:16,084 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 로그인된 상태 확인됨 (지표: ytmusic-settings-button)
+2025-07-14 11:58:16,085 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 쿠키로 로그인 성공
+2025-07-14 11:58:16,085 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 11:58:16,086 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 11:58:16,086 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 윤하 사건의 지평선
+2025-07-14 11:58:16,086 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 11:58:16,129 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 11:58:16,157 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 11:58:17,217 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 11:58:18,298 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 11:58:50,805 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]
+2025-07-14 11:58:53,058 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 윤하 - 사건의 지평선
+2025-07-14 11:58:53,059 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 11:58:53,659 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 84개 곡 발견 (셀렉터: ytmusic-responsive-list-item-renderer[class*="style-scope"])
+2025-07-14 11:58:53,660 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/84
+2025-07-14 11:58:53,661 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 2/84
+2025-07-14 11:58:53,662 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사건의 지평선' - '윤하'
+2025-07-14 11:58:53,663 - crawling_view.utils.utils - ERROR - ❌ 조회수 변환 실패: 노래 • 윤하 • 2.8억
+2025-07-14 11:58:53,664 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: 사건의 지평선 - 윤하 (노래 • 윤하 • 2.8억)
+2025-07-14 11:58:53,665 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (조회수: None)
+2025-07-14 11:58:53,666 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 11:58:53,666 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 11:58:53,666 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 악뮤 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 11:58:53,666 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 11:58:53,687 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 11:58:53,710 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 11:58:54,732 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 기존 검색어 제거: 윤하 사건의 지평선
+2025-07-14 11:58:55,776 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 11:58:56,918 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 11:59:29,139 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]
+2025-07-14 11:59:31,333 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 11:59:31,333 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 11:59:31,806 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 100개 곡 발견 (셀렉터: ytmusic-responsive-list-item-renderer[class*="style-scope"])
+2025-07-14 11:59:31,808 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/100
+2025-07-14 11:59:31,809 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '시작의 아이 ハジマリのコ (Starting With You)' - '마크툽'
+2025-07-14 11:59:31,810 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 2/100
+2025-07-14 11:59:31,810 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '초록을거머쥔우리는' - '잔나비'
+2025-07-14 11:59:31,811 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 3/100
+2025-07-14 11:59:31,812 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'A Step You Can’t Take Back' - 'Keira Knightley'
+2025-07-14 11:59:31,813 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 4/100
+2025-07-14 11:59:31,813 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '명동콜링' - '카더가든'
+2025-07-14 11:59:31,814 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 5/100
+2025-07-14 11:59:31,815 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '예술이야' - '싸이(PSY)'
+2025-07-14 11:59:31,816 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 6/100
+2025-07-14 11:59:31,816 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Whispers Your Name' - 'SISO Wave'
+2025-07-14 11:59:31,817 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 7/100
+2025-07-14 11:59:31,817 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '너에게 닿기를' - '10CM'
+2025-07-14 11:59:31,818 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 8/100
+2025-07-14 11:59:31,819 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Chance (feat. Peakboy (픽보이))' - 'HAAN'
+2025-07-14 11:59:31,819 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 9/100
+2025-07-14 11:59:31,820 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '그 여름을 틀어줘' - '싹쓰리 (유두래곤, 린다G, 비룡)'
+2025-07-14 11:59:31,820 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 10/100
+2025-07-14 11:59:31,821 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Orange, You’re Not a Joke to Me!' - '스텔라장'
+2025-07-14 11:59:31,822 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 11/100
+2025-07-14 11:59:31,823 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '피차일반' - '음율'
+2025-07-14 11:59:31,824 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 12/100
+2025-07-14 11:59:31,824 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '피었습니다. (Into Bloom)' - '엔플라잉 (N.Flying)'
+2025-07-14 11:59:31,825 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 13/100
+2025-07-14 11:59:31,825 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '좋지 아니한가' - '유다빈밴드'
+2025-07-14 11:59:31,826 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 14/100
+2025-07-14 11:59:31,826 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어제보다 슬픈 오늘' - '우디 (Woody)'
+2025-07-14 11:59:31,827 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 15/100
+2025-07-14 11:59:31,827 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'How Long Will I Love You' - 'Jon Boden'
+2025-07-14 11:59:31,828 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 16/100
+2025-07-14 11:59:31,828 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'HAPPY' - 'DAY6'
+2025-07-14 11:59:31,829 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 17/100
+2025-07-14 11:59:31,829 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Soda Pop' - 'KPop Demon Hunters (Soundtrack from the Netflix Film)'
+2025-07-14 11:59:31,830 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 18/100
+2025-07-14 11:59:31,830 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '여름아!부탁해' - '인디고(INDIGO)'
+2025-07-14 11:59:31,831 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 19/100
+2025-07-14 11:59:31,831 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Drowning' - 'WOODZ'
+2025-07-14 11:59:31,832 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 20/100
+2025-07-14 11:59:31,832 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'You're Sorry (feat. Astyn Turr)' - 'Victor Lundberg'
+2025-07-14 11:59:31,833 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 21/100
+2025-07-14 11:59:31,833 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭 콜드플레이 내한 공연 복습반' - '팝플리ㆍ팝 플레이리스트'
+2025-07-14 11:59:31,835 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 22/100
+2025-07-14 11:59:31,836 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '💿 pH-1 노래 모음 | 달달하면서 신나는 싱잉랩 | pH-1 playlist' - 'JINSEE'
+2025-07-14 11:59:31,837 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 23/100
+2025-07-14 11:59:31,838 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'DAY6 - 관객이 될게 (IU cover) | 🎧 1시간 듣기' - '데이원 ᴅᴀʏᴡᴏɴ'
+2025-07-14 11:59:31,839 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 24/100
+2025-07-14 11:59:31,840 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '[playlist] 영원이란 것 그 속에 잠들어 버린대도 나를 잊지 말아 줘| 영원1,2,3 모음 플레이리스트| Young One Playlist' - '김지막'
+2025-07-14 11:59:31,841 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 25/100
+2025-07-14 11:59:31,841 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '[playlist] 여름엔 why | 신나는 태연 노래모음 ☀️' - '탱구덕'
+2025-07-14 11:59:31,842 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 26/100
+2025-07-14 11:59:31,842 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Sunset Rollercoaster - TYPHOON RIDERS 颱風騎士 Live Concert (2020.09.25)' - 'Sunset Rollercoaster落日飛車'
+2025-07-14 11:59:31,843 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 27/100
+2025-07-14 11:59:31,844 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'DAY6 원필, 도운  "오늘(O.WHEN)” 1시간 반복재생 | 1 HOUR LOOP' - '데추'
+2025-07-14 11:59:31,844 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 28/100
+2025-07-14 11:59:31,845 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '[DAY6/데이식스] 방구석에서 즐기는 콘서트 🎤🥁🎸' - '오늘도데이식스'
+2025-07-14 11:59:31,845 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 29/100
+2025-07-14 11:59:31,846 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭•𝟏 𝐡𝐨𝐮𝐫 ❄️ 검정치마의 신나는 감성을 사랑해 ᖗ( ᐛ )ᖘ |검정치마|𝙏𝙝𝙚 𝘽𝙡𝙖𝙘𝙠 𝙎𝙠𝙞𝙧𝙩𝙨ㅣ인디ㅣ신나는ㅣ연말ㅣ플레이리스트' - '𝐎𝐧𝐢𝐢𝐢'
+2025-07-14 11:59:31,847 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 30/100
+2025-07-14 11:59:31,848 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '숙면, 수면을 위한 잘 때 듣기 좋은 백색소음 빗소리 1시간' - '자연 수면 자장가'
+2025-07-14 11:59:31,849 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 31/100
+2025-07-14 11:59:31,849 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '𝐖𝐎𝐎𝐃𝐙 𝟏𝟎𝐭𝐡 𝐀𝐧𝐧𝐢𝐯𝐞𝐫𝐬𝐚𝐫𝐲 𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭🎧 우즈가 듣고 싶은 우즈 노래' - 'WOODZ'
+2025-07-14 11:59:31,851 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 32/100
+2025-07-14 11:59:31,851 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '[playlist] 나 오늘부터 너랑 썸을 한번 타볼 거야 | 썸타는 노래 | 썰플리' - '스튜디오 썰'
+2025-07-14 11:59:31,852 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 33/100
+2025-07-14 11:59:31,852 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '[Playlist] 데이식스 포에버영 피날레 셋리스트 | FOREVER YOUNG FINALE | Day6플리' - '네리데이'
+2025-07-14 11:59:31,854 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 34/100
+2025-07-14 11:59:31,854 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Conor Maynard (Continued World TOUR) - O2 Academy - Bristol - 17/10/2022' - 'Mr. Shows UK'
+2025-07-14 11:59:31,856 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 35/100
+2025-07-14 11:59:31,856 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '잔잔한 빗소리 1시간 (ASMR, 빗소리, 잘 때 듣는 음악)' - 'ASMR Sound'
+2025-07-14 11:59:31,857 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 36/100
+2025-07-14 11:59:31,857 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '노리플라이 권순관의 플레이리스트 : 뜨거운 계절이 끝나갈 무렵 우리가 듣던 노래' - 'culture NEON'
+2025-07-14 11:59:31,858 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 37/100
+2025-07-14 11:59:31,859 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'DAY6 FOREVER YOUNG in INCHEON set list 🎧 콘서트 못 가는 사람들 여기여기😉 [DAY6 PLAYLIST]' - '필리리'
+2025-07-14 11:59:31,860 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 38/100
+2025-07-14 11:59:31,860 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '𝖯𝗅𝖺𝗒𝗅𝗂𝗌𝗍 ★ WOODZ World Tour 'OO-LI' FINALE setlist' - '승걸'
+2025-07-14 11:59:31,861 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 39/100
+2025-07-14 11:59:31,861 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '2022 아이유(IU) 콘서트 Golden Hour 셋리스트 Setlist 실제공연 순서 모음' - '약시무스 Yaximus'
+2025-07-14 11:59:31,862 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 40/100
+2025-07-14 11:59:31,863 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '🎶드렁큰타이거 명곡 모음 22곡 #드렁큰타이거' - '그레이'
+2025-07-14 11:59:31,863 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 41/100
+2025-07-14 11:59:31,864 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(How can I love the heartbreak, you're the one I love)' - '악동뮤지션'
+2025-07-14 11:59:31,864 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 42/100
+2025-07-14 11:59:31,865 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 (Live)' - 'AKMU'
+2025-07-14 11:59:31,865 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 43/100
+2025-07-14 11:59:31,866 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Last Goodbye' - '악동뮤지션'
+2025-07-14 11:59:31,867 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 44/100
+2025-07-14 11:59:31,867 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'Kpop Playlist Vol.3'
+2025-07-14 11:59:31,868 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 45/100
+2025-07-14 11:59:31,868 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'ZICO'
+2025-07-14 11:59:31,869 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 46/100
+2025-07-14 11:59:31,870 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'ZICO'
+2025-07-14 11:59:31,870 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 47/100
+2025-07-14 11:59:31,871 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - '나누리 (NA Nuri)'
+2025-07-14 11:59:31,871 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 48/100
+2025-07-14 11:59:31,872 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지'
+2025-07-14 11:59:31,873 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 49/100
+2025-07-14 11:59:31,873 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 How Can I Love the Heartbreak, You're the One I Love' - '짱군 Zzanggoon'
+2025-07-14 11:59:31,874 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 50/100
+2025-07-14 11:59:31,874 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - '달콤한꿈'
+2025-07-14 11:59:31,875 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 51/100
+2025-07-14 11:59:31,875 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - 'Dr. Kim (김박사)'
+2025-07-14 11:59:31,876 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 52/100
+2025-07-14 11:59:31,876 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지(27083)' - '금영노래방'
+2025-07-14 11:59:31,877 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 53/100
+2025-07-14 11:59:31,878 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 [피아노]' - 'Flow Music'
+2025-07-14 11:59:31,878 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 54/100
+2025-07-14 11:59:31,879 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' - '피아노 가이(Piano Guy)'
+2025-07-14 11:59:31,879 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 55/100
+2025-07-14 11:59:31,880 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Love Lee' - 'AKMU'
+2025-07-14 11:59:31,880 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 56/100
+2025-07-14 11:59:31,881 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 (Cover Ver.)' - '소금'
+2025-07-14 11:59:31,881 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 57/100
+2025-07-14 11:59:31,882 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '뱃노래(Chantey)' - '악동뮤지션'
+2025-07-14 11:59:31,882 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 58/100
+2025-07-14 11:59:31,882 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 [오르골]' - 'Flow Music'
+2025-07-14 11:59:31,883 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 59/100
+2025-07-14 11:59:31,883 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'How can I love the heartbreak, you're the one I love [Music Box] (어떻게 이별까지 사랑하겠어, 널 사랑하는 거지)' - 'Flow Music'
+2025-07-14 11:59:31,884 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 60/100
+2025-07-14 11:59:31,885 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 (오르골 Cover Ver.)' - '김봄 (Bom Kim)'
+2025-07-14 11:59:31,885 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 61/100
+2025-07-14 11:59:31,886 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 (Melody Karaoke Version)' - 'ZZang KARAOKE 2024 K-POP Vol.36'
+2025-07-14 11:59:31,886 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 62/100
+2025-07-14 11:59:31,887 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'How Can I Love the Heartbreak, You're the One I Love' - 'Sungha Jung'
+2025-07-14 11:59:31,887 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 63/100
+2025-07-14 11:59:31,888 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Where Is the Love' - 'Natural Miracle Sleep'
+2025-07-14 11:59:31,889 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 64/100
+2025-07-14 11:59:31,889 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '이별 같은 건 Farewell' - '해빗 Habit'
+2025-07-14 11:59:31,890 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 65/100
+2025-07-14 11:59:31,891 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Love Me Forever' - 'Sam Machin'
+2025-07-14 11:59:31,891 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 66/100
+2025-07-14 11:59:31,892 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑에서 이별까지' - '김민철'
+2025-07-14 11:59:31,892 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 67/100
+2025-07-14 11:59:31,893 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑이 지나가면 (응답하라 1988)' - '드라마 OST 피아노 인기가요 베스트 3'
+2025-07-14 11:59:31,893 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 68/100
+2025-07-14 11:59:31,894 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '말하지 못한 절반의 사랑' - '쥬얼리(Jewelry)'
+2025-07-14 11:59:31,894 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 69/100
+2025-07-14 11:59:31,895 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑을… 하면..' - '브이원'
+2025-07-14 11:59:31,896 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 70/100
+2025-07-14 11:59:31,896 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'The Perfect Request' - 'The Psychic Paramount'
+2025-07-14 11:59:31,897 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 71/100
+2025-07-14 11:59:31,897 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '밤만 되면' - '정든'
+2025-07-14 11:59:31,897 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 72/100
+2025-07-14 11:59:31,898 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '주제는 사랑' - '까치산'
+2025-07-14 11:59:31,899 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 73/100
+2025-07-14 11:59:31,899 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '널 사랑하겠어 (사랑을 보다 2 OST)' - '피아노로 듣는 영화, 드라마 OST 3'
+2025-07-14 11:59:31,900 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 74/100
+2025-07-14 11:59:31,900 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '내가 사랑하는 순간들' - '설렘 자판기'
+2025-07-14 11:59:31,901 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 75/100
+2025-07-14 11:59:31,901 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '인공잔디' - '악동뮤지션'
+2025-07-14 11:59:31,902 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 76/100
+2025-07-14 11:59:31,902 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '리얼리티 & Crescendo (Live)' - 'AKMU'
+2025-07-14 11:59:31,903 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 77/100
+2025-07-14 11:59:31,904 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Soy Mejor' - '$Lil Min$'
+2025-07-14 11:59:31,904 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 78/100
+2025-07-14 11:59:31,905 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '낙하 (inst.)' - '하이 플라이즈'
+2025-07-14 11:59:31,905 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 79/100
+2025-07-14 11:59:31,906 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'CHOCOLADY' - '악동뮤지션'
+2025-07-14 11:59:31,906 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 80/100
+2025-07-14 11:59:31,907 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '시간을 갖자(Let`s take time)' - '악동뮤지션'
+2025-07-14 11:59:31,907 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 81/100
+2025-07-14 11:59:31,908 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Way Back Home' - '악동뮤지션'
+2025-07-14 11:59:31,909 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 82/100
+2025-07-14 11:59:31,909 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑이란' - '윤상'
+2025-07-14 11:59:31,910 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 83/100
+2025-07-14 11:59:31,910 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Haughty Girl' - '악동뮤지션'
+2025-07-14 11:59:31,911 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 84/100
+2025-07-14 11:59:31,911 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '얼음들' - 'Golden Youth'
+2025-07-14 11:59:31,912 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 85/100
+2025-07-14 11:59:31,912 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Reality' - '악동뮤지션'
+2025-07-14 11:59:31,913 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 86/100
+2025-07-14 11:59:31,913 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑하는 순간' - '낮과 밤의 부르스 / 알수 없구나'
+2025-07-14 11:59:31,914 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 87/100
+2025-07-14 11:59:31,914 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '더 사랑해줄걸(Should`ve loved you more)' - '악동뮤지션'
+2025-07-14 11:59:31,915 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 88/100
+2025-07-14 11:59:31,915 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'YOU KNOW ME' - '악동뮤지션'
+2025-07-14 11:59:31,916 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 89/100
+2025-07-14 11:59:31,916 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Zusem Zurh' - 'Magnet Brain'
+2025-07-14 11:59:31,917 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 90/100
+2025-07-14 11:59:31,917 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '다가간다' - '해수 (Hesu)'
+2025-07-14 11:59:31,918 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 91/100
+2025-07-14 11:59:31,918 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '고래 (Inst.)' - 'JUAE'
+2025-07-14 11:59:31,919 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 92/100
+2025-07-14 11:59:31,919 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '얼음들 (Live)' - 'AKMU'
+2025-07-14 11:59:31,920 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 93/100
+2025-07-14 11:59:31,920 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '잃어버린 길 (Season 2 Ver.)' - '김준석'
+2025-07-14 11:59:31,921 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 94/100
+2025-07-14 11:59:31,921 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '째깍 째깍 째깍 (Tictoc Tictoc Tictoc) (with Beenzino)' - 'AKMU'
+2025-07-14 11:59:31,922 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 95/100
+2025-07-14 11:59:31,922 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '사랑이 떠나가도 (Inst.)' - 'M4'
+2025-07-14 11:59:31,922 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 96/100
+2025-07-14 11:59:31,923 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'BYE & 다리꼬지마 & 사소한 것에서 (Live)' - 'AKMU'
+2025-07-14 11:59:31,923 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 97/100
+2025-07-14 11:59:31,924 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'Kevin (Home Alone)' - '호소'
+2025-07-14 11:59:31,924 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 98/100
+2025-07-14 11:59:31,924 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '이별노래 (Feat. KURO) (feat. KURO)' - 'Wavycake'
+2025-07-14 11:59:31,925 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 99/100
+2025-07-14 11:59:31,925 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '어떻게 잘 지내니 내가 없어도' - '미련'
+2025-07-14 11:59:31,926 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 100/100
+2025-07-14 11:59:31,926 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '오랫동안 기다려왔어' - '하눌'
+2025-07-14 11:59:31,927 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - [실패] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지'와 일치하는 곡을 찾지 못함
+2025-07-14 11:59:31,927 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 영문으로 검색 시도
+2025-07-14 11:59:31,927 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어:  
+2025-07-14 11:59:31,927 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-14 11:59:31,945 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-14 11:59:31,958 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-14 11:59:32,980 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 기존 검색어 제거: 악뮤 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지
+2025-07-14 11:59:34,007 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-14 11:59:35,109 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-14 11:59:50,471 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, '현재 연결은 원격 호스트에 의해 강제로 끊겼습니다', None, 10054, None)': /session/98224b1309e922f7885368e8ee94b379
+2025-07-14 11:59:54,585 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000020545E5F9D0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/98224b1309e922f7885368e8ee94b379
+2025-07-14 11:59:58,635 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000002054604A3F0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/98224b1309e922f7885368e8ee94b379
+2025-07-14 12:00:02,705 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료

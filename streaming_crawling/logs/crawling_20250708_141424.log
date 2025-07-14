@@ -1,0 +1,163 @@
+2025-07-08 14:14:24,472 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-08 14:14:24,472 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-08
+2025-07-08 14:14:24,472 - __main__ - INFO - ⏰ 시작 시간: 2025-07-08 14:14:24
+2025-07-08 14:14:24,472 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-08 14:14:24,472 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-08 14:14:24,473 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-08
+2025-07-08 14:14:24,498 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-08 14:14:24,500 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-08 14:14:24,500 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-08 14:14:24,500 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-08 14:14:24,501 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-08 14:14:24,501 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-08 14:14:24,501 - WDM - INFO - ====== WebDriver manager ======
+2025-07-08 14:14:25,465 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:14:25,497 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:14:25,524 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.92\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-08 14:14:26,638 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-08 14:14:26,638 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-08 14:14:34,033 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-08 14:14:34,089 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-08 14:14:34,103 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-08 14:14:34,147 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-08 14:14:34,150 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-08 14:14:34,154 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158334
+2025-07-08 14:14:34,155 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2573037
+2025-07-08 14:14:34,155 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-08 14:14:34,155 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2573037)
+2025-07-08 14:14:34,155 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-08 14:14:39,962 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-08 14:14:40,563 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-08 14:14:40,572 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-08 14:14:40,595 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-08 14:14:40,596 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-08 14:14:40,598 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830294
+2025-07-08 14:14:40,599 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13827860
+2025-07-08 14:14:40,599 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-08 14:14:40,599 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13827860)
+2025-07-08 14:14:42,773 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-08 14:14:42,773 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-08 14:14:42,773 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (18.27초)
+2025-07-08 14:14:42,774 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-08 14:14:42,774 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-08 14:14:42,774 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-08 14:14:42,774 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-08 14:14:42,774 - WDM - INFO - ====== WebDriver manager ======
+2025-07-08 14:14:43,901 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:14:43,982 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:14:44,022 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.92\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-08 14:14:45,160 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-08 14:14:45,161 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-08 14:14:45,161 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키로 로그인 시도
+2025-07-08 14:14:51,947 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 적용 완료
+2025-07-08 14:14:51,968 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ❌ 로그인되지 않은 상태
+2025-07-08 14:14:51,968 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 유효하지 않습니다. 일반 로그인을 시도합니다.
+2025-07-08 14:14:51,968 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-08 14:14:59,878 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 이미 로그인된 상태
+2025-07-08 14:14:59,878 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 일반 로그인 성공
+2025-07-08 14:14:59,879 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-08 14:14:59,879 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 실리카겔 NO PAIN
+2025-07-08 14:14:59,879 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-08 14:14:59,906 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input#input
+2025-07-08 14:14:59,917 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-08 14:15:00,945 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-08 14:15:01,990 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-08 14:15:13,395 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //iron-selector[@id="chips"]//ytmusic-chip-cloud-chip-renderer//yt-formatted-string[text()="노래"]/ancestor::a
+2025-07-08 14:15:14,456 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 실리카겔 - NO PAIN
+2025-07-08 14:15:14,457 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-08 14:15:14,737 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 20개 곡 발견 (셀렉터: ytmusic-shelf-renderer ytmusic-responsive-list-item-renderer)
+2025-07-08 14:15:14,738 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/20
+2025-07-08 14:15:14,738 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: 'NO PAIN' - '실리카겔'
+2025-07-08 14:15:14,739 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: NO PAIN - 실리카겔 (3282만)
+2025-07-08 14:15:14,739 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 32820000)
+2025-07-08 14:15:14,739 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-08 14:15:14,739 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 우효 민들레 (single ver.)
+2025-07-08 14:15:14,740 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-08 14:15:14,764 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input#input
+2025-07-08 14:15:14,774 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-08 14:15:15,799 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 기존 검색어 제거: 실리카겔 NO PAIN
+2025-07-08 14:15:16,837 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-08 14:15:17,888 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-08 14:15:29,230 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //iron-selector[@id="chips"]//ytmusic-chip-cloud-chip-renderer//yt-formatted-string[text()="노래"]/ancestor::a
+2025-07-08 14:15:30,289 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 성공: 우효 - 민들레 (single ver.)
+2025-07-08 14:15:30,290 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [파싱] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-08 14:15:30,538 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색 결과: 20개 곡 발견 (셀렉터: ytmusic-shelf-renderer ytmusic-responsive-list-item-renderer)
+2025-07-08 14:15:30,538 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검사 중인 곡 1/20
+2025-07-08 14:15:30,539 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 발견된 곡: '민들레 (single ver.)' - '우효'
+2025-07-08 14:15:30,539 - crawling_view.view.youtube_music.youtube_music_logic - INFO - [성공] 일치하는 곡 발견: 민들레 (single ver.) - 우효 (5194만)
+2025-07-08 14:15:30,540 - crawling_view.view.youtube_music.youtube_music_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 51940000)
+2025-07-08 14:15:32,690 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-08 14:15:32,691 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 완료 - 성공: 2곡
+2025-07-08 14:15:32,691 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 2개 성공 (49.92초)
+2025-07-08 14:15:32,691 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 2개 성공, 0개 실패
+2025-07-08 14:15:32,692 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 2개 곡
+2025-07-08 14:15:32,692 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 2개 곡
+2025-07-08 14:15:32,692 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 2개 URL
+2025-07-08 14:15:32,692 - WDM - INFO - ====== WebDriver manager ======
+2025-07-08 14:15:33,768 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:15:33,809 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-08 14:15:33,832 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.92\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-08 14:15:34,903 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-08 14:15:39,739 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 실리카겔, 제목: 실리카겔 (Silica Gel) - NO PAIN [MV], 조회수: 5840000, 업로드일: 2022.08.24
+2025-07-08 14:15:44,531 - crawling_view.view.youtube.youtube_logic - INFO - ✅ 크롤링 성공 - 아티스트: 우효, 제목: [Official Audio] OOHYO 우효 / Dandelion 민들레 (full ver.), 조회수: 4230000, 업로드일: 2019.05.20
+2025-07-08 14:15:44,531 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 완료 - 성공: 2개
+2025-07-08 14:15:46,661 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-08 14:15:46,661 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube 크롤링 완료: 2개 성공 (13.97초)
+2025-07-08 14:15:46,661 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube 크롤링 완료: 2개 성공, 0개 실패
+2025-07-08 14:15:46,661 - crawling_view.controller.crawling_manager - INFO - 🍈 Melon 크롤링 시작: 2개 곡
+2025-07-08 14:15:46,662 - crawling_view.controller.platform_crawlers - INFO - 🎯 melon 크롤링 시작: 2개 곡
+2025-07-08 14:15:46,662 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 시작 - 총 2곡
+2025-07-08 14:15:49,347 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 완료 - 성공: 2곡
+2025-07-08 14:15:49,348 - crawling_view.controller.platform_crawlers - INFO - ✅ melon 크롤링 완료: 2개 성공 (2.69초)
+2025-07-08 14:15:49,348 - crawling_view.controller.crawling_manager - INFO - ✅ Melon 크롤링 완료: 2개 성공, 0개 실패
+2025-07-08 14:15:49,348 - crawling_view.controller.crawling_manager - INFO - 💾 3단계: DB 저장
+2025-07-08 14:15:49,384 - crawling_view.data.db_writer - INFO - ✅ genie DB 저장 완료: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,421 - crawling_view.data.db_writer - INFO - ✅ youtube_music DB 저장 완료: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,442 - crawling_view.data.db_writer - INFO - ✅ youtube DB 저장 완료: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,460 - crawling_view.data.db_writer - INFO - ✅ melon DB 저장 완료: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,460 - crawling_view.controller.crawling_manager - INFO - 📄 4단계: CSV 저장
+2025-07-08 14:15:49,460 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 genie 폴더 생성 완료
+2025-07-08 14:15:49,500 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 youtube_music 폴더 생성 완료
+2025-07-08 14:15:49,532 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 youtube 폴더 생성 완료
+2025-07-08 14:15:49,568 - crawling_view.data.csv_writer - INFO - ✅ rhoonart 하위에 melon 폴더 생성 완료
+2025-07-08 14:15:49,603 - crawling_view.controller.crawling_manager - INFO - ✅ 크롤링 프로세스 완료
+2025-07-08 14:15:49,603 - crawling_view.controller.crawling_manager - INFO - 📊 결과 요약: 2개 곡, 4개 플랫폼
+2025-07-08 14:15:49,604 - __main__ - INFO - ================================================================================
+2025-07-08 14:15:49,604 - __main__ - INFO - 📊 크롤링 결과 상세 분석
+2025-07-08 14:15:49,604 - __main__ - INFO - ================================================================================
+2025-07-08 14:15:49,604 - __main__ - INFO - 📅 대상 날짜: 2025-07-08
+2025-07-08 14:15:49,604 - __main__ - INFO - ⏰ 시작 시간: 2025-07-08 14:14:24
+2025-07-08 14:15:49,604 - __main__ - INFO - ⏰ 종료 시간: 2025-07-08 14:15:49
+2025-07-08 14:15:49,604 - __main__ - INFO - ⏱️  총 실행 시간: 85.13초 (1.42분)
+2025-07-08 14:15:49,605 - __main__ - INFO - 🎵 전체 대상 곡: 2개
+2025-07-08 14:15:49,605 - __main__ - INFO - 
+📈 플랫폼별 상세 결과:
+2025-07-08 14:15:49,605 - __main__ - INFO - ------------------------------------------------------------
+2025-07-08 14:15:49,605 - __main__ - INFO - ✅ GENIE:
+2025-07-08 14:15:49,605 - __main__ - INFO -    크롤링: 2개
+2025-07-08 14:15:49,605 - __main__ - INFO -    DB 저장: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,605 - __main__ - INFO -    CSV 저장: 2개 파일
+2025-07-08 14:15:49,606 - __main__ - INFO - ✅ YOUTUBE_MUSIC:
+2025-07-08 14:15:49,606 - __main__ - INFO -    크롤링: 2개
+2025-07-08 14:15:49,606 - __main__ - INFO -    DB 저장: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,606 - __main__ - INFO -    CSV 저장: 2개 파일
+2025-07-08 14:15:49,606 - __main__ - INFO - ✅ YOUTUBE:
+2025-07-08 14:15:49,606 - __main__ - INFO -    크롤링: 2개
+2025-07-08 14:15:49,606 - __main__ - INFO -    DB 저장: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,606 - __main__ - INFO -    CSV 저장: 2개 파일
+2025-07-08 14:15:49,607 - __main__ - INFO - ✅ MELON:
+2025-07-08 14:15:49,607 - __main__ - INFO -    크롤링: 2개
+2025-07-08 14:15:49,607 - __main__ - INFO -    DB 저장: 2개 성공, 0개 실패, 0개 스킵
+2025-07-08 14:15:49,607 - __main__ - INFO -    CSV 저장: 2개 파일
+2025-07-08 14:15:49,607 - __main__ - INFO - 
+📊 전체 요약:
+2025-07-08 14:15:49,607 - __main__ - INFO - ------------------------------------------------------------
+2025-07-08 14:15:49,608 - __main__ - INFO - 🎵 대상 곡: 2개
+2025-07-08 14:15:49,608 - __main__ - INFO - 🌐 플랫폼: 4개
+2025-07-08 14:15:49,608 - __main__ - INFO - 🎯 총 크롤링 시도: 8개
+2025-07-08 14:15:49,608 - __main__ - INFO - 💾 DB 저장: 8개
+2025-07-08 14:15:49,608 - __main__ - INFO - 📄 CSV 저장: 8개 파일
+2025-07-08 14:15:49,608 - __main__ - INFO - ❌ 실패: 0개
+2025-07-08 14:15:49,608 - __main__ - INFO - 📈 성공률: 100.0%
+2025-07-08 14:15:49,609 - __main__ - INFO - ⚡ 곡당 평균 처리 시간: 10.64초
+2025-07-08 14:15:49,609 - __main__ - INFO - ================================================================================

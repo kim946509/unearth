@@ -1,0 +1,196 @@
+2025-07-09 16:21:17,946 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-09 16:21:17,946 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-09
+2025-07-09 16:21:17,946 - __main__ - INFO - ⏰ 시작 시간: 2025-07-09 16:21:17
+2025-07-09 16:21:17,947 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-09 16:21:17,947 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-09 16:21:17,948 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-09
+2025-07-09 16:21:17,973 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-09 16:21:17,976 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-09 16:21:17,976 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-09 16:21:17,977 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-09 16:21:17,977 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-09 16:21:17,977 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-09 16:21:17,977 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 16:21:18,913 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 16:21:19,002 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 16:21:19,103 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 16:21:20,279 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 16:21:20,280 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 16:21:31,719 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 16:21:31,736 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 16:21:31,747 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-09 16:21:31,790 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-09 16:21:31,791 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-09 16:21:31,793 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158483
+2025-07-09 16:21:31,794 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2576198
+2025-07-09 16:21:31,794 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-09 16:21:31,794 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2576198)
+2025-07-09 16:21:31,794 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 16:21:37,532 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 16:21:38,329 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 16:21:38,338 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-09 16:21:38,362 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-09 16:21:38,364 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-09 16:21:38,366 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830458
+2025-07-09 16:21:38,367 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13834381
+2025-07-09 16:21:38,367 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-09 16:21:38,367 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13834381)
+2025-07-09 16:21:40,583 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 16:21:40,583 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-09 16:21:40,583 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (22.61초)
+2025-07-09 16:21:40,584 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-09 16:21:40,584 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-09 16:21:40,584 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-09 16:21:40,584 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-09 16:21:40,584 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 16:21:41,550 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 16:21:41,619 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 16:21:41,820 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 16:21:42,932 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 16:21:42,955 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키 로드: 24개
+2025-07-09 16:21:42,955 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 저장된 쿠키로 로그인 시도
+2025-07-09 16:21:48,885 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🍪 쿠키 적용 완료
+2025-07-09 16:21:48,903 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ❌ 로그인되지 않은 상태
+2025-07-09 16:21:48,904 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ 쿠키가 유효하지 않습니다. 일반 로그인을 시도합니다.
+2025-07-09 16:21:48,904 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-09 16:21:57,635 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 이미 로그인된 상태
+2025-07-09 16:21:57,635 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 일반 로그인 성공
+2025-07-09 16:21:57,635 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 16:21:57,635 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 실리카겔 NO PAIN
+2025-07-09 16:21:57,635 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-09 16:21:57,666 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-09 16:21:57,678 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-09 16:21:58,707 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-09 16:21:59,759 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-09 16:22:10,455 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@title, "노래") or contains(@title, "Songs")]
+2025-07-09 16:22:21,618 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - 검색 시도 1 실패: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x9f44a3+62419]
+	GetHandleVerifier [0x0x9f44e4+62484]
+	(No symbol) [0x0x832133]
+	(No symbol) [0x0x87a8fe]
+	(No symbol) [0x0x87ac9b]
+	(No symbol) [0x0x8c3052]
+	(No symbol) [0x0x89f4b4]
+	(No symbol) [0x0x8c087a]
+	(No symbol) [0x0x89f266]
+	(No symbol) [0x0x86e852]
+	(No symbol) [0x0x86f6f4]
+	GetHandleVerifier [0x0xc64793+2619075]
+	GetHandleVerifier [0x0xc5fbaa+2599642]
+	GetHandleVerifier [0x0xa1b04a+221050]
+	GetHandleVerifier [0x0xa0b2c8+156152]
+	GetHandleVerifier [0x0xa11c7d+183213]
+	GetHandleVerifier [0x0x9fc388+94904]
+	GetHandleVerifier [0x0x9fc512+95298]
+	GetHandleVerifier [0x0x9e766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+
+2025-07-09 16:22:26,308 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 2/3
+2025-07-09 16:22:26,340 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-09 16:22:26,350 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-09 16:22:27,382 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-09 16:22:28,454 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-09 16:22:28,992 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "ytmusic-chip-cloud-chip-renderer") and @role="tab"]
+2025-07-09 16:22:40,235 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - 검색 시도 2 실패: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x9f44a3+62419]
+	GetHandleVerifier [0x0x9f44e4+62484]
+	(No symbol) [0x0x832133]
+	(No symbol) [0x0x87a8fe]
+	(No symbol) [0x0x87ac9b]
+	(No symbol) [0x0x8c3052]
+	(No symbol) [0x0x89f4b4]
+	(No symbol) [0x0x8c087a]
+	(No symbol) [0x0x89f266]
+	(No symbol) [0x0x86e852]
+	(No symbol) [0x0x86f6f4]
+	GetHandleVerifier [0x0xc64793+2619075]
+	GetHandleVerifier [0x0xc5fbaa+2599642]
+	GetHandleVerifier [0x0xa1b04a+221050]
+	GetHandleVerifier [0x0xa0b2c8+156152]
+	GetHandleVerifier [0x0xa11c7d+183213]
+	GetHandleVerifier [0x0x9fc388+94904]
+	GetHandleVerifier [0x0x9fc512+95298]
+	GetHandleVerifier [0x0x9e766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+
+2025-07-09 16:22:44,445 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 3/3
+2025-07-09 16:22:44,465 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-09 16:22:44,474 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-09 16:22:45,506 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-09 16:22:46,531 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-09 16:22:47,068 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@class, "ytmusic-chip-cloud-chip-renderer") and @role="tab"]
+2025-07-09 16:22:58,219 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - 검색 시도 3 실패: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x9f44a3+62419]
+	GetHandleVerifier [0x0x9f44e4+62484]
+	(No symbol) [0x0x832133]
+	(No symbol) [0x0x87a8fe]
+	(No symbol) [0x0x87ac9b]
+	(No symbol) [0x0x8c3052]
+	(No symbol) [0x0x89f4b4]
+	(No symbol) [0x0x8c087a]
+	(No symbol) [0x0x89f266]
+	(No symbol) [0x0x86e852]
+	(No symbol) [0x0x86f6f4]
+	GetHandleVerifier [0x0xc64793+2619075]
+	GetHandleVerifier [0x0xc5fbaa+2599642]
+	GetHandleVerifier [0x0xa1b04a+221050]
+	GetHandleVerifier [0x0xa0b2c8+156152]
+	GetHandleVerifier [0x0xa11c7d+183213]
+	GetHandleVerifier [0x0x9fc388+94904]
+	GetHandleVerifier [0x0x9fc512+95298]
+	GetHandleVerifier [0x0x9e766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+
+2025-07-09 16:22:58,219 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ 모든 검색 시도 실패: 실리카겔 - NO PAIN
+2025-07-09 16:22:58,219 - crawling_view.view.youtube_music.youtube_music_main - WARNING - ❌ 크롤링 실패: NO PAIN - 실리카겔
+2025-07-09 16:22:58,220 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 16:22:58,220 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 YouTube Music 검색어: 우효 민들레 (single ver.)
+2025-07-09 16:22:58,220 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 1/3
+2025-07-09 16:22:58,241 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-09 16:22:58,261 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-09 16:22:59,294 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-09 16:23:00,324 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-09 16:23:11,034 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 노래 탭 클릭 성공: //a[contains(@title, "노래") or contains(@title, "Songs")]
+2025-07-09 16:23:22,186 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - 검색 시도 1 실패: Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x9f44a3+62419]
+	GetHandleVerifier [0x0x9f44e4+62484]
+	(No symbol) [0x0x832133]
+	(No symbol) [0x0x87a8fe]
+	(No symbol) [0x0x87ac9b]
+	(No symbol) [0x0x8c3052]
+	(No symbol) [0x0x89f4b4]
+	(No symbol) [0x0x8c087a]
+	(No symbol) [0x0x89f266]
+	(No symbol) [0x0x86e852]
+	(No symbol) [0x0x86f6f4]
+	GetHandleVerifier [0x0xc64793+2619075]
+	GetHandleVerifier [0x0xc5fbaa+2599642]
+	GetHandleVerifier [0x0xa1b04a+221050]
+	GetHandleVerifier [0x0xa0b2c8+156152]
+	GetHandleVerifier [0x0xa11c7d+183213]
+	GetHandleVerifier [0x0x9fc388+94904]
+	GetHandleVerifier [0x0x9fc512+95298]
+	GetHandleVerifier [0x0x9e766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+
+2025-07-09 16:23:26,586 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔍 검색 시도 2/3
+2025-07-09 16:23:26,607 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 찾기 성공: input[aria-autocomplete="list"]
+2025-07-09 16:23:26,618 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ 검색 입력창 포커스 성공
+2025-07-09 16:23:27,657 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ JavaScript로 검색어 입력 성공
+2025-07-09 16:23:28,690 - crawling_view.view.youtube_music.youtube_music_logic - INFO - ✅ Enter 키로 검색 실행
+2025-07-09 16:23:43,445 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, '현재 연결은 원격 호스트에 의해 강제로 끊겼습니다', None, 10054, None)': /session/3088f25bc4e9ab53e9dfeac265a75ba6
+2025-07-09 16:23:47,534 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000017080648410>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/3088f25bc4e9ab53e9dfeac265a75ba6
+2025-07-09 16:23:51,594 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001708023B950>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/3088f25bc4e9ab53e9dfeac265a75ba6
+2025-07-09 16:23:55,680 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료

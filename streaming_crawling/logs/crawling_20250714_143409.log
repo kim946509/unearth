@@ -1,0 +1,51 @@
+2025-07-14 14:34:09,871 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 14:34:09,872 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 14:34:09,872 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 14:34:09
+2025-07-14 14:34:09,872 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 14:34:09,872 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 14:34:09,873 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 14:34:09,922 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 14:34:09,932 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 14:34:09,933 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 14:34:09,933 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 14:34:09,933 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 14:34:09,933 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 14:34:09,933 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:34:11,158 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:34:11,210 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:34:11,258 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:34:12,579 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:34:12,580 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 14:34:12,580 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:34:20,393 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:34:20,520 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:34:20,536 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,582 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,584 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,587 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,588 - crawling_view.view.genie.genie_logic - INFO - [시도 2/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,630 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,633 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,634 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,634 - crawling_view.view.genie.genie_logic - INFO - [시도 3/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,670 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,672 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,673 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,673 - crawling_view.view.genie.genie_logic - INFO - [시도 4/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,716 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,718 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,719 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,719 - crawling_view.view.genie.genie_logic - INFO - [시도 5/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,758 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,760 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,761 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,762 - crawling_view.view.genie.genie_logic - INFO - [시도 6/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:34:20,793 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 봄 내음보다 너를
+2025-07-14 14:34:20,795 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 김나영
+2025-07-14 14:34:20,796 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:34:20,796 - crawling_view.view.genie.genie_logic - WARNING - ❌ '사건의 지평선' 파싱 실패 - 모든 시도 실패
+2025-07-14 14:34:20,796 - crawling_view.view.genie.genie_logic - INFO - 🔍 영문으로 검색 시도
+2025-07-14 14:34:24,761 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, '현재 연결은 원격 호스트에 의해 강제로 끊겼습니다', None, 10054, None)': /session/210a17ea7e134578a612420638f34974
+2025-07-14 14:34:28,856 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024F70389BD0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/210a17ea7e134578a612420638f34974
+2025-07-14 14:34:32,956 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000024F7038BC50>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/210a17ea7e134578a612420638f34974
+2025-07-14 14:34:37,015 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료

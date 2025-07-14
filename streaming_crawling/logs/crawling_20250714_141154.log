@@ -1,0 +1,95 @@
+2025-07-14 14:11:54,095 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-14 14:11:54,096 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-14
+2025-07-14 14:11:54,096 - __main__ - INFO - ⏰ 시작 시간: 2025-07-14 14:11:54
+2025-07-14 14:11:54,096 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-14 14:11:54,096 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-14 14:11:54,097 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-14
+2025-07-14 14:11:54,254 - crawling_view.data.song_service - INFO - 🔍 중복 제거된 활성 song_id 개수: 3
+2025-07-14 14:11:54,269 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 3
+2025-07-14 14:11:54,269 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-14 14:11:54,270 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 3개 곡
+2025-07-14 14:11:54,270 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 3개 곡
+2025-07-14 14:11:54,270 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 3곡
+2025-07-14 14:11:54,270 - WDM - INFO - ====== WebDriver manager ======
+2025-07-14 14:11:56,066 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:11:56,116 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-14 14:11:56,180 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-14 14:11:57,554 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-14 14:11:57,555 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 사건의 지평선 - 윤하 (ID: 0a499b8d-d0d7-4548-9117-265a090b9350)
+2025-07-14 14:11:57,555 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:04,837 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:04,856 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:04,877 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '윤하 - 사건의 지평선' 정보 추출 시도 중...
+2025-07-14 14:12:04,936 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 사건의 지평선
+2025-07-14 14:12:04,939 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 윤하 (YOUNHA)
+2025-07-14 14:12:04,945 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2340624
+2025-07-14 14:12:04,946 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 86760687
+2025-07-14 14:12:04,946 - crawling_view.view.genie.genie_logic - INFO - ✅ '사건의 지평선' - '윤하 (YOUNHA)' 파싱 성공!
+2025-07-14 14:12:04,947 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 사건의 지평선 - 윤하 (YOUNHA) (조회수: 86760687)
+2025-07-14 14:12:04,947 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤 (ID: 2157ee37-27cf-4f02-b6df-d77ae9b58f89)
+2025-07-14 14:12:04,947 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:11,883 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:11,971 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:11,982 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,003 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,004 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,005 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,006 - crawling_view.view.genie.genie_logic - INFO - [시도 2/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,034 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,036 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,037 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,037 - crawling_view.view.genie.genie_logic - INFO - [시도 3/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,066 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,068 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,069 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,069 - crawling_view.view.genie.genie_logic - INFO - [시도 4/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,105 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,106 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,107 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,107 - crawling_view.view.genie.genie_logic - INFO - [시도 5/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,135 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,137 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,138 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,138 - crawling_view.view.genie.genie_logic - INFO - [시도 6/6] '악뮤 - 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 정보 추출 시도 중...
+2025-07-14 14:12:12,163 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: Gadd A Tee?
+2025-07-14 14:12:12,165 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: Trio Toykeat
+2025-07-14 14:12:12,166 - crawling_view.view.genie.genie_logic - WARNING - ❌ 매칭 실패: {'title_match': False, 'artist_match': False, 'both_match': False, 'match_type': 'none', 'details': {'exact': {'title': False, 'artist': False}, 'keyword': {'title': False, 'artist': False}, 'ratio': {'title_ko': 0.0, 'title_en': 0.0, 'artist_ko': 0.0, 'artist_en': 0.0}}, 'combo': 'en/ko', 'matched_combo': None}
+2025-07-14 14:12:12,166 - crawling_view.view.genie.genie_logic - WARNING - ❌ '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지' 파싱 실패 - 모든 시도 실패
+2025-07-14 14:12:12,166 - crawling_view.view.genie.genie_logic - INFO - 🔍 영문으로 검색 시도
+2025-07-14 14:12:18,318 - crawling_view.view.genie.genie_logic - ERROR - ❌ 곡 정보 버튼 클릭 실패: Alert Text: 검색어를 입력해주세요.
+Message: unexpected alert open: {Alert text : 검색어를 입력해주세요.}
+  (Session info: chrome=138.0.7204.101)
+Stacktrace:
+	GetHandleVerifier [0x0x3444a3+62419]
+	GetHandleVerifier [0x0x3444e4+62484]
+	(No symbol) [0x0x182133]
+	(No symbol) [0x0x211130]
+	(No symbol) [0x0x1ef266]
+	(No symbol) [0x0x1be852]
+	(No symbol) [0x0x1bf6f4]
+	GetHandleVerifier [0x0x5b4793+2619075]
+	GetHandleVerifier [0x0x5afbaa+2599642]
+	GetHandleVerifier [0x0x36b04a+221050]
+	GetHandleVerifier [0x0x35b2c8+156152]
+	GetHandleVerifier [0x0x361c7d+183213]
+	GetHandleVerifier [0x0x34c388+94904]
+	GetHandleVerifier [0x0x34c512+95298]
+	GetHandleVerifier [0x0x33766a+9626]
+	BaseThreadInitThunk [0x0x76a75d49+25]
+	RtlInitializeExceptionChain [0x0x77b6d1ab+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77b6d131+561]
+	(No symbol) [0x0]
+
+2025-07-14 14:12:18,319 - crawling_view.view.genie.genie_logic - WARNING - ❌ 모든 검색 시도 실패: {'title_ko': '어떻게 이별까지 사랑하겠어, 널 사랑하는 거지', 'title_en': '', 'artist_ko': '악뮤', 'artist_en': '', 'song_id': '2157ee37-27cf-4f02-b6df-d77ae9b58f89'}
+2025-07-14 14:12:18,319 - crawling_view.view.genie.genie_main - WARNING - ❌ 크롤링 실패: 어떻게 이별까지 사랑하겠어, 널 사랑하는 거지 - 악뮤
+2025-07-14 14:12:18,319 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 한 페이지가 될 수 있게 - 데이식스 (ID: fabd6648-f05d-4bc1-8ad5-af151eff98d1)
+2025-07-14 14:12:18,319 - crawling_view.view.genie.genie_logic - INFO - 🔍 국문으로 검색 시도
+2025-07-14 14:12:25,278 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-14 14:12:25,342 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-14 14:12:25,352 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '데이식스 - 한 페이지가 될 수 있게' 정보 추출 시도 중...
+2025-07-14 14:12:25,394 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 한 페이지가 될 수 있게
+2025-07-14 14:12:25,396 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: DAY6 (데이식스)
+2025-07-14 14:12:25,400 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 2288536
+2025-07-14 14:12:25,401 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 72161800
+2025-07-14 14:12:25,401 - crawling_view.view.genie.genie_logic - INFO - ✅ '한 페이지가 될 수 있게' - 'DAY6 (데이식스)' 파싱 성공!
+2025-07-14 14:12:25,402 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 한 페이지가 될 수 있게 - DAY6 (데이식스) (조회수: 72161800)

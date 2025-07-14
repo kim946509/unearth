@@ -1,0 +1,140 @@
+2025-07-09 18:16:04,219 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-09 18:16:04,220 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-09
+2025-07-09 18:16:04,220 - __main__ - INFO - ⏰ 시작 시간: 2025-07-09 18:16:04
+2025-07-09 18:16:04,220 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-09 18:16:04,220 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-09 18:16:04,221 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-09
+2025-07-09 18:16:04,245 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-09 18:16:04,249 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-09 18:16:04,250 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-09 18:16:04,250 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-09 18:16:04,250 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-09 18:16:04,250 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-09 18:16:04,250 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:16:05,224 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:05,425 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:05,554 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:16:06,744 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:16:06,745 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 18:16:24,095 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 18:16:24,108 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 18:16:24,120 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-09 18:16:24,160 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-09 18:16:24,162 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-09 18:16:24,164 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158496
+2025-07-09 18:16:24,165 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2576590
+2025-07-09 18:16:24,165 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-09 18:16:24,165 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2576590)
+2025-07-09 18:16:24,166 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 18:16:30,994 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 18:16:31,004 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 18:16:31,023 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-09 18:16:31,054 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-09 18:16:31,055 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-09 18:16:31,057 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830485
+2025-07-09 18:16:31,057 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13835155
+2025-07-09 18:16:31,057 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-09 18:16:31,058 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13835155)
+2025-07-09 18:16:33,331 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 18:16:33,331 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-09 18:16:33,332 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (29.08초)
+2025-07-09 18:16:33,332 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-09 18:16:33,332 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-09 18:16:33,332 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-09 18:16:33,332 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-09 18:16:33,332 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:16:34,347 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:34,429 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:34,521 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:16:35,657 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:16:35,657 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📝 저장된 쿠키가 없습니다. 일반 로그인을 시도합니다.
+2025-07-09 18:16:35,657 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-09 18:16:35,662 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (수동 로그인 시작): data:,
+2025-07-09 18:16:42,043 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ 로그인 실패: Message: element not interactable
+  (Session info: chrome=138.0.7204.97)
+Stacktrace:
+	GetHandleVerifier [0x0xee44a3+62419]
+	GetHandleVerifier [0x0xee44e4+62484]
+	(No symbol) [0x0xd21f90]
+	(No symbol) [0x0xd65309]
+	(No symbol) [0x0xd639f2]
+	(No symbol) [0x0xd8f46c]
+	(No symbol) [0x0xd60054]
+	(No symbol) [0x0xd8f6e4]
+	(No symbol) [0x0xdb087a]
+	(No symbol) [0x0xd8f266]
+	(No symbol) [0x0xd5e852]
+	(No symbol) [0x0xd5f6f4]
+	GetHandleVerifier [0x0x1154793+2619075]
+	GetHandleVerifier [0x0x114fbaa+2599642]
+	GetHandleVerifier [0x0xf0b04a+221050]
+	GetHandleVerifier [0x0xefb2c8+156152]
+	GetHandleVerifier [0x0xf01c7d+183213]
+	GetHandleVerifier [0x0xeec388+94904]
+	GetHandleVerifier [0x0xeec512+95298]
+	GetHandleVerifier [0x0xed766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube_music\youtube_music_logic.py", line 182, in _perform_manual_login
+    password_input.send_keys(self.youtube_music_password)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webelement.py", line 305, in send_keys
+    self._execute(
+    ~~~~~~~~~~~~~^
+        Command.SEND_KEYS_TO_ELEMENT, {"text": "".join(keys_to_typing(value)), "value": keys_to_typing(value)}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webelement.py", line 574, in _execute
+    return self._parent.execute(command, params)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 447, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotInteractableException: Message: element not interactable
+  (Session info: chrome=138.0.7204.97)
+Stacktrace:
+	GetHandleVerifier [0x0xee44a3+62419]
+	GetHandleVerifier [0x0xee44e4+62484]
+	(No symbol) [0x0xd21f90]
+	(No symbol) [0x0xd65309]
+	(No symbol) [0x0xd639f2]
+	(No symbol) [0x0xd8f46c]
+	(No symbol) [0x0xd60054]
+	(No symbol) [0x0xd8f6e4]
+	(No symbol) [0x0xdb087a]
+	(No symbol) [0x0xd8f266]
+	(No symbol) [0x0xd5e852]
+	(No symbol) [0x0xd5f6f4]
+	GetHandleVerifier [0x0x1154793+2619075]
+	GetHandleVerifier [0x0x114fbaa+2599642]
+	GetHandleVerifier [0x0xf0b04a+221050]
+	GetHandleVerifier [0x0xefb2c8+156152]
+	GetHandleVerifier [0x0xf01c7d+183213]
+	GetHandleVerifier [0x0xeec388+94904]
+	GetHandleVerifier [0x0xeec512+95298]
+	GetHandleVerifier [0x0xed766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+
+2025-07-09 18:16:42,048 - crawling_view.view.youtube_music.youtube_music_main - ERROR - ❌ YouTube Music 로그인 실패
+2025-07-09 18:16:44,305 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 18:16:44,306 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 0개 성공 (10.97초)
+2025-07-09 18:16:44,307 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 0개 성공, 2개 실패
+2025-07-09 18:16:44,307 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 2개 곡
+2025-07-09 18:16:44,307 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 2개 곡
+2025-07-09 18:16:44,307 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 2개 URL
+2025-07-09 18:16:44,307 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 18:16:45,239 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:45,395 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 18:16:45,429 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 18:16:46,559 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 18:16:53,176 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000204FE910770>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/674fde503280b135594da730cb64ac08
+2025-07-09 18:16:57,239 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000204FE9108A0>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/674fde503280b135594da730cb64ac08
+2025-07-09 18:17:01,287 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x00000204FEAC0710>: Failed to establish a new connection: [WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다')': /session/674fde503280b135594da730cb64ac08
+2025-07-09 18:17:05,342 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료

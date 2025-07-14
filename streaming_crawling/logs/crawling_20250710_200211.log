@@ -1,0 +1,25 @@
+2025-07-10 20:02:11,562 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-10 20:02:11,563 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-10
+2025-07-10 20:02:11,563 - __main__ - INFO - ⏰ 시작 시간: 2025-07-10 20:02:11
+2025-07-10 20:02:11,563 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-10 20:02:11,563 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-10 20:02:11,564 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-10
+2025-07-10 20:02:11,589 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-10 20:02:11,605 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-10 20:02:11,606 - crawling_view.controller.crawling_manager - ERROR - ❌ 크롤링 프로세스 실패: 'SongInfo' object has no attribute 'genie_artist'
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\controller\crawling_manager.py", line 34, in run_crawling
+    active_songs = SongService.get_active_songs(target_date)
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\data\song_service.py", line 49, in get_active_songs
+    logger.debug(f"   - {song.id}: {song.genie_artist} - {song.genie_title}")
+                                    ^^^^^^^^^^^^^^^^^
+AttributeError: 'SongInfo' object has no attribute 'genie_artist'
+2025-07-10 20:02:11,611 - __main__ - INFO - ================================================================================
+2025-07-10 20:02:11,612 - __main__ - INFO - 📊 크롤링 결과 상세 분석
+2025-07-10 20:02:11,613 - __main__ - INFO - ================================================================================
+2025-07-10 20:02:11,615 - __main__ - INFO - 📅 대상 날짜: None
+2025-07-10 20:02:11,615 - __main__ - INFO - ⏰ 시작 시간: 2025-07-10 20:02:11
+2025-07-10 20:02:11,617 - __main__ - INFO - ⏰ 종료 시간: 2025-07-10 20:02:11
+2025-07-10 20:02:11,617 - __main__ - INFO - ⏱️  총 실행 시간: 0.05초 (0.00분)
+2025-07-10 20:02:11,618 - __main__ - ERROR - ❌ 크롤링 실패: 알 수 없는 오류
+2025-07-10 20:02:11,619 - __main__ - INFO - ================================================================================

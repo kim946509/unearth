@@ -1,0 +1,150 @@
+2025-07-09 17:38:39,656 - __main__ - INFO - 🚀 전체 크롤링 프로세스 시작
+2025-07-09 17:38:39,656 - __main__ - INFO - 📅 크롤링 대상 날짜: 2025-07-09
+2025-07-09 17:38:39,656 - __main__ - INFO - ⏰ 시작 시간: 2025-07-09 17:38:39
+2025-07-09 17:38:39,657 - crawling_view.controller.crawling_manager - INFO - 🚀 크롤링 프로세스 시작
+2025-07-09 17:38:39,657 - crawling_view.controller.crawling_manager - INFO - 📋 1단계: 크롤링 대상 노래 조회
+2025-07-09 17:38:39,657 - crawling_view.data.song_service - INFO - 📅 기준 날짜: 2025-07-09
+2025-07-09 17:38:39,680 - crawling_view.data.song_service - INFO - 🔍 활성 크롤링 기간에 포함된 song_id 개수: 2
+2025-07-09 17:38:39,686 - crawling_view.data.song_service - INFO - 🎵 크롤링 대상 곡 개수: 2
+2025-07-09 17:38:39,686 - crawling_view.controller.crawling_manager - INFO - 🕷️ 2단계: 플랫폼별 크롤링 실행
+2025-07-09 17:38:39,686 - crawling_view.controller.crawling_manager - INFO - 🎵 Genie 크롤링 시작: 2개 곡
+2025-07-09 17:38:39,686 - crawling_view.controller.platform_crawlers - INFO - 🎯 genie 크롤링 시작: 2개 곡
+2025-07-09 17:38:39,687 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 시작 - 총 2곡
+2025-07-09 17:38:39,687 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 17:38:40,630 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:38:40,742 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:38:40,846 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 17:38:41,924 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 17:38:41,925 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: NO PAIN - 실리카겔 (ID: 299fe2985c9e4eb5b358019c5017cb69)
+2025-07-09 17:39:05,205 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 17:39:05,218 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 17:39:05,230 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '실리카겔 - NO PAIN' 정보 추출 시도 중...
+2025-07-09 17:39:05,270 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: NO PAIN
+2025-07-09 17:39:05,272 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 실리카겔
+2025-07-09 17:39:05,274 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 158494
+2025-07-09 17:39:05,274 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 2576455
+2025-07-09 17:39:05,275 - crawling_view.view.genie.genie_logic - INFO - ✅ 'NO PAIN' - '실리카겔' 파싱 성공!
+2025-07-09 17:39:05,275 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: NO PAIN - 실리카겔 (조회수: 2576455)
+2025-07-09 17:39:05,275 - crawling_view.view.genie.genie_main - INFO - 🔍 검색 중: 민들레 (single ver.) - 우효 (ID: 83212ed6632441298a31b53dcfa83d80)
+2025-07-09 17:39:11,861 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 버튼 클릭 완료
+2025-07-09 17:39:12,897 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡 정보 페이지 로딩 완료
+2025-07-09 17:39:12,910 - crawling_view.view.genie.genie_logic - INFO - [시도 1/6] '우효 - 민들레 (single ver.)' 정보 추출 시도 중...
+2025-07-09 17:39:12,939 - crawling_view.view.genie.genie_logic - INFO - ✅ 곡명 추출 성공: 민들레 (single ver.)
+2025-07-09 17:39:12,940 - crawling_view.view.genie.genie_logic - INFO - ✅ 아티스트명 추출 성공: 우효
+2025-07-09 17:39:12,941 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 청취자수 추출 성공: 830470
+2025-07-09 17:39:12,942 - crawling_view.view.genie.genie_logic - INFO - ✅ 전체 재생수 추출 성공: 13834865
+2025-07-09 17:39:12,942 - crawling_view.view.genie.genie_logic - INFO - ✅ '민들레 (single ver.)' - '우효' 파싱 성공!
+2025-07-09 17:39:12,942 - crawling_view.view.genie.genie_main - INFO - ✅ 크롤링 완료: 민들레 (single ver.) - 우효 (조회수: 13834865)
+2025-07-09 17:39:15,136 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 17:39:15,136 - crawling_view.view.genie.genie_main - INFO - 🎵 Genie 크롤링 완료 - 성공: 2곡
+2025-07-09 17:39:15,137 - crawling_view.controller.platform_crawlers - INFO - ✅ genie 크롤링 완료: 2개 성공 (35.45초)
+2025-07-09 17:39:15,137 - crawling_view.controller.crawling_manager - INFO - ✅ Genie 크롤링 완료: 2개 성공, 0개 실패
+2025-07-09 17:39:15,137 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube Music 크롤링 시작: 2개 곡
+2025-07-09 17:39:15,137 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube_music 크롤링 시작: 2개 곡
+2025-07-09 17:39:15,138 - crawling_view.view.youtube_music.youtube_music_main - INFO - 🎵 YouTube Music 크롤링 시작 - 총 2곡
+2025-07-09 17:39:15,138 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 17:39:16,015 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:39:16,856 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:39:16,924 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 17:39:18,015 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 17:39:18,016 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📝 저장된 쿠키가 없습니다. 일반 로그인을 시도합니다.
+2025-07-09 17:39:18,016 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔐 일반 로그인 시도
+2025-07-09 17:39:18,019 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (수동 로그인 시작): data:,
+2025-07-09 17:39:24,827 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 1): https://www.youtube.com/musicpremium
+2025-07-09 17:39:24,828 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 17:39:24,828 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔄 YouTube Music 페이지로 재시도...
+2025-07-09 17:39:31,216 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 2): https://www.youtube.com/musicpremium
+2025-07-09 17:39:31,217 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 17:39:31,217 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 🔄 YouTube Music 페이지로 재시도...
+2025-07-09 17:39:38,258 - crawling_view.view.youtube_music.youtube_music_logic - INFO - 📍 현재 URL (YouTube Music 페이지 이동 시도 3): https://www.youtube.com/musicpremium
+2025-07-09 17:39:38,258 - crawling_view.view.youtube_music.youtube_music_logic - WARNING - ⚠️ YouTube Music이 아닌 다른 페이지로 이동됨: https://www.youtube.com/musicpremium
+2025-07-09 17:39:38,258 - crawling_view.view.youtube_music.youtube_music_logic - ERROR - ❌ YouTube Music 페이지 이동 실패
+2025-07-09 17:39:38,258 - crawling_view.view.youtube_music.youtube_music_main - ERROR - ❌ YouTube Music 로그인 실패
+2025-07-09 17:39:40,683 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 17:39:40,684 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube_music 크롤링 완료: 0개 성공 (25.55초)
+2025-07-09 17:39:40,685 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube Music 크롤링 완료: 0개 성공, 2개 실패
+2025-07-09 17:39:40,686 - crawling_view.controller.crawling_manager - INFO - 🎵 YouTube 크롤링 시작: 2개 곡
+2025-07-09 17:39:40,688 - crawling_view.controller.platform_crawlers - INFO - 🎯 youtube 크롤링 시작: 2개 곡
+2025-07-09 17:39:40,689 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 시작 - 총 2개 URL
+2025-07-09 17:39:40,690 - WDM - INFO - ====== WebDriver manager ======
+2025-07-09 17:39:41,642 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:39:41,902 - WDM - INFO - Get LATEST chromedriver version for google-chrome
+2025-07-09 17:39:41,972 - WDM - INFO - Driver [C:\Users\kim94\.wdm\drivers\chromedriver\win64\138.0.7204.94\chromedriver-win32/chromedriver.exe] found in cache
+2025-07-09 17:39:43,132 - crawling_view.utils.driver - INFO - 🟢 Chrome 브라우저 실행 완료 (헤드리스 모드)
+2025-07-09 17:39:46,104 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 단일 비디오 크롤링 실패: 제목 selector를 찾지 못함
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube\youtube_logic.py", line 78, in _crawl_single_video
+    raise Exception("제목 selector를 찾지 못함")
+Exception: 제목 selector를 찾지 못함
+2025-07-09 17:39:46,108 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 크롤링 실패: 실리카겔 - https://www.youtube.com/watch?v=JaIMSzE5yLA
+2025-07-09 17:39:46,110 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 단일 비디오 크롤링 실패: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=138.0.7204.97)
+Stacktrace:
+	GetHandleVerifier [0x0x2e44a3+62419]
+	GetHandleVerifier [0x0x2e44e4+62484]
+	(No symbol) [0x0x122133]
+	(No symbol) [0x0x100fd9]
+	(No symbol) [0x0x195b9e]
+	(No symbol) [0x0x1b0159]
+	(No symbol) [0x0x18f266]
+	(No symbol) [0x0x15e852]
+	(No symbol) [0x0x15f6f4]
+	GetHandleVerifier [0x0x554793+2619075]
+	GetHandleVerifier [0x0x54fbaa+2599642]
+	GetHandleVerifier [0x0x30b04a+221050]
+	GetHandleVerifier [0x0x2fb2c8+156152]
+	GetHandleVerifier [0x0x301c7d+183213]
+	GetHandleVerifier [0x0x2ec388+94904]
+	GetHandleVerifier [0x0x2ec512+95298]
+	GetHandleVerifier [0x0x2d766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+	(No symbol) [0x0]
+Traceback (most recent call last):
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\crawling_view\view\youtube\youtube_logic.py", line 74, in _crawl_single_video
+    self.driver.get(url)
+    ~~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 472, in get
+    self.execute(Command.GET, {"url": url})
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 447, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\kim94\workspace\source\rhoonart\streaming_crawling\env\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=138.0.7204.97)
+Stacktrace:
+	GetHandleVerifier [0x0x2e44a3+62419]
+	GetHandleVerifier [0x0x2e44e4+62484]
+	(No symbol) [0x0x122133]
+	(No symbol) [0x0x100fd9]
+	(No symbol) [0x0x195b9e]
+	(No symbol) [0x0x1b0159]
+	(No symbol) [0x0x18f266]
+	(No symbol) [0x0x15e852]
+	(No symbol) [0x0x15f6f4]
+	GetHandleVerifier [0x0x554793+2619075]
+	GetHandleVerifier [0x0x54fbaa+2599642]
+	GetHandleVerifier [0x0x30b04a+221050]
+	GetHandleVerifier [0x0x2fb2c8+156152]
+	GetHandleVerifier [0x0x301c7d+183213]
+	GetHandleVerifier [0x0x2ec388+94904]
+	GetHandleVerifier [0x0x2ec512+95298]
+	GetHandleVerifier [0x0x2d766a+9626]
+	BaseThreadInitThunk [0x0x76155d49+25]
+	RtlInitializeExceptionChain [0x0x77e9d09b+107]
+	RtlGetAppContainerNamedObjectPath [0x0x77e9d021+561]
+	(No symbol) [0x0]
+
+2025-07-09 17:39:46,114 - crawling_view.view.youtube.youtube_logic - ERROR - ❌ 크롤링 실패: 우효 - https://www.youtube.com/watch?v=Kaq4LFM47I0&list=RDKaq4LFM47I0
+2025-07-09 17:39:46,114 - crawling_view.view.youtube.youtube_main - INFO - 🖤 YouTube 크롤링 완료 - 성공: 0개
+2025-07-09 17:39:48,243 - crawling_view.utils.driver - INFO - �� Chrome 브라우저 종료
+2025-07-09 17:39:48,244 - crawling_view.controller.platform_crawlers - INFO - ✅ youtube 크롤링 완료: 0개 성공 (7.55초)
+2025-07-09 17:39:48,244 - crawling_view.controller.crawling_manager - INFO - ✅ YouTube 크롤링 완료: 0개 성공, 2개 실패
+2025-07-09 17:39:48,244 - crawling_view.controller.crawling_manager - INFO - 🍈 Melon 크롤링 시작: 2개 곡
+2025-07-09 17:39:48,244 - crawling_view.controller.platform_crawlers - INFO - 🎯 melon 크롤링 시작: 2개 곡
+2025-07-09 17:39:48,245 - crawling_view.view.melon.melon_main - INFO - 🍈 Melon 크롤링 시작 - 총 2곡
