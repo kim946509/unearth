@@ -1,8 +1,24 @@
+# 환경변수 파일 제외
 **/env.properties
+**/.env
 env.properties
+.env
+
+# 빌드 파일 제외
 build/
 out/
 .gradle/
 .idea/
 *.log
 *.iml
+
+# Python 관련 제외
+streaming_crawling/env/
+streaming_crawling/__pycache__/
+streaming_crawling/*.pyc
+streaming_crawling/cookies.pkl
+streaming_crawling/db.sqlite3
+
+# 로그 및 데이터 제외
+streaming_crawling/logs/
+streaming_crawling/csv_folder/
