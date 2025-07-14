@@ -119,8 +119,16 @@ public class CrawlingService {
                         long listenersIncrease = 0;
 
                         if (previousData != null) {
-                            viewsIncrease = currentData.getViews() - previousData.getViews();
-                            listenersIncrease = currentData.getListeners() - previousData.getListeners();
+                            // 특수 값 처리: -1(데이터 없음), -999(오류)는 증가량 계산에서 제외
+                            if (currentData.getViews() != -1 && currentData.getViews() != -999 &&
+                                    previousData.getViews() != -1 && previousData.getViews() != -999) {
+                                viewsIncrease = currentData.getViews() - previousData.getViews();
+                            }
+
+                            if (currentData.getListeners() != -1 && currentData.getListeners() != -999 &&
+                                    previousData.getListeners() != -1 && previousData.getListeners() != -999) {
+                                listenersIncrease = currentData.getListeners() - previousData.getListeners();
+                            }
                         }
 
                         return CrawlingDataResponseDto.builder()
