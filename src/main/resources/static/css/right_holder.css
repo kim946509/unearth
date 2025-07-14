@@ -509,6 +509,39 @@
     color: #6c757d;
     font-style: italic;
 }
+
+/* 크롤링 데이터 텍스트 색상 클래스 */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-warning {
+    color: #f39c12 !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* 결과 정보 스타일 */
+.result-info {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+    font-size: 14px;
+}
+
+.result-info p {
+    margin: 0;
+}
+
 @media (max-width: 600px) {
     .modal-content {
         min-width: 0;

@@ -96,20 +96,12 @@ public class RightHolderController {
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             HttpSession session,
             Model model) {
-        // SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
-        UserDto user = SessionUserUtil.getLoginUser(session);
-        if (user == null) {
-            throw new BaseException(ResponseCode.AUTH_FAIL, "로그인이 필요합니다.");
-        }
-
-        // 권리자 본인인지 확인
-        boolean isOwnPage = user.getRole() == Role.RIGHT_HOLDER &&
-                rightHolderService.findById(rightHolderId).getUser().getId().equals(user.getId());
-
-        // 관리자가 아니고 본인 페이지도 아니면 접근 불가
-        if (user.getRole() != Role.SUPER_ADMIN && user.getRole() != Role.ADMIN && !isOwnPage) {
+        // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId)) {
             throw new BaseException(ResponseCode.FORBIDDEN, "접근 권한이 없습니다.");
         }
+
+        UserDto user = SessionUserUtil.getLoginUser(session);
 
         // size 제한: 10, 30, 50만 허용
         if (size != 10 && size != 30 && size != 50)

@@ -18,6 +18,6 @@ public class CrawlingDataResponseDto {
     private PlatformType platform;
     private long views;
     private long listeners;
-    private long viewsIncrease; // 전날 대비 조회수 증가량
-    private long listenersIncrease; // 전날 대비 청취자수 증가량
+    private long viewsIncrease; // 전날 대비 조회수 증가량 (0: 이전 데이터 없음, -999: 오류)
+    private long listenersIncrease; // 전날 대비 청취자수 증가량 (0: 이전 데이터 없음, -999: 오류)
 }

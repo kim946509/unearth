@@ -15,4 +15,8 @@ import java.util.List;
 public class CrawlingDataWithSongInfoDto {
     private SongInfo songInfo;
     private List<CrawlingDataResponseDto> crawlingDataList;
+    private int totalPages;
+    private long totalElements;
+    private int currentPage;
+    private int pageSize;
 }

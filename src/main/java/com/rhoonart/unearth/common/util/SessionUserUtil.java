@@ -81,4 +81,59 @@ public class SessionUserUtil {
     public static UserDto requireAdminRole(HttpSession session) {
         return requireRole(session, Role.SUPER_ADMIN, Role.ADMIN);
     }
+
+    /**
+     * 사용자 ID를 가져옵니다.
+     * 
+     * @param session HttpSession
+     * @return 사용자 ID 또는 null
+     */
+    public static String getUserId(HttpSession session) {
+        UserDto user = getLoginUser(session);
+        return user != null ? user.getId() : null;
+    }
+
+    /**
+     * 사용자 권한을 가져옵니다.
+     * 
+     * @param session HttpSession
+     * @return 사용자 권한 또는 null
+     */
+    public static String getUserRole(HttpSession session) {
+        UserDto user = getLoginUser(session);
+        return user != null ? user.getRole().name() : null;
+    }
+
+    /**
+     * 관리자 권한(SUPER_ADMIN, ADMIN)을 확인합니다.
+     * 
+     * @param session HttpSession
+     * @return 관리자 권한 여부
+     */
+    public static boolean isAdmin(HttpSession session) {
+        String role = getUserRole(session);
+        return "SUPER_ADMIN".equals(role) || "ADMIN".equals(role);
+    }
+
+    /**
+     * 특정 권리자의 데이터에 접근할 권한이 있는지 확인합니다.
+     * 
+     * @param session       HttpSession
+     * @param rightHolderId 권리자 ID
+     * @return 접근 권한 여부
+     */
+    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId) {
+        UserDto user = getLoginUser(session);
+        if (user == null) {
+            return false;
+        }
+
+        // 관리자는 모든 권리자 데이터에 접근 가능
+        if (isAdmin(session)) {
+            return true;
+        }
+
+        // 권리자는 본인 데이터만 접근 가능
+        return user.getRole() == Role.RIGHT_HOLDER && user.getId().equals(rightHolderId);
+    }
 }

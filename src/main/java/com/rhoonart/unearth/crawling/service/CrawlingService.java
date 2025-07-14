@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,8 +78,7 @@ public class CrawlingService {
     }
 
     public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(String songId, LocalDate startDate,
-            LocalDate endDate,
-            PlatformType platform, Integer intervalDays) {
+            LocalDate endDate, PlatformType platform, Integer intervalDays, int page, int size) {
         // 음원 존재 여부 확인
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -93,12 +93,14 @@ public class CrawlingService {
         // 간격 설정 (null이면 1로 설정)
         int interval = intervalDays != null ? intervalDays : 1;
 
-        // 간격 적용 및 증가량 계산
+        // 간격 필터링 및 검색어 필터링
         List<CrawlingDataResponseDto> resultList = dataByDate.entrySet().stream()
                 .filter(entry -> {
+                    LocalDate currentDate = entry.getKey();
+
                     // 간격에 맞는 날짜만 필터링 (시작일부터 간격만큼 건너뛰면서)
-                    long daysFromStart = java.time.temporal.ChronoUnit.DAYS.between(startDate, entry.getKey());
-                    return daysFromStart % interval == 0;
+                    long daysFromStart = java.time.temporal.ChronoUnit.DAYS.between(startDate, currentDate);
+                    return daysFromStart >= 0 && daysFromStart % interval == 0;
                 })
                 .map(entry -> {
                     LocalDate currentDate = entry.getKey();
@@ -115,18 +117,25 @@ public class CrawlingService {
                                         .orElse(null)
                                 : null;
 
-                        long viewsIncrease = 0;
-                        long listenersIncrease = 0;
+                        long viewsIncrease = 0; // 기본값: 이전 데이터 없음
+                        long listenersIncrease = 0; // 기본값: 이전 데이터 없음
 
                         if (previousData != null) {
-                            // 특수 값 처리: -1(데이터 없음), -999(오류)는 증가량 계산에서 제외
-                            if (currentData.getViews() != -1 && currentData.getViews() != -999 &&
-                                    previousData.getViews() != -1 && previousData.getViews() != -999) {
+                            // 조회수 증가량 계산
+                            if (currentData.getViews() == -999 || previousData.getViews() == -999) {
+                                viewsIncrease = -999; // 오류 상황
+                            } else if (currentData.getViews() == -1 || previousData.getViews() == -1) {
+                                viewsIncrease = -1; // 데이터 제공되지 않음
+                            } else {
                                 viewsIncrease = currentData.getViews() - previousData.getViews();
                             }
 
-                            if (currentData.getListeners() != -1 && currentData.getListeners() != -999 &&
-                                    previousData.getListeners() != -1 && previousData.getListeners() != -999) {
+                            // 청취자수 증가량 계산
+                            if (currentData.getListeners() == -999 || previousData.getListeners() == -999) {
+                                listenersIncrease = -999; // 오류 상황
+                            } else if (currentData.getListeners() == -1 || previousData.getListeners() == -1) {
+                                listenersIncrease = -1; // 데이터 제공되지 않음
+                            } else {
                                 listenersIncrease = currentData.getListeners() - previousData.getListeners();
                             }
                         }
@@ -150,9 +159,40 @@ public class CrawlingService {
                 })
                 .collect(Collectors.toList());
 
+        // 페이징 처리
+        int totalElements = resultList.size();
+        int totalPages = totalElements > 0 ? (int) Math.ceil((double) totalElements / size) : 0;
+
+        // 페이지 범위 계산 (안전한 범위 체크)
+        int startIndex = (page - 1) * size;
+        int endIndex = Math.min(startIndex + size, totalElements);
+
+        // 시작 인덱스가 총 개수보다 크면 빈 리스트 반환
+        List<CrawlingDataResponseDto> pagedData;
+        if (startIndex >= totalElements) {
+            pagedData = new ArrayList<>();
+        } else {
+            pagedData = resultList.subList(startIndex, endIndex);
+        }
+
         return CrawlingDataWithSongInfoDto.builder()
                 .songInfo(songInfo)
-                .crawlingDataList(resultList)
+                .crawlingDataList(pagedData)
+                .totalPages(totalPages)
+                .totalElements(totalElements)
+                .currentPage(page)
+                .pageSize(size)
                 .build();
+    }
+
+    /**
+     * 음원 ID로 음원 정보를 조회합니다.
+     * 
+     * @param songId 음원 ID
+     * @return SongInfo
+     */
+    public SongInfo getSongInfoById(String songId) {
+        return songInfoRepository.findById(songId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
     }
 }
