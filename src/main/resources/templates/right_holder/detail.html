@@ -10,7 +10,7 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    <div th:if="${user.role != T(com.rhoonart.unearth.user.entity.Role).RIGHT_HOLDER}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
     <section class="content">
         <div class="page-header">
             <h2 th:text="${rightHolder.holderName}">권리자 상세</h2>
