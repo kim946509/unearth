@@ -2,10 +2,14 @@ package com.rhoonart.unearth.right_holder.service;
 
 import com.rhoonart.unearth.right_holder.dto.RightHolderListResponseDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import com.rhoonart.unearth.right_holder.dto.RightHolderSongListResponseDto;
 import com.rhoonart.unearth.right_holder.entity.HolderType;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
 import com.rhoonart.unearth.right_holder.repository.RightHolderRepository;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
+import com.rhoonart.unearth.song.entity.SongInfo;
+import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
+import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
 import com.rhoonart.unearth.user.entity.User;
 import com.rhoonart.unearth.user.entity.Role;
 import com.rhoonart.unearth.user.repository.UserRepository;
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
 public class RightHolderService {
     private final RightHolderRepository rightHolderRepository;
     private final SongInfoRepository songInfoRepository;
+    private final CrawlingPeriodRepository crawlingPeriodRepository;
+    private final CrawlingDataRepository crawlingDataRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -74,5 +80,36 @@ public class RightHolderService {
                 .businessNumber(dto.getBusinessNumber())
                 .build();
         rightHolderRepository.save(rightHolder);
+    }
+
+    public Page<RightHolderSongListResponseDto> findSongsByRightHolder(String rightHolderId, String search,
+            Pageable pageable) {
+        // 권리자 존재 여부 확인
+        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // 권리자별 노래 조회
+        Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearch(rightHolderId, search, pageable);
+
+        // DTO 변환
+        return songPage.map(song -> {
+            // 크롤링 데이터 존재 여부 확인
+            boolean hasCrawlingData = crawlingDataRepository.existsBySongId(song.getId());
+
+            return RightHolderSongListResponseDto.builder()
+                    .songId(song.getId())
+                    .rightHolderName(song.getRightHolder().getHolderName())
+                    .artistKo(song.getArtistKo())
+                    .albumKo(song.getAlbumKo())
+                    .titleKo(song.getTitleKo())
+                    .youtubeUrl(song.getYoutubeUrl())
+                    .hasCrawlingData(hasCrawlingData)
+                    .build();
+        });
+    }
+
+    public RightHolder findById(String rightHolderId) {
+        return rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
     }
 }

@@ -30,4 +30,19 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
                 ORDER BY s.createdAt DESC
             """)
     Page<SongInfo> searchSearchFields(@Param("search") String search, Pageable pageable);
+
+    @Query("""
+                SELECT s FROM SongInfo s
+                WHERE s.rightHolder.id = :rightHolderId
+                AND (
+                    :search IS NULL OR :search = ''
+                    OR s.artistKo LIKE CONCAT('%', :search, '%')
+                    OR s.albumKo LIKE CONCAT('%', :search, '%')
+                    OR s.titleKo LIKE CONCAT('%', :search, '%')
+                    OR s.rightHolder.holderName LIKE CONCAT('%', :search, '%')
+                )
+                ORDER BY s.createdAt DESC
+            """)
+    Page<SongInfo> findByRightHolderIdWithSearch(@Param("rightHolderId") String rightHolderId,
+            @Param("search") String search, Pageable pageable);
 }

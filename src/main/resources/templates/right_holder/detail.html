@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 권리자 상세</title>
+    <link rel="icon" type="image/png" href="/img/unearth_icon.png">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/right_holder.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    <section class="content">
+        <div class="page-header">
+            <h2 th:text="${rightHolder.holderName}">권리자 상세</h2>
+        </div>
+        
+        <form class="search-form" method="get" th:action="@{'/right-holder/' + ${rightHolderId}}">
+            <div class="search-row">
+                <div class="search-group">
+                    <label>검색</label>
+                    <input type="text" name="search" class="search-input" th:value="${search}" placeholder="권리자명, 앨범명, 트랙명, 아티스트명으로 검색" />
+                </div>
+                <div class="search-group">
+                    <label>페이지당 개수</label>
+                    <select name="size" class="search-input">
+                        <option th:value="10" th:selected="${size == 10}">10</option>
+                        <option th:value="30" th:selected="${size == 30}">30</option>
+                        <option th:value="50" th:selected="${size == 50}">50</option>
+                    </select>
+                </div>
+                <div class="search-group search-btn-group">
+                    <button type="submit" class="search-btn">검색</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 안내문구 영역 제거 및 팝업 처리 -->
+        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+            <script th:inline="javascript">
+                alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
+            </script>
+        </div>
+
+        <table class="holder-table">
+            <thead>
+            <tr>
+                <th>권리자명</th>
+                <th>아티스트명</th>
+                <th>앨범명</th>
+                <th>트랙명</th>
+                <th>유튜브 공식 URL</th>
+                <th>데이터 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="song : ${response.data.content}">
+                <td th:text="${song.rightHolderName}"></td>
+                <td th:text="${song.artistKo}"></td>
+                <td th:text="${song.albumKo}"></td>
+                <td th:text="${song.titleKo}"></td>
+                <td>
+                    <a th:href="${song.youtubeUrl}" target="_blank" class="youtube-link">보기</a>
+                </td>
+                <td>
+                    <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">크롤링 데이터 보기</a>
+                    <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">크롤링 데이터 없음</span>
+                </td>
+            </tr>
+            <tr th:if="${response.data.content.size() == 0}">
+                <td colspan="6" style="text-align:center;">등록된 노래가 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination" th:if="${response.data.totalPages > 0}">
+            <a th:if="${response.data.hasPrevious()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number - 1}, size=${size}, search=${param.search})}" class="page-btn">이전</a>
+            <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
+                <a th:if="${i != response.data.number}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${i}, size=${size}, search=${param.search})}" th:text="${i + 1}" class="page-btn"></a>
+                <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
+            </span>
+            <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search})}" class="page-btn">다음</a>
+        </div>
+    </section>
+</div>
+</body>
+</html> 

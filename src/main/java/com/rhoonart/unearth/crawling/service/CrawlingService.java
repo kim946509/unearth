@@ -1,8 +1,13 @@
 package com.rhoonart.unearth.crawling.service;
 
 import com.rhoonart.unearth.crawling.dto.CrawlingExecuteRequestDto;
+import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
+import com.rhoonart.unearth.crawling.dto.CrawlingDataWithSongInfoDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingPeriod;
+import com.rhoonart.unearth.crawling.entity.CrawlingData;
+import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
+import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.common.exception.BaseException;
@@ -13,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +32,7 @@ public class CrawlingService {
     private static final int CRAWLING_PERIOD_DAYS = 30;
 
     private final CrawlingPeriodRepository crawlingPeriodRepository;
+    private final CrawlingDataRepository crawlingDataRepository;
     private final SongInfoRepository songInfoRepository;
 
     @Transactional
@@ -60,10 +69,82 @@ public class CrawlingService {
         LocalTime now = LocalTime.now();
         LocalDate today = LocalDate.now();
 
-        if (now.isBefore(LocalTime.of(CRAWLING_HOUR-1, 59))) {
+        if (now.isBefore(LocalTime.of(CRAWLING_HOUR - 1, 59))) {
             return today; // 17시 이전이면 오늘부터
         } else {
             return today.plusDays(1); // 17시 이후면 내일부터
         }
+    }
+
+    public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(String songId, LocalDate startDate,
+            LocalDate endDate,
+            PlatformType platform, Integer intervalDays) {
+        // 음원 존재 여부 확인
+        SongInfo songInfo = songInfoRepository.findById(songId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
+
+        List<CrawlingData> crawlingDataList = crawlingDataRepository.findBySongIdAndDateRange(songId, platform,
+                startDate, endDate);
+
+        // 날짜별로 그룹화
+        Map<LocalDate, List<CrawlingData>> dataByDate = crawlingDataList.stream()
+                .collect(Collectors.groupingBy(data -> data.getCreatedAt().toLocalDate()));
+
+        // 간격 설정 (null이면 1로 설정)
+        int interval = intervalDays != null ? intervalDays : 1;
+
+        // 간격 적용 및 증가량 계산
+        List<CrawlingDataResponseDto> resultList = dataByDate.entrySet().stream()
+                .filter(entry -> {
+                    // 간격에 맞는 날짜만 필터링 (시작일부터 간격만큼 건너뛰면서)
+                    long daysFromStart = java.time.temporal.ChronoUnit.DAYS.between(startDate, entry.getKey());
+                    return daysFromStart % interval == 0;
+                })
+                .map(entry -> {
+                    LocalDate currentDate = entry.getKey();
+                    List<CrawlingData> currentDataList = entry.getValue();
+
+                    return currentDataList.stream().map(currentData -> {
+                        // 간격만큼 이전 날짜의 데이터 찾기
+                        LocalDate previousDate = currentDate.minusDays(interval);
+
+                        CrawlingData previousData = dataByDate.get(previousDate) != null
+                                ? dataByDate.get(previousDate).stream()
+                                        .filter(data -> data.getPlatform() == currentData.getPlatform())
+                                        .findFirst()
+                                        .orElse(null)
+                                : null;
+
+                        long viewsIncrease = 0;
+                        long listenersIncrease = 0;
+
+                        if (previousData != null) {
+                            viewsIncrease = currentData.getViews() - previousData.getViews();
+                            listenersIncrease = currentData.getListeners() - previousData.getListeners();
+                        }
+
+                        return CrawlingDataResponseDto.builder()
+                                .date(currentDate)
+                                .platform(currentData.getPlatform())
+                                .views(currentData.getViews())
+                                .listeners(currentData.getListeners())
+                                .viewsIncrease(viewsIncrease)
+                                .listenersIncrease(listenersIncrease)
+                                .build();
+                    }).collect(Collectors.toList());
+                })
+                .flatMap(List::stream)
+                .sorted((a, b) -> {
+                    int dateCompare = a.getDate().compareTo(b.getDate());
+                    if (dateCompare != 0)
+                        return dateCompare;
+                    return a.getPlatform().compareTo(b.getPlatform());
+                })
+                .collect(Collectors.toList());
+
+        return CrawlingDataWithSongInfoDto.builder()
+                .songInfo(songInfo)
+                .crawlingDataList(resultList)
+                .build();
     }
 }

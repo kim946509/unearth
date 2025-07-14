@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 크롤링 데이터</title>
+    <link rel="icon" type="image/png" href="/img/unearth_icon.png">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/right_holder.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    <section class="content">
+        <div class="page-header">
+            <h2 th:text="${songInfo.artistKo} + ' - ' + ${songInfo.titleKo}">크롤링 데이터</h2>
+            <a th:href="@{'/right-holder/' + ${rightHolderId}}" class="back-btn">← 노래 목록으로 돌아가기</a>
+        </div>
+
+        <!-- 필터링 폼 -->
+        <form class="filter-form" method="get" th:action="@{'/crawling/data/' + ${songId}}">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>시작일</label>
+                    <input type="date" name="startDate" class="filter-input" th:value="${startDate}" />
+                </div>
+                <div class="filter-group">
+                    <label>종료일</label>
+                    <input type="date" name="endDate" class="filter-input" th:value="${endDate}" />
+                </div>
+                <div class="filter-group">
+                    <label>플랫폼</label>
+                    <select name="platform" class="filter-input">
+                        <option value="">전체</option>
+                        <option value="MELON" th:selected="${platform == 'MELON'}">멜론</option>
+                        <option value="YOUTUBE_MUSIC" th:selected="${platform == 'YOUTUBE_MUSIC'}">유튜브 뮤직</option>
+                        <option value="YOUTUBE" th:selected="${platform == 'YOUTUBE'}">유튜브</option>
+                        <option value="GENIE" th:selected="${platform == 'GENIE'}">지니</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>간격 (일)</label>
+                    <select name="intervalDays" class="filter-input">
+                        <option value="1" th:selected="${intervalDays == 1}">1일</option>
+                        <option value="3" th:selected="${intervalDays == 3}">3일</option>
+                        <option value="7" th:selected="${intervalDays == 7}">7일</option>
+                        <option value="14" th:selected="${intervalDays == 14}">14일</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-btn-group">
+                    <button type="submit" class="filter-btn">조회</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- 안내문구 영역 제거 및 팝업 처리 -->
+        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+            <script th:inline="javascript">
+                alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
+            </script>
+        </div>
+
+        <div th:if="${response.data.size() == 0}" class="no-data-message">
+            <p>크롤링 데이터가 없습니다.</p>
+        </div>
+
+        <div th:if="${response.data.size() > 0}" class="crawling-data-container">
+            <table class="crawling-table">
+                <thead>
+                <tr>
+                    <th>날짜</th>
+                    <th>플랫폼</th>
+                    <th>조회수</th>
+                    <th>조회수 증가</th>
+                    <th>청취자 수</th>
+                    <th>청취자 수 증가</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="data : ${response.data}">
+                    <td th:text="${#temporals.format(data.date, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${data.platform}"></td>
+                    <td th:text="${data.views == -1 ? '-' : (data.views == -999 ? '⚠️' : #numbers.formatInteger(data.views, 0, 'COMMA'))}"></td>
+                    <td th:text="${data.viewsIncrease >= 0 ? '+' : ''} + ${#numbers.formatInteger(data.viewsIncrease, 0, 'COMMA')}"></td>
+                    <td th:text="${data.listeners == -1 ? '-' : (data.listeners == -999 ? '⚠️' : #numbers.formatInteger(data.listeners, 0, 'COMMA'))}"></td>
+                    <td th:text="${data.listenersIncrease >= 0 ? '+' : ''} + ${#numbers.formatInteger(data.listenersIncrease, 0, 'COMMA')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+</body>
+</html> 
