@@ -39,7 +39,6 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
                     OR s.artistKo LIKE CONCAT('%', :search, '%')
                     OR s.albumKo LIKE CONCAT('%', :search, '%')
                     OR s.titleKo LIKE CONCAT('%', :search, '%')
-                    OR s.rightHolder.holderName LIKE CONCAT('%', :search, '%')
                 )
                 ORDER BY s.createdAt DESC
             """)
