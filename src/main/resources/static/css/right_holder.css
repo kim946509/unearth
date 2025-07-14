@@ -1,0 +1,551 @@
+/* right_holder.css - 권리자 목록 페이지 전용 스타일 */
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.content {
+    flex: 1;
+    padding: 40px 40px 0 40px;
+    background: #fff;
+}
+
+.search-form {
+    margin-bottom: 32px;
+}
+.search-row {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: flex-end;
+}
+.search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 120px;
+}
+.search-input {
+    padding: 10px 12px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+}
+.search-btn-group {
+    min-width: 90px;
+}
+.search-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.register-btn-group {
+    min-width: 160px;
+    display: flex;
+    align-items: flex-end;
+}
+.register-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.holder-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    background: #fff;
+}
+.holder-table th, .holder-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 14px 10px;
+    text-align: left;
+    font-size: 16px;
+}
+.holder-table th {
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+    font-size: 17px;
+}
+.holder-table td {
+    color: #222;
+}
+.move-btn {
+    padding: 8px 24px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.pagination {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 32px;
+}
+.page-btn {
+    padding: 7px 15px;
+    border-radius: 6px;
+    border: none;
+    background: #eee;
+    color: #111;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 2px;
+}
+.page-btn.current {
+    background: #111;
+    color: #fff;
+    font-weight: bold;
+} 
+
+/* 권리자 등록 폼 세부 레이아웃 */
+.register-layout {
+    display: flex;
+    flex-direction: row;
+    gap: 48px;
+    align-items: flex-start;
+}
+.register-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    background: #fafbfc;
+    padding: 32px 32px 24px 32px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+.register-form label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.required-star {
+    color: #e74c3c;
+    font-size: 17px;
+    margin-left: 2px;
+    vertical-align: middle;
+}
+.register-form input[type="text"],
+.register-form input[type="date"],
+.register-form input[type="password"],
+.register-form select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+.register-form input:focus,
+.register-form select:focus {
+    border: 2px solid #2d7cf2;
+}
+.register-btn {
+    margin-top: 10px;
+}
+.register-guide {
+    min-width: 220px;
+    margin-top: 8px;
+}
+.guide-box {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 15px;
+    color: #222;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.guide-box ul {
+    margin: 10px 0 0 0;
+    padding-left: 18px;
+}
+.guide-box li {
+    margin-bottom: 4px;
+    list-style: disc;
+} 
+
+/* 권리자 등록 폼 2열 그리드 */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 32px;
+    margin-bottom: 10px;
+}
+@media (max-width: 700px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+} 
+
+/* 권리자 등록 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.25);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.modal.show {
+    display: flex;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 32px 28px 32px;
+    min-width: 340px;
+    max-width: 420px;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.modal-content h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+#closeModalBtn {
+    position: absolute;
+    right: 18px; top: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #222;
+    transition: color 0.15s;
+}
+#closeModalBtn:hover {
+    color: #e74c3c;
+}
+#registerForm .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+#registerForm label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+#registerForm input[type="text"],
+#registerForm input[type="date"],
+#registerForm select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+#registerForm input:focus,
+#registerForm select:focus {
+    border: 2px solid #2d7cf2;
+}
+#registerForm .register-btn {
+    width: 100%;
+    padding: 14px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* 권리자 상세 페이지 스타일 */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    background: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #e9e9e9;
+    border-color: #ccc;
+}
+
+.youtube-link {
+    padding: 6px 12px;
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.youtube-link:hover {
+    background: #cc0000;
+}
+
+.data-btn {
+    padding: 8px 16px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.data-btn:hover {
+    background: #333;
+}
+
+.data-btn.no-data {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.data-btn.no-data:hover {
+    background: #ccc;
+}
+
+/* 크롤링 데이터 페이지 스타일 */
+.filter-form {
+    margin-bottom: 32px;
+    background: #f8f9fa;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.filter-row {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 140px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.filter-input {
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+
+.filter-input:focus {
+    border: 2px solid #2d7cf2;
+}
+
+.filter-btn-group {
+    min-width: 80px;
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 12px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.filter-btn:hover {
+    background: #333;
+}
+
+.no-data-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.crawling-data-container {
+    margin-top: 20px;
+}
+
+.crawling-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.crawling-table th, .crawling-table td {
+    border-bottom: 1px solid #eee;
+    padding: 16px 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.crawling-table th {
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    position: sticky;
+    top: 0;
+}
+
+.crawling-table td {
+    color: #222;
+}
+
+.crawling-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* 증가량 표시 스타일 */
+.increase-positive {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.increase-negative {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.increase-zero {
+    color: #6c757d;
+}
+
+/* 특수 값 스타일 */
+.error-value {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.no-data-value {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* 크롤링 데이터 텍스트 색상 클래스 */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-warning {
+    color: #f39c12 !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* 결과 정보 스타일 */
+.result-info {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+    font-size: 14px;
+}
+
+.result-info p {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        min-width: 0;
+        width: 95vw;
+        padding: 18px 6vw 18px 6vw;
+    }
+} 

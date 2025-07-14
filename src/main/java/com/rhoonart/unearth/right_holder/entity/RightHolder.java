@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.JoinColumn;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class RightHolder extends BaseEntity {
     @Id
     @UuidGenerator
-    @Column(length = 32, nullable = false, updatable = false, unique = true)
+    @Column(length = 36, nullable = false, updatable = false, unique = true)
     private String id;
 
     @OneToOne(optional = false)
@@ -36,15 +37,15 @@ public class RightHolder extends BaseEntity {
     @Column(name = "holder_type", nullable = false)
     private HolderType holderType;
 
-    @Column(name = "holder_name", nullable = false)
+    @Column(name = "holder_name", nullable = false, unique = true)
     private String holderName;
 
     @Column(name = "contract_start", nullable = false)
-    private java.time.LocalDate contractStart;
+    private LocalDate contractStart;
 
     @Column(name = "contract_end", nullable = false)
-    private java.time.LocalDate contractEnd;
+    private LocalDate contractEnd;
 
-    @Column(name = "business_number")
+    @Column(name = "business_number", nullable = false)
     private String businessNumber;
 }

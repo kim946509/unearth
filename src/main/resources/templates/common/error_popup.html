@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 접근 권한 없음</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+</head>
+<body>
+<script th:inline="javascript">
+    var errorMessage = /*[[${errorMessage}]]*/ '접근 권한이 없습니다.';
+    alert(errorMessage);
+    history.back();
+</script>
+</body>
+</html> 

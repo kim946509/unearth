@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class CrawlingData extends BaseEntity {
     @Id
     @UuidGenerator
-    @Column(length = 32, nullable = false, updatable = false, unique = true)
+    @Column(length = 36, nullable = false, updatable = false, unique = true)
     private String id;
 
     @Enumerated(EnumType.STRING)

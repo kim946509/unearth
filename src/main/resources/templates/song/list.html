@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="icon" type="image/png" href="/img/unearth_icon.png">
+    <title>UNEARTH | 음원 등록</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/song.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='songRegister')}"></div>
+    <section class="content">
+        <h2>음원 등록</h2>
+        <form id="songRegisterForm" class="register-form" method="post" th:action="@{/song/register}">
+            <div class="song-form-grid">
+                <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
+                <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
+                <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
+                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
+                <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
+                <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
+                <div class="form-row"><label>유튜브 공식 URL <span class="required-star">*</span></label><input type="text" name="youtubeUrl" required /></div>
+                <div class="form-row">
+                    <label>권리자명 <span class="required-star">*</span></label>
+                    <select name="rightHolderName" required>
+                        <option value="">권리자를 선택하세요</option>
+                        <option th:each="holder : ${rightHolders}" th:value="${holder}" th:text="${holder}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="register-btn" id="songRegisterBtn" disabled>음원 등록하기</button>
+            </div>
+        </form>
+        <form class="search-form" method="get" th:action="@{/song/list}">
+            <div class="search-row">
+                <div class="search-group"><label>검색</label><input type="text" name="search" class="search-input" th:value="${search}" placeholder="검색어 입력" /></div>
+                <div class="search-group search-btn-group"><button type="submit" class="search-btn">검색</button></div>
+            </div>
+        </form>
+        <table class="holder-table song-table">
+            <thead>
+            <tr>
+                <th>아티스트명(국문)</th><th>앨범명(국문)</th><th>트랙명(국문)</th><th>유튜브 공식 URL</th><th>권리자명</th><th>크롤링 실행</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="song : ${response.data.content}">
+                <td th:text="${song.artistKo}"></td>
+                <td th:text="${song.albumKo}"></td>
+                <td th:text="${song.titleKo}"></td>
+                <td><a th:href="${song.youtubeUrl}" target="_blank" class="ellipsis" th:text="${song.youtubeUrl}"></a></td>
+                <td th:text="${song.rightHolder.holderName}"></td>
+                <td class="crawling-column">
+                    <button type="button" class="crawling-btn" 
+                            th:data-song-id="${song.id}" 
+                            th:data-artist-ko="${song.artistKo}" 
+                            th:data-title-ko="${song.titleKo}" 
+                            th:data-has-crawling="${song.crawlingStartDate != null}">🕹️</button>
+                    <span class="crawling-period" th:if="${song.crawlingStartDate != null and song.crawlingEndDate != null}" 
+                          th:text="${#temporals.format(song.crawlingStartDate, 'yy.MM.dd')} + ' ~ ' + ${#temporals.format(song.crawlingEndDate, 'yy.MM.dd')}"></span>
+                    <span class="crawling-period empty" th:if="${song.crawlingStartDate == null or song.crawlingEndDate == null}">-</span>
+                </td>
+            </tr>
+            <tr th:if="${response.data.content.size() == 0}"><td colspan="6" style="text-align:center;">음원이 없습니다.</td></tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${response.data.totalPages > 0}">
+            <a th:if="${response.data.hasPrevious()}" th:href="@{/song/list(page=${response.data.number - 1}, size=${size}, search=${search})}" class="page-btn">이전</a>
+            <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
+                <a th:if="${i != response.data.number}" th:href="@{/song/list(page=${i}, size=${size}, search=${search})}" th:text="${i + 1}" class="page-btn"></a>
+                <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
+            </span>
+            <a th:if="${response.data.hasNext()}" th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search})}" class="page-btn">다음</a>
+        </div>
+    </section>
+</div>
+
+<!-- 크롤링 실행 모달 -->
+<div id="crawlingModal" class="modal">
+    <div class="modal-content crawling-modal-content">
+        <button type="button" id="closeCrawlingModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+        <h3 id="crawlingModalTitle" style="margin-bottom:18px;">크롤링 실행</h3>
+        <form id="crawlingForm" method="post" action="/crawling/execute">
+            <input type="hidden" id="crawlingSongId" name="songId" />
+            <div class="form-row">
+                <label>채널명 <span class="required-star">*</span></label>
+                <input type="text" name="channel" required />
+            </div>
+            <div class="form-row">
+                <label>유튜브 영상 제목 <span class="required-star">*</span></label>
+                <input type="text" name="youtubeTitle" required />
+            </div>
+            <div class="form-row">
+                <label>유튜브 영상 URL <span class="required-star">*</span></label>
+                <input type="text" name="youtubeUrl" required />
+            </div>
+            <div class="form-row">
+                <label>수록 순서 <span class="required-star">*</span></label>
+                <input type="number" name="songOrder" min="1" required />
+            </div>
+            <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="crawling-execute-btn" style="width:100%;">크롤링 실행</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+// 폼 유효성 검사 및 버튼 활성화
+const form = document.getElementById('songRegisterForm');
+const btn = document.getElementById('songRegisterBtn');
+function validateForm() {
+    let valid = true;
+    ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'].forEach(name => {
+        const el = form.elements[name];
+        if (!el || !el.value || el.value.trim() === '') valid = false;
+    });
+    btn.disabled = !valid;
+}
+form && form.addEventListener('input', validateForm);
+form && form.addEventListener('change', validateForm);
+form && form.addEventListener('submit', function(e) {
+    if (btn.disabled) { e.preventDefault(); return false; }
+    if (!confirm('음원을 등록하시겠습니까?')) { e.preventDefault(); return false; }
+});
+
+// 크롤링 실행 모달 제어
+const crawlingModal = document.getElementById('crawlingModal');
+const closeCrawlingModalBtn = document.getElementById('closeCrawlingModalBtn');
+const crawlingForm = document.getElementById('crawlingForm');
+const crawlingModalTitle = document.getElementById('crawlingModalTitle');
+const crawlingSongId = document.getElementById('crawlingSongId');
+
+// 크롤링 버튼 이벤트 리스너 등록
+document.addEventListener('DOMContentLoaded', function() {
+    const crawlingBtns = document.querySelectorAll('.crawling-btn');
+    crawlingBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const songId = this.dataset.songId;
+            const artistKo = this.dataset.artistKo;
+            const titleKo = this.dataset.titleKo;
+            const hasCrawlingHistory = this.dataset.hasCrawling === 'true';
+            
+            handleCrawlingClick(songId, artistKo, titleKo, hasCrawlingHistory);
+        });
+    });
+});
+
+function handleCrawlingClick(songId, artistKo, titleKo, hasCrawlingHistory) {
+    if (hasCrawlingHistory) {
+        // 이미 크롤링 기록이 있는 경우 먼저 확인 팝업
+        if (!confirm('크롤링을 다시 시작하시겠습니까?')) {
+            return; // 취소하면 모달 열지 않음
+        }
+    }
+    // 확인했거나 처음 크롤링인 경우 모달 열기
+    openCrawlingModal(songId, artistKo, titleKo);
+}
+
+function openCrawlingModal(songId, artistKo, titleKo) {
+    crawlingModalTitle.textContent = artistKo + ' - ' + titleKo;
+    crawlingSongId.value = songId;
+    crawlingModal.classList.add('show');
+}
+
+closeCrawlingModalBtn && closeCrawlingModalBtn.addEventListener('click', () => {
+    crawlingModal.classList.remove('show');
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === crawlingModal) {
+        crawlingModal.classList.remove('show');
+    }
+});
+
+// 크롤링 폼 제출
+crawlingForm && crawlingForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(crawlingForm);
+    
+    fetch('/crawling/execute', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 'SUCCESS') {
+            alert('크롤링이 성공적으로 실행되었습니다.');
+            crawlingModal.classList.remove('show');
+            location.reload(); // 페이지 새로고침으로 크롤링 기간 업데이트
+        } else {
+            alert('크롤링 실행 중 오류가 발생했습니다: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('크롤링 실행 중 오류가 발생했습니다.');
+    });
+});
+</script>
+</body>
+</html> 
