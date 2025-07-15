@@ -75,12 +75,16 @@
     border-collapse: collapse;
     margin-bottom: 32px;
     background: #fff;
+    table-layout: fixed; /* 고정 테이블 레이아웃 */
 }
 .holder-table th, .holder-table td {
     border-bottom: 1px solid #ddd;
     padding: 14px 10px;
     text-align: left;
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .holder-table th {
     background: #111;
@@ -90,6 +94,26 @@
 }
 .holder-table td {
     color: #222;
+}
+
+/* 권리자 상세페이지 테이블 컬럼 너비 조정 */
+.holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 권리자명 */
+    width: 10%;
+}
+.holder-table th:nth-child(2), .holder-table td:nth-child(2) { /* 아티스트명 */
+    width: 10%;
+}
+.holder-table th:nth-child(3), .holder-table td:nth-child(3) { /* 앨범명 */
+    width: 25%;
+}
+.holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 트랙명 */
+    width: 25%;
+}
+.holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 유튜브 URL */
+    width: 10%;
+}
+.holder-table th:nth-child(6), .holder-table td:nth-child(6) { /* 데이터 보기 */
+    width: 20%;
 }
 .move-btn {
     padding: 8px 24px;
@@ -331,7 +355,7 @@
 
 .youtube-link {
     padding: 6px 12px;
-    background: #ff0000;
+    background: #000000;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -340,10 +364,14 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .youtube-link:hover {
-    background: #cc0000;
+    background: #333;
 }
 
 .data-btn {
@@ -357,6 +385,10 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .data-btn:hover {
