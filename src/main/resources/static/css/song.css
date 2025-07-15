@@ -58,12 +58,16 @@
     border-collapse: collapse;
     margin-bottom: 32px;
     background: #fff;
+    table-layout: fixed; /* 고정 테이블 레이아웃 */
 }
 .holder-table th, .holder-table td {
     border-bottom: 1px solid #ddd;
     padding: 14px 10px;
     text-align: left;
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .holder-table th {
     background: #111;
@@ -73,6 +77,26 @@
 }
 .holder-table td {
     color: #222;
+}
+
+/* 음원 테이블 컬럼 너비 조정 */
+.song-table th:nth-child(1), .song-table td:nth-child(1) { /* 아티스트명 */
+    width: 10%;
+}
+.song-table th:nth-child(2), .song-table td:nth-child(2) { /* 앨범명 */
+    width: 25%;
+}
+.song-table th:nth-child(3), .song-table td:nth-child(3) { /* 트랙명 */
+    width: 25%;
+}
+.song-table th:nth-child(4), .song-table td:nth-child(4) { /* 유튜브 URL */
+    width: 10%;
+}
+.song-table th:nth-child(5), .song-table td:nth-child(5) { /* 권리자명 */
+    width: 12%;
+}
+.song-table th:nth-child(6), .song-table td:nth-child(6) { /* 크롤링 실행 */
+    width: 18%;
 }
 
 /* 페이지네이션 */
@@ -204,6 +228,8 @@
 .crawling-column {
     text-align: center;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .crawling-btn {
     background: none;
@@ -219,7 +245,7 @@
     background-color: #f0f0f0;
 }
 .crawling-period {
-    font-size: 12px;
+    font-size: 1rem;
     color: #666;
     font-weight: 500;
 }
@@ -275,12 +301,18 @@
 
 /* 유튜브 URL ellipsis */
 .song-table .ellipsis {
-    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-block;
+    display: block;
     vertical-align: middle;
+    color: #2d7cf2;
+    text-decoration: none;
+}
+
+/* URL 링크 호버 효과 */
+.song-table .ellipsis:hover {
+    text-decoration: underline;
 }
 
 /* 크롤링 실행 모달 스타일 개선 (right_holder.css 스타일 적용) */
