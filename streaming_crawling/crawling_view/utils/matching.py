@@ -134,24 +134,6 @@ def compare_song_info(found_title, found_artist, target_info):
     return match_details
 
 def exact_and_partial_match(found_text, target_texts, found_artist, target_artists):
-    """
-    정확 매칭 + 부분 매칭
-    
-    Args:
-        found_text (str): 찾은 텍스트
-        target_texts (list): 목표 텍스트 리스트 [국문, 영문]
-        found_artist (str): 찾은 아티스트
-        target_artists (list): 목표 아티스트 리스트 [국문, 영문]
-        
-    Returns:
-        tuple: (text_match, artist_match)
-    """
-    logger.info(f"🔍 정확/부분 매칭 시작:")
-    logger.info(f"  찾은 제목: '{found_text}'")
-    logger.info(f"  목표 제목들: {[f"'{t}'" for t in target_texts if t]}")
-    logger.info(f"  찾은 아티스트: '{found_artist}'")
-    logger.info(f"  목표 아티스트들: {[f"'{t}'" for t in target_artists if t]}")
-    
     # 텍스트 매칭: 정확히 일치하거나 한쪽이 다른 쪽에 포함
     text_match = False
     for target in target_texts:
@@ -182,7 +164,7 @@ def exact_and_partial_match(found_text, target_texts, found_artist, target_artis
             break
     
     if not text_match:
-        logger.warning(f"❌ 제목 매칭 실패: '{found_text}' vs {[f"'{t}'" for t in target_texts if t]}")
+        pass
     
     # 아티스트 매칭: 더 유연한 매칭
     artist_match = False
@@ -196,7 +178,7 @@ def exact_and_partial_match(found_text, target_texts, found_artist, target_artis
             break
     
     if not artist_match:
-        logger.warning(f"❌ 아티스트 매칭 실패: '{found_artist}' vs {[f"'{t}'" for t in target_artists if t]}")
+        pass
     
     logger.info(f"🔍 정확/부분 매칭 결과: 텍스트={text_match}, 아티스트={artist_match}")
     return text_match, artist_match
