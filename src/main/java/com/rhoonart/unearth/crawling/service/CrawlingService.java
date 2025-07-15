@@ -86,7 +86,7 @@ public class CrawlingService {
     }
 
     public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(String songId, LocalDate startDate,
-            LocalDate endDate, PlatformType platform, Integer intervalDays, int page, int size) {
+            LocalDate endDate, PlatformType platform, int page, int size) {
         // 음원 존재 여부 확인
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -98,25 +98,15 @@ public class CrawlingService {
         Map<LocalDate, List<CrawlingData>> dataByDate = crawlingDataList.stream()
                 .collect(Collectors.groupingBy(data -> data.getCreatedAt().toLocalDate()));
 
-        // 간격 설정 (null이면 1로 설정)
-        int interval = intervalDays != null ? intervalDays : 1;
-
-        // 간격 필터링 및 검색어 필터링
+        // 모든 데이터를 처리 (간격 필터링 제거)
         List<CrawlingDataResponseDto> resultList = dataByDate.entrySet().stream()
-                .filter(entry -> {
-                    LocalDate currentDate = entry.getKey();
-
-                    // 간격에 맞는 날짜만 필터링 (시작일부터 간격만큼 건너뛰면서)
-                    long daysFromStart = java.time.temporal.ChronoUnit.DAYS.between(startDate, currentDate);
-                    return daysFromStart >= 0 && daysFromStart % interval == 0;
-                })
                 .map(entry -> {
                     LocalDate currentDate = entry.getKey();
                     List<CrawlingData> currentDataList = entry.getValue();
 
                     return currentDataList.stream().map(currentData -> {
-                        // 간격만큼 이전 날짜의 데이터 찾기
-                        LocalDate previousDate = currentDate.minusDays(interval);
+                        // 1일 전 데이터 찾기 (간격은 항상 1로 고정)
+                        LocalDate previousDate = currentDate.minusDays(1);
 
                         CrawlingData previousData = dataByDate.get(previousDate) != null
                                 ? dataByDate.get(previousDate).stream()

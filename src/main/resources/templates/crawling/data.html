@@ -38,15 +38,7 @@
                         <option value="GENIE" th:selected="${platform == 'GENIE'}">지니</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label>간격 (일)</label>
-                    <select name="intervalDays" class="filter-input">
-                        <option value="1" th:selected="${intervalDays == 1}">1일</option>
-                        <option value="3" th:selected="${intervalDays == 3}">3일</option>
-                        <option value="7" th:selected="${intervalDays == 7}">7일</option>
-                        <option value="14" th:selected="${intervalDays == 14}">14일</option>
-                    </select>
-                </div>
+
                 <div class="filter-group">
                     <label>페이지 크기</label>
                     <select name="size" class="filter-input">
@@ -106,20 +98,20 @@
         <div th:if="${totalPages > 1}" class="pagination">
             <!-- 이전 페이지 -->
             <a th:if="${currentPage > 1}" 
-               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage - 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
+               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage - 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform}}" 
                class="page-btn">이전</a>
             
             <!-- 페이지 번호들 -->
             <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
                 <a th:if="${pageNum != currentPage}" 
-                   th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${pageNum} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
+                   th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${pageNum} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform}}" 
                    class="page-btn" th:text="${pageNum}"></a>
                 <span th:if="${pageNum == currentPage}" class="page-btn current" th:text="${pageNum}"></span>
             </span>
             
             <!-- 다음 페이지 -->
             <a th:if="${currentPage < totalPages}" 
-               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage + 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
+               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage + 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform}}" 
                class="page-btn">다음</a>
         </div>
 

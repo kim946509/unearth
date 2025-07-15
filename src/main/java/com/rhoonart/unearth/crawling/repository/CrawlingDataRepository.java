@@ -25,7 +25,8 @@ public interface CrawlingDataRepository extends JpaRepository<CrawlingData, Stri
                 SELECT cd FROM CrawlingData cd
                 WHERE cd.song.id = :songId
                 AND (:platform IS NULL OR cd.platform = :platform)
-                AND DATE(cd.createdAt) BETWEEN :startDate AND :endDate
+                AND (:startDate IS NULL OR DATE(cd.createdAt) >= :startDate)
+                AND (:endDate IS NULL OR DATE(cd.createdAt) <= :endDate)
                 ORDER BY DATE(cd.createdAt) ASC, cd.platform ASC
             """)
     List<CrawlingData> findBySongIdAndDateRange(

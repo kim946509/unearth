@@ -41,7 +41,6 @@ public class CrawlingController {
             @RequestParam(value = "startDate", required = false) String startDateStr,
             @RequestParam(value = "endDate", required = false) String endDateStr,
             @RequestParam(value = "platform", required = false) String platformStr,
-            @RequestParam(value = "intervalDays", required = false) Integer intervalDays,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
             HttpSession session,
@@ -58,9 +57,9 @@ public class CrawlingController {
             throw new ForbiddenException("해당 권리자의 크롤링 데이터에 접근할 권한이 없습니다.");
         }
 
-        // 날짜 파싱
-        LocalDate startDate = startDateStr != null ? LocalDate.parse(startDateStr) : LocalDate.now().minusDays(30);
-        LocalDate endDate = endDateStr != null ? LocalDate.parse(endDateStr) : LocalDate.now();
+        // 날짜 파싱 (전체 기간으로 설정)
+        LocalDate startDate = startDateStr != null ? LocalDate.parse(startDateStr) : null;
+        LocalDate endDate = endDateStr != null ? LocalDate.parse(endDateStr) : null;
 
         // 플랫폼 파싱 (빈 문자열이면 null로 처리)
         PlatformType platform = null;
@@ -73,9 +72,6 @@ public class CrawlingController {
             }
         }
 
-        // 간격 파싱 (null이면 1로 설정)
-        Integer interval = intervalDays != null ? intervalDays : 1;
-
         // 페이지 크기 제한: 10, 20, 50, 100만 허용
         if (size != 10 && size != 20 && size != 50 && size != 100)
             size = 10;
@@ -85,7 +81,7 @@ public class CrawlingController {
         int pageSize = size;
 
         CrawlingDataWithSongInfoDto crawlingDataWithSongInfo = crawlingService.getCrawlingDataWithFilters(
-                songId, startDate, endDate, platform, interval, pageNumber, pageSize);
+                songId, startDate, endDate, platform, pageNumber, pageSize);
 
         model.addAttribute("response", CommonResponse.success(crawlingDataWithSongInfo.getCrawlingDataList()));
         model.addAttribute("songId", songId);
@@ -93,7 +89,6 @@ public class CrawlingController {
         model.addAttribute("startDate", startDateStr);
         model.addAttribute("endDate", endDateStr);
         model.addAttribute("platform", platformStr);
-        model.addAttribute("intervalDays", interval);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", crawlingDataWithSongInfo.getTotalPages());
