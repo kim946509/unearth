@@ -73,14 +73,16 @@ public class CrawlingService {
      * - 현재 시간이 17시 이후면 내일부터 시작
      */
     private LocalDate calculateStartDate() {
-        LocalTime now = LocalTime.now();
-        LocalDate today = LocalDate.now();
+        // LocalTime now = LocalTime.now();
+        // LocalDate today = LocalDate.now();
 
-        if (now.isBefore(LocalTime.of(CRAWLING_HOUR - 1, 59))) {
-            return today; // 17시 이전이면 오늘부터
-        } else {
-            return today.plusDays(1); // 17시 이후면 내일부터
-        }
+        // if (now.isBefore(LocalTime.of(CRAWLING_HOUR - 1, 59))) {
+        // return today; // 17시 이전이면 오늘부터
+        // } else {
+        // return today.plusDays(1); // 17시 이후면 내일부터
+        // }
+
+        return LocalDate.now();
     }
 
     public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(String songId, LocalDate startDate,
