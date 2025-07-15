@@ -76,7 +76,7 @@ public class CrawlingExecuteService {
                         songId);
                 log.info("Windows 환경에서 크롤링 실행: {}", command);
             } else {
-                command = createLinuxCommand("streaming_crawling/crawling_view/controller/run_single_song_crawling.py",
+                command = createLinuxCommand("crawling_view/controller/run_single_song_crawling.py",
                         "--song_id", songId);
                 log.info("Linux/Ubuntu 환경에서 크롤링 실행: {}", command);
             }
@@ -173,7 +173,7 @@ public class CrawlingExecuteService {
                 command = createWindowsCommand("crawling_view/controller/run_crawling.py");
                 log.info("Windows 환경에서 전체 크롤링 실행: {}", command);
             } else {
-                command = createLinuxCommand("streaming_crawling/crawling_view/controller/run_crawling.py");
+                command = createLinuxCommand("crawling_view/controller/run_crawling.py");
                 log.info("Linux/Ubuntu 환경에서 전체 크롤링 실행: {}", command);
             }
 

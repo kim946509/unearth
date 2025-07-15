@@ -1,7 +1,6 @@
-# 멀티스테이지 빌드
+# 멀티스테이지 빌드: Java 빌드
 FROM openjdk:17-jdk-slim AS java-builder
 
-# Java 애플리케이션 빌드
 WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY gradle ./gradle
@@ -10,27 +9,10 @@ COPY src ./src
 RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
-# Python 환경 설정
-FROM python:3.11-slim AS python-builder
-
-# 시스템 패키지 설치
-RUN apt-get update && apt-get install -y \
-    pkg-config \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    libmariadb-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Python 의존성 설치
-WORKDIR /app
-COPY streaming_crawling/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-# 최종 이미지
+# 최종 이미지 (Java + Python)
 FROM openjdk:17-jdk-slim
 
-# 시스템 패키지 설치
+# 시스템 패키지 + Python 설치
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -41,6 +23,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libffi-dev \
     libmariadb-dev \
+    python3 \
+    python3-pip \
     locales \
     && rm -rf /var/lib/apt/lists/*
 
@@ -51,14 +35,15 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# 작업 디렉토리 설정
+# 작업 디렉토리
 WORKDIR /app
 
 # Java 애플리케이션 복사
 COPY --from=java-builder /app/build/libs/*.jar app.jar
 
-# Python 환경 복사
-COPY --from=python-builder /usr/local /usr/local
+# Python 의존성 설치
+COPY streaming_crawling/requirements.txt ./streaming_crawling/requirements.txt
+RUN pip3 install -r ./streaming_crawling/requirements.txt
 
 # Django 프로젝트 복사
 COPY streaming_crawling/crawling_view/ ./streaming_crawling/crawling_view/
@@ -66,11 +51,11 @@ COPY streaming_crawling/config/ ./streaming_crawling/config/
 COPY streaming_crawling/manage.py ./streaming_crawling/
 COPY streaming_crawling/logging_setting.py ./streaming_crawling/
 
-# 필요한 디렉토리 생성
+# 디렉토리 생성
 RUN mkdir -p streaming_crawling/logs \
     && mkdir -p streaming_crawling/csv_folder
 
-# 환경변수 설정
+# 환경변수
 ENV TZ=Asia/Seoul
 ENV PYTHONPATH="/app/streaming_crawling"
 ENV DJANGO_SETTINGS_MODULE="config.settings"
@@ -78,5 +63,5 @@ ENV DJANGO_SETTINGS_MODULE="config.settings"
 # 포트 노출
 EXPOSE 8080
 
-# 시작 명령
+# 실행 명령
 ENTRYPOINT ["java", "-jar", "app.jar"]
