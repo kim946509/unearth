@@ -29,8 +29,7 @@ public class SongInfoController {
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             Model model,
-            HttpSession session
-    ) {
+            HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
         Pageable pageable = PageRequest.of(page, size);
         Page<SongInfoWithCrawlingDto> songPage = songInfoService.findSongsWithCrawling(search, pageable);
@@ -39,15 +38,21 @@ public class SongInfoController {
         model.addAttribute("size", size);
         model.addAttribute("search", search);
         // 권리자 드롭다운용 목록
-        model.addAttribute("rightHolders", rightHolderService.findAllForDropdown());
-        System.out.println(rightHolderService.findAllForDropdown().get(0));
+        var rightHolders = rightHolderService.findAllForDropdown();
+        model.addAttribute("rightHolders", rightHolders);
+
+        // 권리자가 없으면 경고 로그 출력 (디버깅용)
+        if (rightHolders.isEmpty()) {
+            System.out.println("⚠️ 등록된 권리자가 없습니다. 음원 등록을 위해서는 먼저 권리자를 등록해주세요.");
+        } else {
+            System.out.println("✅ 권리자 목록 로드 완료: " + rightHolders.size() + "개");
+        }
         return "song/list";
     }
 
     @PostMapping("/register")
     public String register(@Valid @ModelAttribute SongInfoRegisterRequestDto dto,
-                           HttpSession session
-                           ) {
+            HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
         songInfoService.register(dto);
         return "redirect:/song/list";

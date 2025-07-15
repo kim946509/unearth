@@ -1,0 +1,8 @@
+# 크롤링 실행 명령어
+python manage.py run_crawling_job
+
+# 플랫폼별 크롤링 테스트
+python crawling_view/test/test_platform_crawlers.py [platform]
+
+# 전체 크롤링 테스트
+python crawling_view/test/test_full_crawling.py

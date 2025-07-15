@@ -39,6 +39,11 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
+// 메인 클래스 설정 추가
+springBoot {
+    mainClass = 'com.rhoonart.unearth.UnearthApplication'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

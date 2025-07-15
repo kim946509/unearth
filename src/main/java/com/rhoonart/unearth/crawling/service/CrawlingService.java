@@ -13,6 +13,7 @@ import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.ResponseCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CrawlingService {
@@ -35,6 +37,7 @@ public class CrawlingService {
     private final CrawlingPeriodRepository crawlingPeriodRepository;
     private final CrawlingDataRepository crawlingDataRepository;
     private final SongInfoRepository songInfoRepository;
+    private final CrawlingExecuteService crawlingExecuteService;
 
     @Transactional
     public void executeCrawling(CrawlingExecuteRequestDto dto) {
@@ -59,6 +62,9 @@ public class CrawlingService {
                 .build();
 
         crawlingPeriodRepository.save(crawlingPeriod);
+
+        // 4. 크롤링 실행 (비동기)
+        crawlingExecuteService.executeSingleSongCrawling(dto.getSongId());
     }
 
     /**
