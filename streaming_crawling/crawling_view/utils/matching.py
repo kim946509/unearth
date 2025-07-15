@@ -28,6 +28,15 @@ def compare_song_info(found_title, found_artist, target_info):
         normalized = normalize_text(text)
         return normalized.replace(' ', '') if normalized else ''
     
+    # 정규화 전 원본 값 로깅
+    logger.info(f"🔍 매칭 시작:")
+    logger.info(f"  찾은 제목: '{found_title}'")
+    logger.info(f"  찾은 아티스트: '{found_artist}'")
+    logger.info(f"  목표 제목(국문): '{target_info['title_ko']}'")
+    logger.info(f"  목표 제목(영문): '{target_info['title_en']}'")
+    logger.info(f"  목표 아티스트(국문): '{target_info['artist_ko']}'")
+    logger.info(f"  목표 아티스트(영문): '{target_info['artist_en']}'")
+    
     # 정규화
     found_title = normalize_text(found_title)
     found_artist = normalize_text(found_artist)
@@ -43,6 +52,15 @@ def compare_song_info(found_title, found_artist, target_info):
     target_title_en_no_space = normalize_no_space(target_title_en)
     target_artist_ko_no_space = normalize_no_space(target_artist_ko)
     target_artist_en_no_space = normalize_no_space(target_artist_en)
+    
+    # 정규화 후 값 로깅
+    logger.info(f"🔍 정규화 후:")
+    logger.info(f"  찾은 제목: '{found_title}' (공백제거: '{found_title_no_space}')")
+    logger.info(f"  찾은 아티스트: '{found_artist}' (공백제거: '{found_artist_no_space}')")
+    logger.info(f"  목표 제목(국문): '{target_title_ko}' (공백제거: '{target_title_ko_no_space}')")
+    logger.info(f"  목표 제목(영문): '{target_title_en}' (공백제거: '{target_title_en_no_space}')")
+    logger.info(f"  목표 아티스트(국문): '{target_artist_ko}' (공백제거: '{target_artist_ko_no_space}')")
+    logger.info(f"  목표 아티스트(영문): '{target_artist_en}' (공백제거: '{target_artist_en_no_space}')")
     
     # 1단계: 정확 매칭 + 부분 매칭
     title_match_exact, artist_match_exact = exact_and_partial_match(
@@ -112,7 +130,7 @@ def compare_song_info(found_title, found_artist, target_info):
         }
     }
     
-    logger.debug(f"매칭 상세 정보: {match_details}")
+    logger.info(f"🔍 매칭 결과: {match_details}")
     return match_details
 
 def exact_and_partial_match(found_text, target_texts, found_artist, target_artists):
@@ -128,23 +146,59 @@ def exact_and_partial_match(found_text, target_texts, found_artist, target_artis
     Returns:
         tuple: (text_match, artist_match)
     """
+    logger.info(f"🔍 정확/부분 매칭 시작:")
+    logger.info(f"  찾은 제목: '{found_text}'")
+    logger.info(f"  목표 제목들: {[f"'{t}'" for t in target_texts if t]}")
+    logger.info(f"  찾은 아티스트: '{found_artist}'")
+    logger.info(f"  목표 아티스트들: {[f"'{t}'" for t in target_artists if t]}")
+    
     # 텍스트 매칭: 정확히 일치하거나 한쪽이 다른 쪽에 포함
-    text_match = any(
-        found_text == target or
-        (len(found_text) >= 3 and found_text in target) or
-        (len(target) >= 3 and target in found_text) or
+    text_match = False
+    for target in target_texts:
+        if not target:
+            continue
+            
+        # 정확 매칭
+        if found_text == target:
+            logger.info(f"✅ 제목 정확 매칭: '{found_text}' == '{target}'")
+            text_match = True
+            break
+            
+        # 포함 매칭
+        if len(found_text) >= 3 and found_text in target:
+            logger.info(f"✅ 제목 포함 매칭: '{found_text}' in '{target}'")
+            text_match = True
+            break
+            
+        if len(target) >= 3 and target in found_text:
+            logger.info(f"✅ 제목 포함 매칭: '{target}' in '{found_text}'")
+            text_match = True
+            break
+            
         # 괄호 안의 영어 제목 제거 후 매칭
-        _match_title_with_brackets(found_text, target)
-        for target in target_texts if target
-    )
+        if _match_title_with_brackets(found_text, target):
+            logger.info(f"✅ 제목 괄호 매칭: '{found_text}' vs '{target}'")
+            text_match = True
+            break
+    
+    if not text_match:
+        logger.warning(f"❌ 제목 매칭 실패: '{found_text}' vs {[f"'{t}'" for t in target_texts if t]}")
     
     # 아티스트 매칭: 더 유연한 매칭
-    artist_match = any(
-        _match_artist_names(found_artist, target)
-        for target in target_artists if target
-    )
+    artist_match = False
+    for target in target_artists:
+        if not target:
+            continue
+            
+        if _match_artist_names(found_artist, target):
+            logger.info(f"✅ 아티스트 매칭 성공: '{found_artist}' vs '{target}'")
+            artist_match = True
+            break
     
-    logger.debug(f"정확/부분 매칭: 텍스트={text_match}, 아티스트={artist_match}")
+    if not artist_match:
+        logger.warning(f"❌ 아티스트 매칭 실패: '{found_artist}' vs {[f"'{t}'" for t in target_artists if t]}")
+    
+    logger.info(f"🔍 정확/부분 매칭 결과: 텍스트={text_match}, 아티스트={artist_match}")
     return text_match, artist_match
 
 def _match_title_with_brackets(found_title, target_title):
@@ -333,6 +387,10 @@ def compare_song_info_multilang(found_title, found_artist, target_info):
     Returns:
         dict: 매칭 결과 (기존 compare_song_info 결과 + 어떤 조합에서 매칭됐는지)
     """
+    logger.info(f"🔍 다국어 매칭 시작:")
+    logger.info(f"  찾은 제목: '{found_title}'")
+    logger.info(f"  찾은 아티스트: '{found_artist}'")
+    
     results = []
     combos = [
         (target_info['title_ko'], target_info['artist_ko'], 'ko/ko'),
@@ -340,7 +398,10 @@ def compare_song_info_multilang(found_title, found_artist, target_info):
         (target_info['title_ko'], target_info['artist_en'], 'ko/en'),
         (target_info['title_en'], target_info['artist_ko'], 'en/ko'),
     ]
+    
     for tgt_title, tgt_artist, combo in combos:
+        logger.info(f"🔍 조합 시도: {combo} (제목: '{tgt_title}', 아티스트: '{tgt_artist}')")
+        
         result = compare_song_info(found_title, found_artist, {
             'title_ko': tgt_title,
             'title_en': tgt_title,
@@ -349,9 +410,15 @@ def compare_song_info_multilang(found_title, found_artist, target_info):
         })
         result['combo'] = combo
         results.append(result)
+        
+        logger.info(f"🔍 조합 {combo} 결과: {result['both_match']} (제목: {result['title_match']}, 아티스트: {result['artist_match']})")
+        
         if result['both_match']:
             result['matched_combo'] = combo
+            logger.info(f"✅ 매칭 성공! 조합: {combo}")
             return result
+    
     # 모두 실패 시 마지막 결과 반환
     results[-1]['matched_combo'] = None
+    logger.warning(f"❌ 모든 조합 매칭 실패")
     return results[-1] 

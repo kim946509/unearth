@@ -43,3 +43,5 @@ src/main/resources/env.properties
 
 # Chrome user data directory
 user_data/
+
+streaming_crawling/logs/

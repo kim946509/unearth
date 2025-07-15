@@ -96,7 +96,9 @@ class SongService:
                 {
                     'song_id': song.id,
                     'song_title': song.get_platform_info(platform)['title_ko'],
-                    'artist_name': song.get_platform_info(platform)['artist_ko']
+                    'artist_name': song.get_platform_info(platform)['artist_ko'],
+                    'title_en': song.get_platform_info(platform)['title_en'],  # 영문 제목 추가
+                    'artist_en': song.get_platform_info(platform)['artist_en']  # 영문 아티스트 추가
                 }
                 for song in songs
                 if song.is_platform_available(platform)
@@ -106,7 +108,9 @@ class SongService:
                 {
                     'song_id': song.id,
                     'song_title': song.get_platform_info(platform)['title_ko'],
-                    'artist_name': song.get_platform_info(platform)['artist_ko']
+                    'artist_name': song.get_platform_info(platform)['artist_ko'],
+                    'title_en': song.get_platform_info(platform)['title_en'],  # 영문 제목 추가
+                    'artist_en': song.get_platform_info(platform)['artist_en']  # 영문 아티스트 추가
                 }
                 for song in songs
                 if song.is_platform_available(platform)
