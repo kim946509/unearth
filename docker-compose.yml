@@ -9,7 +9,6 @@ services:
     image: mysql:8.0
     platform: linux/amd64
     container_name: unearth_db
-    restart: always
     networks:
       - unearth
     environment:
@@ -24,10 +23,9 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   app:
-    build: .
+    image: agong1/unearth-app:latest
     platform: linux/amd64
     container_name: unearth_app
-    restart: always
     networks:
       - unearth
     depends_on:
@@ -54,6 +52,15 @@ services:
       - DEBUG=False
       - ALLOWED_HOSTS=localhost,127.0.0.1
 
+      # 크롤링 관련 환경변수
+      - MELON_API_URL=${MELON_API_URL}
+      - YOUTUBE_MUSIC_ID=${YOUTUBE_MUSIC_ID}
+      - YOUTUBE_MUSIC_PASSWORD=${YOUTUBE_MUSIC_PASSWORD}
+
+      # Django 설정
+      - DJANGO_SETTINGS_MODULE=${DJANGO_SETTING_MODULE}
+      - PYTHONPATH=${PYTHONPATH}
+
       # 기타 환경변수
       - PYTHONUNBUFFERED=1
       - TZ=Asia/Seoul
@@ -64,7 +71,6 @@ services:
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: unearth_phpmyadmin
-    restart: always
     networks:
       - unearth
     environment:
@@ -73,7 +79,7 @@ services:
       PMA_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "10708:80"
+      - "10702:80"
     depends_on:
       - db
 

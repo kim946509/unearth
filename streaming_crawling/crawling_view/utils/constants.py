@@ -2,6 +2,8 @@
 크롤링에서 사용하는 상수 정의
 """
 
+from selenium.webdriver.common.by import By
+
 # Genie 관련 셀렉터
 class GenieSelectors:
     # 검색 관련
@@ -86,6 +88,69 @@ class YouTubeMusicSelectors:
         # 'input[placeholder]',                    # placeholder가 있는 모든 input
         'input'                                  # 모든 input (최후의 fallback)
     ]
+    
+    # 로그인 관련 셀렉터
+    LOGIN_BUTTON = [
+        'a[aria-label="로그인"]',
+        'a[aria-label="Sign in"]',
+        'ytmusic-button-renderer[is-sign-in-button]',
+        'paper-button[aria-label="로그인"]',
+        'paper-button[aria-label="Sign in"]',
+        'button[aria-label="로그인"]',
+        'button[aria-label="Sign in"]',
+        'a[title="로그인"]',
+        'a[title="Sign in"]',
+        'button[title="로그인"]',
+        'button[title="Sign in"]'
+    ]
+    
+    # Google 로그인 폼 셀렉터
+    GOOGLE_LOGIN = {
+        'EMAIL_INPUT': [
+            (By.ID, "identifierId"),
+        ],
+        'EMAIL_NEXT': [
+            (By.ID, "identifierNext"),
+        ],
+        'PASSWORD_INPUT': [
+            (By.NAME, "Passwd"),
+        ],
+        'PASSWORD_NEXT': [
+            (By.ID, "passwordNext"),
+        ]
+    }
+    
+    # 로그인 상태 확인 셀렉터
+    LOGIN_STATUS_INDICATORS = [
+        # 프로필 아이콘
+        'ytmusic-settings-button',
+        'img.ytmusic-settings-button',
+        # 아바타 이미지
+        'yt-img-shadow#avatar',
+        'img#img[alt="Avatar image"]',
+        # 계정 메뉴
+        'ytmusic-menu-renderer[slot="menu"]',
+        # 업로드 버튼 (로그인된 상태에서만 표시)
+        'ytmusic-upload-button',
+        # 라이브러리 링크 (로그인된 상태에서만 표시)
+        'a[href="/library"]',
+        'yt-formatted-string[title="라이브러리"]',
+        'yt-formatted-string[title="Library"]',
+        # 추가 로그인 상태 지표
+        'ytmusic-user-avatar-renderer',
+        'ytmusic-profile-button',
+        'ytmusic-account-button'
+    ]
+    
+    # 본인 인증 관련 키워드
+    AUTHENTICATION_KEYWORDS = [
+        # 한글 키워드
+        "보안", "코드", "인증", "확인", "전화", "기기", "추가 확인", "본인", "인증번호", "보안코드",
+        # 영어 키워드
+        "security", "code", "verification", "verify", "phone", "device", "additional verification",
+        "authentication", "verification code", "security code", "confirm", "identity"
+    ]
+    
     SONG_TAB = [
         '//a[contains(@class, "yt-simple-endpoint") and .//yt-formatted-string[text()="노래"]]',   # 한글
         # 더 일반적인 셀렉터 추가

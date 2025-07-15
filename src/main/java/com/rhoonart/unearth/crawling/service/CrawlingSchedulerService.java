@@ -38,9 +38,9 @@ public class CrawlingSchedulerService {
         try {
             isCrawlingRunning = true;
             crawlingExecuteService.executeFullCrawling();
-            log.info("✅ 30분 주기 전체 크롤링 스케줄 완료");
+            log.info("✅ 3분 주기 전체 크롤링 스케줄 완료");
         } catch (Exception e) {
-            log.error("❌ 30분 주기 전체 크롤링 스케줄 실행 중 오류", e);
+            log.error("❌ 3분 주기 전체 크롤링 스케줄 실행 중 오류", e);
         } finally {
             // 5분 후에 상태 초기화 (크롤링 완료 예상 시간)
             new Thread(() -> {

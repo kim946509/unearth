@@ -163,39 +163,14 @@ class YouTubeMusicCrawler:
             time.sleep(2)
             
             # 1. 로그인 버튼 확인 (로그아웃 상태 체크)
-            login_selectors = [
-                'a[aria-label="로그인"]',
-                'a[aria-label="Sign in"]',
-                'ytmusic-button-renderer[is-sign-in-button]',
-                'paper-button[aria-label="로그인"]',
-                'paper-button[aria-label="Sign in"]'
-            ]
-            
-            for selector in login_selectors:
+            for selector in YouTubeMusicSelectors.LOGIN_BUTTON:
                 elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
                 if elements and elements[0].is_displayed():
                     logger.info(f"❌ 로그인되지 않은 상태 (로그인 버튼 발견: {selector})")
                     return False
             
             # 2. 로그인 상태 확인 (여러 방법으로 체크)
-            login_indicators = [
-                # 프로필 아이콘
-                'ytmusic-settings-button',
-                'img.ytmusic-settings-button',
-                # 아바타 이미지
-                'yt-img-shadow#avatar',
-                'img#img[alt="Avatar image"]',
-                # 계정 메뉴
-                'ytmusic-menu-renderer[slot="menu"]',
-                # 업로드 버튼 (로그인된 상태에서만 표시)
-                'ytmusic-upload-button',
-                # 라이브러리 링크 (로그인된 상태에서만 표시)
-                'a[href="/library"]',
-                'yt-formatted-string[title="라이브러리"]',
-                'yt-formatted-string[title="Library"]'
-            ]
-            
-            for selector in login_indicators:
+            for selector in YouTubeMusicSelectors.LOGIN_STATUS_INDICATORS:
                 try:
                     elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
                     if elements and elements[0].is_displayed():
@@ -300,26 +275,37 @@ class YouTubeMusicCrawler:
             logger.error(f"❌ YouTube Music 로그인 실패: {e}", exc_info=True)
             return False
     
+    def _find_element_with_fallback(self, selector_list, wait_type='presence'):
+        for by, value in selector_list:
+            try:
+                if wait_type == 'presence':
+                    return self.wait.until(EC.presence_of_element_located((by, value)))
+                elif wait_type == 'clickable':
+                    return self.wait.until(EC.element_to_be_clickable((by, value)))
+            except Exception:
+                continue
+        raise Exception(f"요소를 찾을 수 없습니다: {selector_list}")
+
     def _perform_manual_login(self):
         """
         수동 로그인 수행
-        
         Returns:
             bool: 로그인 성공 여부
         """
         try:
             self.driver.get("https://music.youtube.com/")
             time.sleep(2)
-            
+
             # 로그인 버튼이 보이면(=로그인 안 된 상태)만 로그인 로직 실행
             need_login = False
-            try:
-                login_btn = self.driver.find_element(By.CSS_SELECTOR, 'a[aria-label="로그인"]')
-                if login_btn.is_displayed():
-                    need_login = True
-            except Exception:
-                # 로그인 버튼이 없으면 이미 로그인된 상태
-                need_login = False
+            for selector in YouTubeMusicSelectors.LOGIN_BUTTON:
+                try:
+                    login_btn = self.driver.find_element(By.CSS_SELECTOR, selector)
+                    if login_btn.is_displayed():
+                        need_login = True
+                        break
+                except Exception:
+                    continue
 
             if need_login:
                 # 로그인 프로세스 실행
@@ -327,25 +313,25 @@ class YouTubeMusicCrawler:
                 time.sleep(2)
 
                 # 이메일 입력
-                email_input = self.wait.until(EC.presence_of_element_located((By.ID, "identifierId")))
+                email_input = self._find_element_with_fallback(YouTubeMusicSelectors.GOOGLE_LOGIN['EMAIL_INPUT'], 'presence')
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
                 email_input.send_keys(self.youtube_music_id)
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
 
                 # '다음' 버튼 클릭
-                next_button = self.wait.until(EC.element_to_be_clickable((By.ID, "identifierNext")))
+                next_button = self._find_element_with_fallback(YouTubeMusicSelectors.GOOGLE_LOGIN['EMAIL_NEXT'], 'clickable')
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
                 next_button.click()
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
 
                 # 비밀번호 입력
-                password_input = self.wait.until(EC.presence_of_element_located((By.NAME, "Passwd")))
+                password_input = self._find_element_with_fallback(YouTubeMusicSelectors.GOOGLE_LOGIN['PASSWORD_INPUT'], 'presence')
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
                 password_input.send_keys(self.youtube_music_password)
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
 
                 # 로그인 버튼 클릭
-                login_button = self.wait.until(EC.element_to_be_clickable((By.ID, "passwordNext")))
+                login_button = self._find_element_with_fallback(YouTubeMusicSelectors.GOOGLE_LOGIN['PASSWORD_NEXT'], 'clickable')
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
                 login_button.click()
                 time.sleep(random.uniform(CommonSettings.RANDOM_DELAY_MIN, CommonSettings.RANDOM_DELAY_MAX))
@@ -353,21 +339,22 @@ class YouTubeMusicCrawler:
                 # 본인 인증 화면 감지 및 대기
                 time.sleep(2)
                 page_source = self.driver.page_source
-                if any(keyword in page_source for keyword in ["보안", "코드", "인증", "확인", "전화", "기기", "추가 확인"]):
+                if any(keyword in page_source for keyword in YouTubeMusicSelectors.AUTHENTICATION_KEYWORDS):
                     logger.warning("⚠️ 본인 인증(추가 인증) 화면이 감지되었습니다. 자동화가 중단될 수 있습니다.")
                     time.sleep(60)
 
-                # 로그인 완료 대기
-                self.wait.until_not(EC.presence_of_element_located((By.CSS_SELECTOR, 'a[aria-label="로그인"]')))
+                # 로그인 완료 대기 (모든 로그인 버튼 셀렉터에 대해 확인)
+                for selector in YouTubeMusicSelectors.LOGIN_BUTTON:
+                    try:
+                        self.wait.until_not(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                    except Exception:
+                        continue
                 time.sleep(2)
-                
-                # 로그인 성공 시 쿠키 저장
-                self._save_cookies()
-                
+
             # 유튜브 뮤직 페이지로 이동
             self.driver.get("https://music.youtube.com/")
             time.sleep(2)
-            
+
             # 최종 로그인 상태 확인
             if self._check_login_status():
                 self.is_logged_in = True
@@ -376,7 +363,7 @@ class YouTubeMusicCrawler:
             else:
                 logger.error("❌ 일반 로그인 실패")
                 return False
-                
+
         except Exception as e:
             logger.error(f"❌ 수동 로그인 실패: {e}", exc_info=True)
             return False
