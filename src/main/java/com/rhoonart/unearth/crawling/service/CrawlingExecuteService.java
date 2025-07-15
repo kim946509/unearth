@@ -9,11 +9,54 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CrawlingExecuteService {
+
+    /**
+     * 운영체제를 감지합니다.
+     */
+    private boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
+    }
+
+    /**
+     * Windows 환경에서 가상환경을 포함한 명령어를 생성합니다.
+     */
+    private List<String> createWindowsCommand(String scriptPath, String... args) {
+        List<String> command = new ArrayList<>();
+        command.add("cmd");
+        command.add("/c");
+        command.add("cd streaming_crawling && env\\Scripts\\activate && python " + scriptPath);
+
+        // 추가 인자들 추가
+        for (String arg : args) {
+            command.add(arg);
+        }
+
+        return command;
+    }
+
+    /**
+     * Ubuntu/Linux 환경에서 명령어를 생성합니다.
+     */
+    private List<String> createLinuxCommand(String scriptPath, String... args) {
+        List<String> command = new ArrayList<>();
+        command.add("python3");
+        command.add(scriptPath);
+
+        // 추가 인자들 추가
+        for (String arg : args) {
+            command.add(arg);
+        }
+
+        return command;
+    }
 
     /**
      * 단일 곡 크롤링을 실행합니다.
@@ -26,14 +69,34 @@ public class CrawlingExecuteService {
             Path djangoPath = Paths.get("streaming_crawling");
             Path scriptPath = djangoPath.resolve("crawling_view/controller/run_single_song_crawling.py");
 
-            // Python 명령어 구성 (가상환경 활성화 후 스크립트 실행)
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "cmd", "/c",
-                    "env\\Scripts\\activate.bat && python crawling_view/controller/run_single_song_crawling.py --song_id "
-                            + songId);
+            // 운영체제별 명령어 생성
+            List<String> command;
+            if (isWindows()) {
+                command = createWindowsCommand("crawling_view/controller/run_single_song_crawling.py", "--song_id",
+                        songId);
+                log.info("Windows 환경에서 크롤링 실행: {}", command);
+            } else {
+                command = createLinuxCommand("streaming_crawling/crawling_view/controller/run_single_song_crawling.py",
+                        "--song_id", songId);
+                log.info("Linux/Ubuntu 환경에서 크롤링 실행: {}", command);
+            }
 
-            // 작업 디렉토리 설정 (Django 프로젝트 루트)
-            processBuilder.directory(djangoPath.toFile());
+            // ProcessBuilder 생성
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+            // 작업 디렉토리 설정
+            if (isWindows()) {
+                processBuilder.directory(Paths.get(".").toFile()); // Windows: 프로젝트 루트에서 실행
+            } else {
+                processBuilder.directory(djangoPath.toFile()); // Linux: streaming_crawling 폴더에서 실행
+            }
+
+            // 환경 변수 설정 (Linux 환경에서만)
+            if (!isWindows()) {
+                Map<String, String> env = processBuilder.environment();
+                env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
+                env.put("PYTHONUNBUFFERED", "1"); // Python 출력 버퍼링 비활성화
+            }
 
             log.info("크롤링 실행 시작: songId={}", songId);
 
@@ -102,14 +165,34 @@ public class CrawlingExecuteService {
         try {
             // Django 프로젝트 경로 설정
             Path djangoPath = Paths.get("streaming_crawling");
+            Path scriptPath = djangoPath.resolve("crawling_view/controller/run_crawling.py");
 
-            // Python 명령어 구성 (가상환경 활성화 후 스크립트 실행)
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "cmd", "/c",
-                    "env\\Scripts\\activate.bat && python crawling_view/controller/run_crawling.py");
+            // 운영체제별 명령어 생성
+            List<String> command;
+            if (isWindows()) {
+                command = createWindowsCommand("crawling_view/controller/run_crawling.py");
+                log.info("Windows 환경에서 전체 크롤링 실행: {}", command);
+            } else {
+                command = createLinuxCommand("streaming_crawling/crawling_view/controller/run_crawling.py");
+                log.info("Linux/Ubuntu 환경에서 전체 크롤링 실행: {}", command);
+            }
 
-            // 작업 디렉토리 설정 (Django 프로젝트 루트)
-            processBuilder.directory(djangoPath.toFile());
+            // ProcessBuilder 생성
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+
+            // 작업 디렉토리 설정
+            if (isWindows()) {
+                processBuilder.directory(Paths.get(".").toFile()); // Windows: 프로젝트 루트에서 실행
+            } else {
+                processBuilder.directory(djangoPath.toFile()); // Linux: streaming_crawling 폴더에서 실행
+            }
+
+            // 환경 변수 설정 (Linux 환경에서만)
+            if (!isWindows()) {
+                Map<String, String> env = processBuilder.environment();
+                env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
+                env.put("PYTHONUNBUFFERED", "1"); // Python 출력 버퍼링 비활성화
+            }
 
             log.info("전체 크롤링 실행 시작");
 

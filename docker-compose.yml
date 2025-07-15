@@ -1,0 +1,81 @@
+version: "3.8"
+
+networks:
+  unearth:
+    driver: bridge
+
+services:
+  db:
+    image: mysql:8.0
+    platform: linux/amd64
+    container_name: unearth_db
+    restart: always
+    networks:
+      - unearth
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "10701:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  app:
+    build: .
+    platform: linux/amd64
+    container_name: unearth_app
+    restart: always
+    networks:
+      - unearth
+    depends_on:
+      - db
+    ports:
+      - "10700:8080"
+    environment:
+      # Java Spring Boot 환경변수
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=3306
+      - DB_NAME=${MYSQL_DATABASE}
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - SERVER_PORT=8080
+
+      # Django 환경변수 (Spring Boot와 동일한 DB 사용)
+      - DB_ENGINE=django.db.backends.mysql
+      - DJANGO_DB_NAME=${MYSQL_DATABASE}
+      - DJANGO_DB_USER=${MYSQL_USER}
+      - DJANGO_DB_PASSWORD=${MYSQL_PASSWORD}
+      - DJANGO_DB_HOST=${DJANGO_DB_HOST}
+      - DJANGO_DB_PORT=3306
+      - SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+
+      # 기타 환경변수
+      - PYTHONUNBUFFERED=1
+      - TZ=Asia/Seoul
+    volumes:
+      - ./streaming_crawling/logs:/app/streaming_crawling/logs
+      - ./streaming_crawling/csv_folder:/app/streaming_crawling/csv_folder
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: unearth_phpmyadmin
+    restart: always
+    networks:
+      - unearth
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "10708:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

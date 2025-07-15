@@ -6,6 +6,9 @@ spring:
     username: ${DB_USERNAME:admin}
     password: ${DB_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      initialization-fail-timeout: 0 # 연결 안 되더라도 앱이 죽지 않게
+      connection-timeout: 30000 # 최대 대기 시간 (30초)
   jpa:
     hibernate:
       ddl-auto: update

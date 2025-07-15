@@ -41,5 +41,5 @@ env.properties
 src/main/resources/env.properties
 .cursor/
 
-
-
+# Chrome user data directory
+user_data/

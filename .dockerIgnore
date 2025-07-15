@@ -12,13 +12,39 @@ out/
 *.log
 *.iml
 
+# Git 관련
+.git/
+.gitignore
+
 # Python 관련 제외
 streaming_crawling/env/
 streaming_crawling/__pycache__/
 streaming_crawling/*.pyc
 streaming_crawling/cookies.pkl
 streaming_crawling/db.sqlite3
+streaming_crawling/.git/
 
 # 로그 및 데이터 제외
 streaming_crawling/logs/
 streaming_crawling/csv_folder/
+
+# 문서 파일
+*.md
+docs/
+
+# 임시 파일
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker 관련
+Dockerfile
+docker-compose.yml
+.dockerignore
