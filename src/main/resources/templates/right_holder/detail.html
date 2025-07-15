@@ -10,8 +10,11 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:if="${user.role != T(com.rhoonart.unearth.user.entity.Role).RIGHT_HOLDER}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
-    <section class="content">
+    <!-- 관리자/슈퍼관리자만 사이드바 표시 -->
+    <div th:if="${user.role == 'SUPER_ADMIN' or user.role == 'ADMIN'}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    
+    <!-- 권리자는 사이드바 없이 전체 너비 사용 -->
+    <section th:class="${user.role == 'RIGHT_HOLDER'} ? 'content full-width' : 'content'">
         <div class="page-header">
             <h2 th:text="${rightHolder.holderName}">권리자 상세</h2>
         </div>

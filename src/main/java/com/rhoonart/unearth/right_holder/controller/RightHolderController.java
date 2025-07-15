@@ -97,7 +97,7 @@ public class RightHolderController {
             HttpSession session,
             Model model) {
         // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
-        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId)) {
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
             throw new BaseException(ResponseCode.FORBIDDEN, "접근 권한이 없습니다.");
         }
 

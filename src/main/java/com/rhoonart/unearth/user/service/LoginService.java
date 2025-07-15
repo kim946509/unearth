@@ -1,8 +1,10 @@
 package com.rhoonart.unearth.user.service;
 
+import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.user.dto.LoginRequestDto;
 import com.rhoonart.unearth.user.dto.LoginResponseDto;
 import com.rhoonart.unearth.user.dto.UserDto;
+import com.rhoonart.unearth.user.entity.Role;
 import com.rhoonart.unearth.user.entity.User;
 import com.rhoonart.unearth.user.exception.LoginException;
 import com.rhoonart.unearth.user.repository.UserRepository;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RightHolderService rightHolderService;
 
     @Transactional(readOnly = true)
     public LoginResponseDto login(LoginRequestDto request) {
@@ -40,6 +43,18 @@ public class LoginService {
                 user.getId(),
                 user.getUsername(),
                 user.getRole());
-        return LoginResponseDto.of(userDto);
+
+        // 권리자인 경우 권리자 ID 조회
+        String rightHolderId = null;
+        if (user.getRole() == Role.RIGHT_HOLDER) {
+            try {
+                rightHolderId = rightHolderService.findByUserId(user.getId()).getId();
+            } catch (Exception e) {
+                // 권리자 정보를 찾을 수 없는 경우 null로 설정
+                rightHolderId = null;
+            }
+        }
+
+        return LoginResponseDto.of(userDto, rightHolderId);
     }
 }

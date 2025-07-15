@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(staticName = "of")
 public class LoginResponseDto {
     private final UserDto userDto;
+    private final String rightHolderId; // 권리자 ID (권리자인 경우에만 값이 있음)
 }

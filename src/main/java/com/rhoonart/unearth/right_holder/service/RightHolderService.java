@@ -112,4 +112,9 @@ public class RightHolderService {
         return rightHolderRepository.findById(rightHolderId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
     }
+
+    public RightHolder findByUserId(String userId) {
+        return rightHolderRepository.findByUserId(userId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+    }
 }

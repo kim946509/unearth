@@ -6,6 +6,7 @@ import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataWithSongInfoDto;
 import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.service.CrawlingService;
+import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.common.CommonResponse;
 import com.rhoonart.unearth.user.exception.ForbiddenException;
@@ -25,6 +26,7 @@ import java.util.List;
 public class CrawlingController {
 
     private final CrawlingService crawlingService;
+    private final RightHolderService rightHolderService;
 
     @PostMapping("/execute")
     @ResponseBody
@@ -53,7 +55,7 @@ public class CrawlingController {
         String rightHolderId = songInfo.getRightHolder().getId();
 
         // 권한 확인
-        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId)) {
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
             throw new ForbiddenException("해당 권리자의 크롤링 데이터에 접근할 권한이 없습니다.");
         }
 
