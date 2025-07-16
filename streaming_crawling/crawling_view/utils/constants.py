@@ -142,13 +142,15 @@ class YouTubeMusicSelectors:
         'ytmusic-account-button'
     ]
     
-    # 본인 인증 관련 키워드
+    # 본인 인증 관련 키워드 (더 구체적이고 정확한 키워드로 수정)
     AUTHENTICATION_KEYWORDS = [
-        # 한글 키워드
-        "보안", "코드", "인증", "확인", "전화", "기기", "추가 확인", "본인", "인증번호", "보안코드",
-        # 영어 키워드
-        "security", "code", "verification", "verify", "phone", "device", "additional verification",
-        "authentication", "verification code", "security code", "confirm", "identity"
+        # 구체적인 본인 인증 관련 키워드
+        "2단계 인증", "2단계 확인", "추가 보안 확인", "본인 인증", "인증 코드 입력",
+        "two-factor authentication", "2-step verification", "verification code",
+        "security code", "phone verification", "device verification",
+        # Google 계정 보안 관련 키워드
+        "계정 보안", "보안 확인", "추가 확인 필요", "계정 인증",
+        "account security", "security check", "additional verification required"
     ]
     
     SONG_TAB = [

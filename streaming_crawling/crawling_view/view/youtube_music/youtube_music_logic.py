@@ -5,10 +5,8 @@ import time
 import random
 import logging
 import re
-import pickle
 import os
 from datetime import datetime
-from pathlib import Path
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -30,130 +28,8 @@ class YouTubeMusicCrawler:
         self.youtube_music_id = os.getenv('YOUTUBE_MUSIC_ID', '')
         self.youtube_music_password = os.getenv('YOUTUBE_MUSIC_PASSWORD', '')
         self.is_logged_in = False
-        
-        # 쿠키 파일 경로 설정 (절대 경로 사용)
-        cookies_dir = Path("/app/cookies")
-        if not cookies_dir.exists():
-            cookies_dir.mkdir(parents=True, exist_ok=True)
-        self.cookies_file = cookies_dir / "youtube_music_cookies.pkl"
     
-    def _load_cookies(self):
-        """저장된 쿠키 로드"""
-        try:
-            if self.cookies_file.exists():
-                with open(self.cookies_file, 'rb') as f:
-                    cookies = pickle.load(f)
-                logger.info(f"🍪 저장된 쿠키 로드: {len(cookies)}개")
-                return cookies
-        except Exception as e:
-            logger.warning(f"쿠키 로드 실패: {e}")
-            # 쿠키 파일이 손상된 경우 삭제
-            try:
-                if self.cookies_file.exists():
-                    self.cookies_file.unlink()
-                    logger.info("손상된 쿠키 파일 삭제됨")
-            except Exception as e:
-                logger.warning(f"쿠키 파일 삭제 실패: {e}")
-        return None
-    
-    def _is_cookie_expired(self, cookies):
-        """쿠키 만료 여부 확인"""
-        try:
-            current_time = time.time()
-            cookie_creation_time = os.path.getmtime(self.cookies_file) if self.cookies_file.exists() else current_time
-            
-            for cookie in cookies:
-                # expiry 필드로 만료 확인
-                if 'expiry' in cookie:
-                    if cookie['expiry'] < current_time:
-                        logger.info(f"🍪 쿠키 만료됨 (expiry): {cookie.get('name', 'unknown')}")
-                        return True
-                
-                # maxAge 필드로 만료 확인
-                if 'maxAge' in cookie:
-                    max_age = cookie['maxAge']
-                    if max_age > 0:  # 양수인 경우만 체크
-                        cookie_age = current_time - cookie_creation_time
-                        if cookie_age > max_age:
-                            logger.info(f"🍪 쿠키 만료됨 (maxAge): {cookie.get('name', 'unknown')}")
-                            return True
-            
-            # 쿠키 파일이 24시간 이상 된 경우 만료 처리
-            if (current_time - cookie_creation_time) > 24 * 60 * 60:
-                logger.info("🍪 쿠키 파일이 24시간 이상 되어 만료 처리")
-                return True
-            
-            return False
-        except Exception as e:
-            logger.warning(f"쿠키 만료 확인 실패: {e}")
-            return True  # 에러 발생 시 안전하게 만료된 것으로 처리
-    
-    def _save_cookies(self):
-        """현재 쿠키 저장"""
-        try:
-            cookies = self.driver.get_cookies()
-            if not cookies:
-                logger.warning("저장할 쿠키가 없습니다")
-                return False
-                
-            # 쿠키 디렉토리 생성
-            self.cookies_file.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(self.cookies_file, 'wb') as f:
-                pickle.dump(cookies, f)
-            logger.info(f"🍪 쿠키 저장 완료: {len(cookies)}개")
-            return True
-        except Exception as e:
-            logger.error(f"쿠키 저장 실패: {e}")
-            return False
-    
-    def _apply_cookies(self, cookies):
-        """쿠키 적용"""
-        try:
-            # 먼저 YouTube Music 페이지로 이동
-            self.driver.get("https://music.youtube.com")
-            time.sleep(2)
-            
-            # 기존 쿠키 모두 삭제
-            self.driver.delete_all_cookies()
-            time.sleep(1)
-            
-            # 새 쿠키 적용
-            success_count = 0
-            for cookie in cookies:
-                try:
-                    # 쿠키 정보 로깅
-                    logger.debug(f"처리 중인 쿠키 정보:")
-                    for key, value in cookie.items():
-                        logger.debug(f"  - {key}: {value}")
-                    
-                    # domain 필드가 없는 경우에만 기본값 설정
-                    if 'domain' not in cookie:
-                        cookie['domain'] = '.youtube.com'
-                    
-                    # 쿠키를 있는 그대로 적용
-                    self.driver.add_cookie(cookie)
-                    success_count += 1
-                    logger.debug(f"✅ 쿠키 적용 성공: {cookie.get('name', 'unknown')}")
-                    
-                except Exception as e:
-                    logger.warning(f"개별 쿠키 적용 실패: {cookie.get('name', 'unknown')} - {e}")
-            
-            logger.info(f"🍪 쿠키 적용 완료 ({success_count}/{len(cookies)}개 성공)")
-            
-            # 페이지 새로고침
-            self.driver.refresh()
-            time.sleep(2)
-            
-            # 적용된 쿠키 확인
-            current_cookies = self.driver.get_cookies()
-            logger.info(f"현재 브라우저에 설정된 쿠키 수: {len(current_cookies)}")
-            
-            return success_count > 0
-            
-        except Exception as e:
-            logger.error(f"쿠키 적용 실패: {e}")
-            return False
+
     
     def _check_login_status(self):
         """로그인 상태 확인"""
@@ -235,39 +111,12 @@ class YouTubeMusicCrawler:
     
     def login(self):
         """
-        YouTube Music 로그인 (쿠키 우선 사용)
-        
-        로그인 순서:
-        1. 저장된 쿠키가 있으면 쿠키로 로그인 시도
-        2. 쿠키가 없거나 만료되었으면 일반 로그인 시도
-        3. 로그인 성공 시 새로운 쿠키 저장
+        YouTube Music 로그인 (일반 로그인만 사용)
         
         Returns:
             bool: 로그인 성공 여부
         """
         try:
-            # 1단계: 저장된 쿠키로 로그인 시도
-            cookies = self._load_cookies()
-            if cookies:
-                # 쿠키 만료 여부 확인
-                if self._is_cookie_expired(cookies):
-                    logger.warning("⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.")
-                else:
-                    logger.info("🍪 저장된 쿠키로 로그인 시도")
-                    if self._apply_cookies(cookies):
-                        # 로그인 상태 확인
-                        if self._check_login_status():
-                            self.is_logged_in = True
-                            logger.info("✅ 쿠키로 로그인 성공")
-                            return True
-                        else:
-                            logger.warning("⚠️ 쿠키가 유효하지 않습니다. 일반 로그인을 시도합니다.")
-                    else:
-                        logger.warning("⚠️ 쿠키 적용에 실패했습니다. 일반 로그인을 시도합니다.")
-            else:
-                logger.info("📝 저장된 쿠키가 없습니다. 일반 로그인을 시도합니다.")
-            
-            # 2단계: 일반 로그인 시도
             logger.info("🔐 일반 로그인 시도")
             return self._perform_manual_login()
             
@@ -341,7 +190,7 @@ class YouTubeMusicCrawler:
                 page_source = self.driver.page_source
                 if any(keyword in page_source for keyword in YouTubeMusicSelectors.AUTHENTICATION_KEYWORDS):
                     logger.warning("⚠️ 본인 인증(추가 인증) 화면이 감지되었습니다. 자동화가 중단될 수 있습니다.")
-                    time.sleep(60)
+                    time.sleep(30)
 
                 # 로그인 완료 대기 (모든 로그인 버튼 셀렉터에 대해 확인)
                 for selector in YouTubeMusicSelectors.LOGIN_BUTTON:
