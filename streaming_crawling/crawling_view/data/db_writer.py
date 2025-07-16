@@ -102,10 +102,10 @@ def get_song_info_id(platform, **kwargs):
     try:
         if platform == Platforms.GENIE:
             # Genie는 artist와 title로 조회
-            artist_name = kwargs.get('artist_name')
-            song_name = kwargs.get('song_name')
+            artist_name = kwargs.get('artist_ko')
+            song_name = kwargs.get('title_ko')
             if not artist_name or not song_name:
-                logger.warning(f"❌ Genie artist_name 또는 song_name 누락")
+                logger.warning(f"❌ Genie artist_ko 또는 title_ko 누락")
                 return None
             
             song_info = SongInfo.objects.get(artist_ko=artist_name, title_ko=song_name)
@@ -125,10 +125,10 @@ def get_song_info_id(platform, **kwargs):
                 
         elif platform == Platforms.YOUTUBE_MUSIC:
             # YouTube Music은 artist와 title로 조회
-            artist_name = kwargs.get('artist_name')
-            song_name = kwargs.get('song_name')
+            artist_name = kwargs.get('artist_ko')
+            song_name = kwargs.get('title_ko')
             if not artist_name or not song_name:
-                logger.warning(f"❌ YouTube Music artist_name 또는 song_name 누락")
+                logger.warning(f"❌ YouTube Music artist_ko 또는 title_ko 누락")
                 return None
             
             song_info = SongInfo.objects.get(artist_ko=artist_name, title_ko=song_name)

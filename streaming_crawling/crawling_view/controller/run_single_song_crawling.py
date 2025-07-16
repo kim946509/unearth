@@ -47,8 +47,8 @@ def main():
     # 곡 정보 dict 생성 (플랫폼별 정보 포함)
     song_dict = {
         'song_id': song.id,
-        'song_title': song.title_ko,
-        'artist_name': song.artist_ko,
+        'title_ko': song.title_ko,
+        'artist_ko': song.artist_ko,
         'title_en': song.title_en,
         'artist_en': song.artist_en,
         'youtube_url': song.youtube_url,

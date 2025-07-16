@@ -359,13 +359,16 @@ def keyword_similarity_match(found_text, target_texts, found_artist, target_arti
     
     return text_match, artist_match 
 
-def compare_song_info_multilang(found_title, found_artist, target_info):
+def compare_song_info_multilang(found_title, found_artist, target_title_ko, target_title_en, target_artist_ko, target_artist_en=''):
     """
     국문/영문 조합을 모두 시도하여 하나라도 매칭되면 True 반환
     Args:
         found_title (str): 검색된 곡 제목
         found_artist (str): 검색된 아티스트명
-        target_info (dict): {'title_ko', 'title_en', 'artist_ko', 'artist_en'}
+        target_title_ko (str): 목표 곡 제목 (한글)
+        target_title_en (str): 목표 곡 제목 (영문)
+        target_artist_ko (str): 목표 아티스트명 (한글)
+        target_artist_en (str): 목표 아티스트명 (영문, 선택사항)
     Returns:
         dict: 매칭 결과 (기존 compare_song_info 결과 + 어떤 조합에서 매칭됐는지)
     """
@@ -374,12 +377,34 @@ def compare_song_info_multilang(found_title, found_artist, target_info):
     logger.info(f"  찾은 아티스트: '{found_artist}'")
     
     results = []
-    combos = [
-        (target_info['title_ko'], target_info['artist_ko'], 'ko/ko'),
-        (target_info['title_en'], target_info['artist_en'], 'en/en'),
-        (target_info['title_ko'], target_info['artist_en'], 'ko/en'),
-        (target_info['title_en'], target_info['artist_ko'], 'en/ko'),
-    ]
+    combos = []
+    
+    # 한글 제목과 한글 아티스트 (기본)
+    if target_title_ko and target_artist_ko:
+        combos.append((target_title_ko, target_artist_ko, 'ko/ko'))
+    
+    # 영문 제목과 영문 아티스트
+    if target_title_en and target_artist_en:
+        combos.append((target_title_en, target_artist_en, 'en/en'))
+    
+    # 한글 제목과 영문 아티스트
+    if target_title_ko and target_artist_en:
+        combos.append((target_title_ko, target_artist_en, 'ko/en'))
+    
+    # 영문 제목과 한글 아티스트
+    if target_title_en and target_artist_ko:
+        combos.append((target_title_en, target_artist_ko, 'en/ko'))
+    
+    if not combos:
+        logger.warning(f"❌ 매칭할 수 있는 조합이 없음 (한글 제목: '{target_title_ko}', 영문 제목: '{target_title_en}', 한글 아티스트: '{target_artist_ko}', 영문 아티스트: '{target_artist_en}')")
+        return {
+            'both_match': False,
+            'title_match': False,
+            'artist_match': False,
+            'match_type': 'none',
+            'matched_combo': None,
+            'details': {}
+        }
     
     for tgt_title, tgt_artist, combo in combos:
         logger.info(f"🔍 조합 시도: {combo} (제목: '{tgt_title}', 아티스트: '{tgt_artist}')")

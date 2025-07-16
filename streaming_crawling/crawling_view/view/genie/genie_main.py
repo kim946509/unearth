@@ -14,7 +14,7 @@ def run_genie_crawling(song_list, save_csv=True, save_db=True):
     Genie 크롤링 실행
     
     Args:
-        song_list (list): 크롤링할 곡 리스트 [{'song_title': '곡명', 'artist_name': '가수명', 'song_id': 'id'}, ...]
+        song_list (list): 크롤링할 곡 리스트 [{'title_ko': '곡명', 'artist_ko': '가수명', 'song_id': 'id'}, ...]
         save_csv (bool): CSV 저장 여부
         save_db (bool): DB 저장 여부
     
@@ -32,8 +32,8 @@ def run_genie_crawling(song_list, save_csv=True, save_db=True):
             
             # 각 곡에 대해 크롤링 실행
             for song_info in song_list:
-                song_title = song_info.get('song_title', '')
-                artist_name = song_info.get('artist_name', '')
+                song_title = song_info.get('title_ko', '')
+                artist_name = song_info.get('artist_ko', '')
                 song_id = song_info.get('song_id')
                 
                 logger.info(f"🔍 검색 중: {song_title} - {artist_name} (ID: {song_id})")

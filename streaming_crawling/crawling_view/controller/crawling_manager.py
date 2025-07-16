@@ -13,7 +13,7 @@ from crawling_view.data.db_writer import save_genie_to_db, save_youtube_to_db, s
 from crawling_view.data.csv_writer import save_genie_csv, save_youtube_csv, save_youtube_music_csv, save_melon_csv
 from crawling_view.controller.platform_crawlers import create_crawler
 from crawling_view.utils.constants import Platforms
-from crawling_view.utils.crawlingAllSongLogWriter import CrawlingAllSongLogWriter
+from crawling_view.utils.batch_crawling_logger import BatchCrawlingLogger
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ def run_crawling(target_date=None):
         dict: 크롤링 결과 요약
     """
     # 로그 라이터 초기화
-    log_writer = CrawlingAllSongLogWriter()
+    log_writer = BatchCrawlingLogger()
     
     try:
         # 1단계: 크롤링 대상 노래 조회
@@ -206,7 +206,7 @@ def run_platform_crawling(platform, target_date=None):
         dict: 크롤링 결과
     """
     # 로그 라이터 초기화
-    log_writer = CrawlingAllSongLogWriter()
+    log_writer = BatchCrawlingLogger()
     
     try:
         # 1단계: 크롤링 대상 노래 조회

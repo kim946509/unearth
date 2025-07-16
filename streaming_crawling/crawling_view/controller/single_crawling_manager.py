@@ -12,6 +12,7 @@ from crawling_view.data.db_writer import (
 from crawling_view.data.csv_writer import (
     save_genie_csv, save_youtube_music_csv, save_youtube_csv, save_melon_csv
 )
+from crawling_view.utils.single_crawling_logger import create_summary_logger
 
 logger = logging.getLogger(__name__)
 
@@ -19,24 +20,18 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     """
     단일 곡 크롤링 및 저장 (여러 곡과 동일한 로직, 곡 리스트만 1개)
     Args:
-        song_dict (dict): {'song_id', 'song_title', 'artist_name', 'title_en', 'artist_en'}
+        song_dict (dict): {'song_id', 'title_ko', 'artist_ko', 'title_en', 'artist_en'}
         save_csv (bool): CSV 저장 여부
         save_db (bool): DB 저장 여부
         platform (str or None): 특정 플랫폼만 실행 (None이면 전체)
     Returns:
         dict: 결과 요약
     """
-    import time
-    start_time = time.time()
-    
     logger.info("🚀 단일 곡 크롤링 프로세스 시작")
-    logger.info(f"🎵 곡 정보: {song_dict['artist_name']} - {song_dict['song_title']} (ID: {song_dict['song_id']})")
+    logger.info(f"🎵 곡 정보: {song_dict['artist_ko']} - {song_dict['title_ko']} (ID: {song_dict['song_id']})")
 
-    crawling_results = {}
-    db_results = {}
-    csv_results = {}
-    platform_status = {}  # 플랫폼별 성공/실패 상태
-
+    # 결과 요약 로거 생성
+    summary_logger = create_summary_logger(song_dict)
     platforms_to_run = [platform] if platform else Platforms.ALL_PLATFORMS
 
     for plat in platforms_to_run:
@@ -44,71 +39,81 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
             logger.info(f"🔍 {plat.upper()} 크롤링 시작")
             
             if plat == Platforms.GENIE:
-                # Genie용 데이터 형식
+                # Genie용 데이터 형식 (한글/영문 제목과 아티스트명 모두 포함)
                 genie_data = [{
                     'song_id': song_dict['song_id'],
-                    'song_title': song_dict['song_title'],
-                    'artist_name': song_dict['artist_name']
+                    'title_ko': song_dict['title_ko'],
+                    'title_en': song_dict.get('title_en', ''),
+                    'artist_ko': song_dict['artist_ko'],
+                    'artist_en': song_dict['artist_en']
                 }]
                 
                 genie_crawler = create_crawler('genie')
                 genie_results = genie_crawler.crawl_songs(genie_data)
-                crawling_results['genie'] = genie_results
                 
-                # 성공 여부 확인
+                # 성공 여부 확인 및 결과 추가
                 if genie_results and len(genie_results) > 0 and genie_results[0]:
-                    platform_status['genie'] = 'success'
+                    summary_logger.add_platform_result('genie', 'success', genie_results)
                     if save_db:
-                        db_results['genie'] = save_genie_to_db(genie_results)
+                        db_result = save_genie_to_db(genie_results)
+                        summary_logger.add_db_result('genie', db_result)
                     if save_csv:
-                        csv_results['genie'] = save_genie_csv(genie_results)
+                        csv_result = save_genie_csv(genie_results)
+                        summary_logger.add_csv_result('genie', csv_result)
                 else:
-                    platform_status['genie'] = 'failed'
+                    summary_logger.add_platform_result('genie', 'failed')
                     
             elif plat == Platforms.YOUTUBE_MUSIC:
-                # YouTube Music용 데이터 형식
+                # YouTube Music용 데이터 형식 (한글/영문 제목과 아티스트명 모두 포함)
                 ytmusic_data = [{
                     'song_id': song_dict['song_id'],
-                    'song_title': song_dict['song_title'],
-                    'artist_name': song_dict['artist_name']
+                    'title_ko': song_dict['title_ko'],
+                    'title_en': song_dict.get('title_en', ''),
+                    'artist_ko': song_dict['artist_ko'],
+                    'artist_en': song_dict['artist_en']
                 }]
                 
                 ytmusic_crawler = create_crawler('youtube_music')
                 ytmusic_results = ytmusic_crawler.crawl_songs(ytmusic_data)
-                crawling_results['youtube_music'] = ytmusic_results
                 
-                # 성공 여부 확인
+                # 성공 여부 확인 및 결과 추가
                 if ytmusic_results and len(ytmusic_results) > 0 and ytmusic_results[0]:
-                    platform_status['youtube_music'] = 'success'
+                    summary_logger.add_platform_result('youtube_music', 'success', ytmusic_results)
                     if save_db:
-                        db_results['youtube_music'] = save_youtube_music_to_db(ytmusic_results)
+                        db_result = save_youtube_music_to_db(ytmusic_results)
+                        summary_logger.add_db_result('youtube_music', db_result)
                     if save_csv:
-                        csv_results['youtube_music'] = save_youtube_music_csv(ytmusic_results)
+                        csv_result = save_youtube_music_csv(ytmusic_results)
+                        summary_logger.add_csv_result('youtube_music', csv_result)
                 else:
-                    platform_status['youtube_music'] = 'failed'
+                    summary_logger.add_platform_result('youtube_music', 'failed')
                     
             elif plat == Platforms.YOUTUBE:
                 # YouTube는 song_dict에서 직접 URL 정보 사용
                 youtube_url = song_dict.get('youtube_url')
                 
                 if youtube_url:
-                    youtube_data = [(youtube_url, song_dict['artist_name'], song_dict['song_id'])]
+                    youtube_data = [(youtube_url, song_dict['artist_ko'], song_dict['song_id'])]
                     
                     youtube_crawler = create_crawler('youtube')
                     youtube_results = youtube_crawler.crawl_songs(youtube_data)
-                    crawling_results['youtube'] = youtube_results
                     
-                    # 성공 여부 확인
-                    if youtube_results and len(youtube_results) > 0 and youtube_results[0]:
-                        platform_status['youtube'] = 'success'
+                    # 성공 여부 확인 및 결과 추가 (딕셔너리 구조에 맞게 판정)
+                    if youtube_results and any(
+                        v and isinstance(v, dict) and v.get('song_name') not in (None, '', '제목 없음')
+                        for v in youtube_results.values()
+                    ):
+                        summary_logger.add_platform_result('youtube', 'success', youtube_results)
                         if save_db:
-                            db_results['youtube'] = save_youtube_to_db(youtube_results)
+                            db_result = save_youtube_to_db(youtube_results)
+                            summary_logger.add_db_result('youtube', db_result)
                         if save_csv:
-                            csv_results['youtube'] = save_youtube_csv(youtube_results)
+                            csv_result = save_youtube_csv(youtube_results)
+                            summary_logger.add_csv_result('youtube', csv_result)
                     else:
-                        platform_status['youtube'] = 'failed'
+                        summary_logger.add_platform_result('youtube', 'failed')
                 else:
-                    platform_status['youtube'] = 'skipped'  # URL 없음
+                    summary_logger.add_platform_result('youtube', 'skipped')
                     logger.warning(f"⚠️ YouTube URL이 비어있어 건너뜀")
                     
             elif plat == Platforms.MELON:
@@ -123,71 +128,28 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                     
                     melon_crawler = create_crawler('melon')
                     melon_results = melon_crawler.crawl_songs(melon_data)
-                    crawling_results['melon'] = melon_results
                     
-                    # 성공 여부 확인
+                    # 성공 여부 확인 및 결과 추가
                     if melon_results and len(melon_results) > 0 and melon_results[0]:
-                        platform_status['melon'] = 'success'
+                        summary_logger.add_platform_result('melon', 'success', melon_results)
                         if save_db:
-                            db_results['melon'] = save_melon_to_db(melon_results)
+                            db_result = save_melon_to_db(melon_results)
+                            summary_logger.add_db_result('melon', db_result)
                         if save_csv:
-                            csv_results['melon'] = save_melon_csv(melon_results)
+                            csv_result = save_melon_csv(melon_results)
+                            summary_logger.add_csv_result('melon', csv_result)
                     else:
-                        platform_status['melon'] = 'failed'
+                        summary_logger.add_platform_result('melon', 'failed')
                 else:
-                    platform_status['melon'] = 'skipped'  # song_id 없음
+                    summary_logger.add_platform_result('melon', 'skipped')
                     logger.warning(f"⚠️ Melon song_id가 비어있어 건너뜀")
                     
         except Exception as e:
             logger.error(f"❌ {plat.upper()} 크롤링 중 오류: {str(e)}")
-            platform_status[plat] = 'error'
-            crawling_results[plat] = None
+            summary_logger.add_platform_result(plat, 'error')
 
-    # 실행 시간 계산
-    end_time = time.time()
-    execution_time = end_time - start_time
-    
-    # 성공/실패 통계
-    success_count = sum(1 for status in platform_status.values() if status == 'success')
-    failed_count = sum(1 for status in platform_status.values() if status == 'failed')
-    error_count = sum(1 for status in platform_status.values() if status == 'error')
-    skipped_count = sum(1 for status in platform_status.values() if status == 'skipped')
-    
-    # 요약 정보 생성
-    summary = {
-        'status': 'success' if success_count > 0 else 'failed',
-        'execution_time': f"{execution_time:.2f}초",
-        'platform_status': platform_status,
-        'statistics': {
-            'total_platforms': len(platforms_to_run),
-            'success': success_count,
-            'failed': failed_count,
-            'error': error_count,
-            'skipped': skipped_count
-        },
-        'crawling_results': crawling_results,
-        'db_results': db_results,
-        'csv_results': csv_results
-    }
-    
-    # 깔끔한 요약 출력
-    logger.info("=" * 60)
-    logger.info("📊 단일 곡 크롤링 결과 요약")
-    logger.info("=" * 60)
-    logger.info(f"🎵 곡: {song_dict['artist_name']} - {song_dict['song_title']}")
-    logger.info(f"⏱️  실행 시간: {execution_time:.2f}초")
-    logger.info(f"📈 성공: {success_count}개, 실패: {failed_count}개, 오류: {error_count}개, 건너뜀: {skipped_count}개")
-    
-    # 플랫폼별 결과
-    for plat, status in platform_status.items():
-        status_emoji = "✅" if status == 'success' else "❌" if status == 'failed' else "⚠️" if status == 'skipped' else "💥"
-        logger.info(f"{status_emoji} {plat.upper()}: {status}")
-    
-    if success_count > 0:
-        logger.info("✅ 크롤링 완료 (일부 성공)")
-    else:
-        logger.info("❌ 크롤링 실패 (모든 플랫폼 실패)")
-    
-    logger.info("=" * 60)
+    # 요약 정보 생성 및 출력
+    summary = summary_logger.generate_summary()
+    summary_logger.print_summary()
     
     return summary 

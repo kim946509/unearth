@@ -9,7 +9,7 @@ from collections import defaultdict
 
 logger = logging.getLogger(__name__)
 
-class CrawlingAllSongLogWriter:
+class BatchCrawlingLogger:
     """
     크롤링 전체 과정을 추적하고 최종 요약 로그를 생성하는 클래스
     """

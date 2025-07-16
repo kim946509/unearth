@@ -241,12 +241,13 @@ class YouTubeMusicCrawler:
                     return result
             
             # 국문 검색 실패시 영문으로 검색
-            logger.info("🔍 영문으로 검색 시도")
-            html = self._search_song(song_info['title_en'], song_info['artist_en'])
-            if html:
-                result = self._parse_song_info(html, song_info)
-                if result:
-                    return result
+            if song_info.get('title_en') and song_info.get('artist_en'):
+                logger.info("🔍 영문으로 검색 시도")
+                html = self._search_song(song_info['title_en'], song_info['artist_en'])
+                if html:
+                    result = self._parse_song_info(html, song_info)
+                    if result:
+                        return result
             
             logger.warning(f"❌ 모든 검색 시도 실패: {song_info}")
             return None
@@ -512,8 +513,14 @@ class YouTubeMusicCrawler:
                     # 조회수 추출
                     view_count = self._extract_view_count(item)
 
-                    # matching.py의 compare_song_info 함수 사용
-                    match_result = compare_song_info_multilang(song_title, artist_name, song_info)
+                    # matching.py의 compare_song_info 함수 사용 (한글/영문 제목과 아티스트명 모두 사용)
+                    match_result = compare_song_info_multilang(
+                        song_title, artist_name, 
+                        song_info['title_ko'], 
+                        song_info.get('title_en', ''),
+                        song_info['artist_ko'], 
+                        song_info.get('artist_en', '')
+                    )
                     
                     logger.debug(f"매칭 결과: {match_result}")
                     
