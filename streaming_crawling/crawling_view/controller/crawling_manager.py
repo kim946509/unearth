@@ -13,6 +13,7 @@ from crawling_view.data.db_writer import save_genie_to_db, save_youtube_to_db, s
 from crawling_view.data.csv_writer import save_genie_csv, save_youtube_csv, save_youtube_music_csv, save_melon_csv
 from crawling_view.controller.platform_crawlers import create_crawler
 from crawling_view.utils.constants import Platforms
+from crawling_view.utils.crawlingAllSongLogWriter import CrawlingAllSongLogWriter
 
 logger = logging.getLogger(__name__)
 
@@ -26,96 +27,155 @@ def run_crawling(target_date=None):
     Returns:
         dict: 크롤링 결과 요약
     """
-    logger.info("🚀 크롤링 프로세스 시작")
-        
+    # 로그 라이터 초기화
+    log_writer = CrawlingAllSongLogWriter()
+    
     try:
         # 1단계: 크롤링 대상 노래 조회
-        logger.info("📋 1단계: 크롤링 대상 노래 조회")
         active_songs = SongService.get_active_songs(target_date)
         
         if not active_songs:
             logger.warning("⚠️ 크롤링 대상 노래가 없습니다.")
             return {'status': 'no_songs', 'message': '크롤링 대상 노래가 없습니다.'}
         
+        # 로그 라이터 시작
+        log_writer.start_crawling(target_date or date.today(), len(active_songs))
+        
         # 2단계: 플랫폼별 크롤링 실행
-        logger.info("🕷️ 2단계: 플랫폼별 크롤링 실행")
         crawling_results = {}
         
         # Genie 크롤링
         genie_songs = SongService.get_songs_by_platform(active_songs, 'genie')
         if genie_songs:
-            logger.info(f"🎵 Genie 크롤링 시작: {len(genie_songs)}개 곡")
             genie_crawler = create_crawler('genie')
             genie_data = SongService.convert_to_crawling_format(genie_songs, 'genie')
             genie_results = genie_crawler.crawl_songs(genie_data)
             crawling_results['genie'] = genie_results
-            failed_count = len(genie_songs) - len(genie_results)
-            logger.info(f"✅ Genie 크롤링 완료: {len(genie_results)}개 성공, {failed_count}개 실패")
+            
+            # 실패한 곡만 기록 (Genie는 List[Dict] 형태)
+            successful_song_ids = {result.get('song_id') for result in genie_results}
+            for song in genie_songs:
+                if song.id not in successful_song_ids:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_crawling_failure(song_name, 'genie')
         
         # YouTube Music 크롤링
         ytmusic_songs = SongService.get_songs_by_platform(active_songs, 'youtube_music')
         if ytmusic_songs:
-            logger.info(f"🎵 YouTube Music 크롤링 시작: {len(ytmusic_songs)}개 곡")
             ytmusic_crawler = create_crawler('youtube_music')
             ytmusic_data = SongService.convert_to_crawling_format(ytmusic_songs, 'youtube_music')
             ytmusic_results = ytmusic_crawler.crawl_songs(ytmusic_data)
             crawling_results['youtube_music'] = ytmusic_results
-            failed_count = len(ytmusic_songs) - len(ytmusic_results)
-            logger.info(f"✅ YouTube Music 크롤링 완료: {len(ytmusic_results)}개 성공, {failed_count}개 실패")
+            
+            # 실패한 곡만 기록 (YouTube Music은 List[Dict] 형태)
+            successful_song_ids = {result.get('song_id') for result in ytmusic_results}
+            for song in ytmusic_songs:
+                if song.id not in successful_song_ids:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_crawling_failure(song_name, 'youtube_music')
         
         # YouTube 크롤링
         youtube_songs = SongService.get_songs_by_platform(active_songs, 'youtube')
         if youtube_songs:
-            logger.info(f"🎵 YouTube 크롤링 시작: {len(youtube_songs)}개 곡")
             youtube_crawler = create_crawler('youtube')
             youtube_data = SongService.convert_to_crawling_format(youtube_songs, 'youtube')
             youtube_results = youtube_crawler.crawl_songs(youtube_data)
             crawling_results['youtube'] = youtube_results
-            failed_count = len(youtube_songs) - len(youtube_results)
-            logger.info(f"✅ YouTube 크롤링 완료: {len(youtube_results)}개 성공, {failed_count}개 실패")
+            
+            # 실패한 곡만 기록 (YouTube는 딕셔너리 형태로 반환)
+            successful_song_ids = set(youtube_results.keys())
+            for song in youtube_songs:
+                if song.id not in successful_song_ids:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_crawling_failure(song_name, 'youtube')
         
         # Melon 크롤링
         melon_songs = SongService.get_songs_by_platform(active_songs, 'melon')
         if melon_songs:
-            logger.info(f"🍈 Melon 크롤링 시작: {len(melon_songs)}개 곡")
             melon_crawler = create_crawler('melon')
             melon_data = SongService.convert_to_crawling_format(melon_songs, 'melon')
             melon_results = melon_crawler.crawl_songs(melon_data)
             crawling_results['melon'] = melon_results
-            failed_count = len(melon_songs) - len(melon_results)
-            logger.info(f"✅ Melon 크롤링 완료: {len(melon_results)}개 성공, {failed_count}개 실패")
+            
+            # 실패한 곡만 기록 (Melon은 List[Dict] 형태)
+            successful_song_ids = {result.get('song_id') for result in melon_results}
+            for song in melon_songs:
+                if song.id not in successful_song_ids:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_crawling_failure(song_name, 'melon')
         
         # 3단계: DB 저장
-        logger.info("💾 3단계: DB 저장")
         db_results = {}
         
         if 'genie' in crawling_results:
             db_results['genie'] = save_genie_to_db(crawling_results['genie'])
+            # DB 저장 실패만 기록
+            if db_results['genie'].get('saved_count', 0) == 0 and db_results['genie'].get('updated_count', 0) == 0:
+                for song in genie_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_db_failure(song_name, 'genie')
         
         if 'youtube_music' in crawling_results:
             db_results['youtube_music'] = save_youtube_music_to_db(crawling_results['youtube_music'])
+            # DB 저장 실패만 기록
+            if db_results['youtube_music'].get('saved_count', 0) == 0 and db_results['youtube_music'].get('updated_count', 0) == 0:
+                for song in ytmusic_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_db_failure(song_name, 'youtube_music')
         
         if 'youtube' in crawling_results:
             db_results['youtube'] = save_youtube_to_db(crawling_results['youtube'])
+            # DB 저장 실패만 기록
+            if db_results['youtube'].get('saved_count', 0) == 0 and db_results['youtube'].get('updated_count', 0) == 0:
+                for song in youtube_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_db_failure(song_name, 'youtube')
         
         if 'melon' in crawling_results:
             db_results['melon'] = save_melon_to_db(crawling_results['melon'])
+            # DB 저장 실패만 기록
+            if db_results['melon'].get('saved_count', 0) == 0 and db_results['melon'].get('updated_count', 0) == 0:
+                for song in melon_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_db_failure(song_name, 'melon')
         
         # 4단계: CSV 저장
-        logger.info("📄 4단계: CSV 저장")
         csv_results = {}
         
         if 'genie' in crawling_results:
             csv_results['genie'] = save_genie_csv(crawling_results['genie'])
+            # CSV 저장 실패만 기록
+            if not csv_results['genie']:
+                for song in genie_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_csv_failure(song_name, 'genie')
                 
         if 'youtube_music' in crawling_results:
             csv_results['youtube_music'] = save_youtube_music_csv(crawling_results['youtube_music'])
+            # CSV 저장 실패만 기록
+            if not csv_results['youtube_music']:
+                for song in ytmusic_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_csv_failure(song_name, 'youtube_music')
         
         if 'youtube' in crawling_results:
             csv_results['youtube'] = save_youtube_csv(crawling_results['youtube'])
+            # CSV 저장 실패만 기록
+            if not csv_results['youtube']:
+                for song in youtube_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_csv_failure(song_name, 'youtube')
         
         if 'melon' in crawling_results:
             csv_results['melon'] = save_melon_csv(crawling_results['melon'])
+            # CSV 저장 실패만 기록
+            if not csv_results['melon']:
+                for song in melon_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_csv_failure(song_name, 'melon')
+        
+        # 로그 라이터 종료 및 최종 요약 생성
+        log_writer.end_crawling()
         
         # 결과 요약
         summary = {
@@ -124,11 +184,9 @@ def run_crawling(target_date=None):
             'total_songs': len(active_songs),
             'crawling_results': crawling_results,
             'db_results': db_results,
-            'csv_results': csv_results
+            'csv_results': csv_results,
+            'log_summary': log_writer.get_summary_dict()
         }
-        
-        logger.info("✅ 크롤링 프로세스 완료")
-        logger.info(f"📊 결과 요약: {len(active_songs)}개 곡, {len(crawling_results)}개 플랫폼")
         
         return summary
         
@@ -147,7 +205,8 @@ def run_platform_crawling(platform, target_date=None):
     Returns:
         dict: 크롤링 결과
     """
-    logger.info(f"🚀 {platform} 플랫폼 크롤링 시작")
+    # 로그 라이터 초기화
+    log_writer = CrawlingAllSongLogWriter()
     
     try:
         # 1단계: 크롤링 대상 노래 조회
@@ -158,10 +217,26 @@ def run_platform_crawling(platform, target_date=None):
             logger.warning(f"⚠️ {platform} 크롤링 대상 노래가 없습니다.")
             return {'status': 'no_songs', 'platform': platform}
         
+        # 로그 라이터 시작
+        log_writer.start_crawling(target_date or date.today(), len(platform_songs))
+        
         # 2단계: 크롤링 실행
         crawler = create_crawler(platform)
         crawling_data = SongService.convert_to_crawling_format(platform_songs, platform)
         crawling_results = crawler.crawl_songs(crawling_data)
+        
+        # 실패한 곡만 기록 (플랫폼별 결과 형태에 따라 처리)
+        if platform == Platforms.YOUTUBE:
+            # YouTube는 Dict[str, Dict] 형태로 반환
+            successful_song_ids = set(crawling_results.keys())
+        else:
+            # Genie, YouTube Music, Melon은 List[Dict] 형태로 반환
+            successful_song_ids = {result.get('song_id') for result in crawling_results}
+        
+        for song in platform_songs:
+            if song.id not in successful_song_ids:
+                song_name = f"{song.artist_ko} - {song.title_ko}"
+                log_writer.add_crawling_failure(song_name, platform)
         
         # 3단계: DB 저장
         if platform == Platforms.GENIE:
@@ -175,6 +250,12 @@ def run_platform_crawling(platform, target_date=None):
         else:
             db_results = {'error': '지원하지 않는 플랫폼'}
         
+        # DB 저장 실패만 기록
+        if db_results.get('saved_count', 0) == 0 and db_results.get('updated_count', 0) == 0:
+            for song in platform_songs:
+                song_name = f"{song.artist_ko} - {song.title_ko}"
+                log_writer.add_db_failure(song_name, platform)
+        
         # 4단계: CSV 저장
         if platform == Platforms.GENIE:
             csv_results = save_genie_csv(crawling_results)
@@ -187,6 +268,15 @@ def run_platform_crawling(platform, target_date=None):
         else:
             csv_results = {'error': '지원하지 않는 플랫폼'}
         
+        # CSV 저장 실패만 기록
+        if not csv_results:
+            for song in platform_songs:
+                song_name = f"{song.artist_ko} - {song.title_ko}"
+                log_writer.add_csv_failure(song_name, platform)
+        
+        # 로그 라이터 종료 및 최종 요약 생성
+        log_writer.end_crawling()
+        
         summary = {
             'status': 'success',
             'platform': platform,
@@ -194,10 +284,10 @@ def run_platform_crawling(platform, target_date=None):
             'total_songs': len(platform_songs),
             'crawling_results': crawling_results,
             'db_results': db_results,
-            'csv_results': csv_results
+            'csv_results': csv_results,
+            'log_summary': log_writer.get_summary_dict()
         }
         
-        logger.info(f"✅ {platform} 크롤링 완료")
         return summary
         
     except Exception as e:
