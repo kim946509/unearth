@@ -11,8 +11,13 @@
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
     <!-- 관리자/슈퍼관리자만 사이드바 표시 -->
-    <div th:if="${user.role == 'SUPER_ADMIN' or user.role == 'ADMIN'}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
-    
+<!--    <div th:if="${user.role == 'SUPER_ADMIN' or user.role == 'ADMIN'}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>-->
+    <!-- ✅ fragment 호출 조건만 분리 -->
+    <!-- 조건문 블록으로 분리 -->
+    <th:block th:if="${userRole == 'SUPER_ADMIN' or userRole == 'ADMIN'}">
+        <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    </th:block>
+
     <!-- 권리자는 사이드바 없이 전체 너비 사용 -->
     <section th:class="${user.role == 'RIGHT_HOLDER'} ? 'content full-width' : 'content'">
         <div class="page-header">

@@ -118,11 +118,10 @@ public class RightHolderController {
         model.addAttribute("search", search);
         model.addAttribute("rightHolderId", rightHolderId);
         model.addAttribute("user", user);
-
+        model.addAttribute("userRole", user.getRole().name());
         // 권리자 정보 추가
         var rightHolder = rightHolderService.findById(rightHolderId);
         model.addAttribute("rightHolder", rightHolder);
-
         return "right_holder/detail";
     }
 }
