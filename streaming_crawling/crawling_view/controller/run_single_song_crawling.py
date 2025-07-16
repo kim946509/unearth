@@ -64,8 +64,8 @@ def main():
             platform=args.platform
         )
         
-        logger.info("✅ 단일 곡 크롤링 완료")
-        logger.info(f"📊 크롤링 결과 요약: {result}")
+        # 결과 요약은 single_crawling_manager에서 이미 출력됨
+        logger.info("✅ 단일 곡 크롤링 프로세스 완료")
         
     except Exception as e:
         logger.error(f"❌ 크롤링 중 오류 발생: {str(e)}")
