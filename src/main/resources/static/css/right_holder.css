@@ -107,7 +107,7 @@
     width: 25%;
 }
 .holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 트랙명 */
-    width: 25%;
+    width: 10%;
 }
 .holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 유튜브 URL */
     width: 10%;

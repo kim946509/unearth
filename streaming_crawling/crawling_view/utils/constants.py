@@ -217,7 +217,7 @@ class YouTubeMusicSelectors:
         'ytmusic-responsive-list-item-renderer:has(ytmusic-menu-renderer)'
     ]
     SONG_TITLE = 'yt-formatted-string.title a'
-    ARTIST_COLUMN = '.secondary-flex-columns'
+    ARTIST_COLUMN = '.secondary-flex-columns yt-formatted-string'
     ARTIST_LINK = 'a'
     VIEW_COUNT_FLEX = 'yt-formatted-string.flex-column'
 
