@@ -1,6 +1,7 @@
 package com.rhoonart.unearth.song.service;
 
 import com.rhoonart.unearth.song.dto.SongInfoRegisterRequestDto;
+import com.rhoonart.unearth.song.dto.SongInfoUpdateRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoWithCrawlingDto;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
@@ -72,5 +73,36 @@ public class SongInfoService {
                 .toList();
 
         return new PageImpl<>(songsWithCrawling, pageable, songPage.getTotalElements());
+    }
+
+    @Transactional
+    public void update(String songId, SongInfoUpdateRequestDto dto) {
+        // 1. 음원 존재 여부 확인
+        SongInfo song = songInfoRepository.findById(songId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
+
+        // 2. melonSongId 중복 체크 (자신 제외)
+        if (!song.getMelonSongId().equals(dto.getMelonSongId()) &&
+                songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 음원입니다.");
+        }
+
+        // 3. 권리자명으로 RightHolder 조회
+        RightHolder rightHolder = rightHolderRepository.findByHolderName(dto.getRightHolderName())
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // 4. 음원 정보 업데이트
+        song.updateInfo(
+                dto.getArtistKo(),
+                dto.getArtistEn(),
+                dto.getAlbumKo(),
+                dto.getAlbumEn(),
+                dto.getTitleKo(),
+                dto.getTitleEn(),
+                dto.getYoutubeUrl(),
+                dto.getMelonSongId(),
+                rightHolder);
+
+        songInfoRepository.save(song);
     }
 }

@@ -2,6 +2,7 @@ package com.rhoonart.unearth.song.controller;
 
 import com.rhoonart.unearth.common.util.SessionUserUtil;
 import com.rhoonart.unearth.song.dto.SongInfoRegisterRequestDto;
+import com.rhoonart.unearth.song.dto.SongInfoUpdateRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoWithCrawlingDto;
 import com.rhoonart.unearth.song.service.SongInfoService;
 import com.rhoonart.unearth.right_holder.service.RightHolderService;
@@ -55,6 +56,15 @@ public class SongInfoController {
             HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
         songInfoService.register(dto);
+        return "redirect:/song/list";
+    }
+
+    @PostMapping("/{songId}/update")
+    public String update(@PathVariable String songId,
+            @Valid @ModelAttribute SongInfoUpdateRequestDto dto,
+            HttpSession session) {
+        SessionUserUtil.requireAdminRole(session);
+        songInfoService.update(songId, dto);
         return "redirect:/song/list";
     }
 }

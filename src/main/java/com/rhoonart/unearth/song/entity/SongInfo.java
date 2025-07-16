@@ -53,4 +53,18 @@ public class SongInfo extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "right_holder_id", nullable = false)
     private RightHolder rightHolder;
+
+    public void updateInfo(String artistKo, String artistEn, String albumKo, String albumEn,
+            String titleKo, String titleEn, String youtubeUrl, String melonSongId,
+            RightHolder rightHolder) {
+        this.artistKo = artistKo;
+        this.artistEn = artistEn;
+        this.albumKo = albumKo;
+        this.albumEn = albumEn;
+        this.titleKo = titleKo;
+        this.titleEn = titleEn;
+        this.youtubeUrl = youtubeUrl;
+        this.melonSongId = melonSongId;
+        this.rightHolder = rightHolder;
+    }
 }

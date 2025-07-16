@@ -84,19 +84,22 @@
     width: 10%;
 }
 .song-table th:nth-child(2), .song-table td:nth-child(2) { /* 앨범명 */
-    width: 25%;
+    width: 20%;
 }
 .song-table th:nth-child(3), .song-table td:nth-child(3) { /* 트랙명 */
-    width: 25%;
+    width: 20%;
 }
 .song-table th:nth-child(4), .song-table td:nth-child(4) { /* 유튜브 URL */
-    width: 10%;
+    width: 15%;
 }
 .song-table th:nth-child(5), .song-table td:nth-child(5) { /* 권리자명 */
     width: 12%;
 }
 .song-table th:nth-child(6), .song-table td:nth-child(6) { /* 크롤링 실행 */
-    width: 18%;
+    width: 15%;
+}
+.song-table th:nth-child(7), .song-table td:nth-child(7) { /* 수정 */
+    width: 8%;
 }
 
 /* 페이지네이션 */
@@ -231,6 +234,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* 수정 컬럼 */
+.edit-column {
+    text-align: center;
+    white-space: nowrap;
+}
 .crawling-btn {
     background: none;
     border: none;
@@ -240,6 +249,20 @@
     padding: 4px;
     border-radius: 4px;
     transition: background-color 0.2s;
+}
+
+.edit-btn {
+    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 8px;
 }
 .crawling-btn:hover {
     background-color: #f0f0f0;
@@ -328,6 +351,100 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+}
+
+/* 음원 수정 모달 스타일 */
+.song-edit-modal-content {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 32px 28px 32px;
+    min-width: 1200px;
+    max-width: 1600px;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.song-edit-modal-content h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+.song-edit-modal-content .close-btn {
+    position: absolute;
+    right: 18px; top: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #222;
+    transition: color 0.15s;
+}
+.song-edit-modal-content .close-btn:hover {
+    color: #e74c3c;
+}
+.song-edit-modal-content .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+.song-edit-modal-content label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.song-edit-modal-content input[type="text"],
+.song-edit-modal-content input[type="number"],
+.song-edit-modal-content select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+}
+.song-edit-modal-content input:focus,
+.song-edit-modal-content select:focus {
+    border: 2px solid #2d7cf2;
+}
+.song-edit-modal-content .song-edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 22px 18px;
+    margin-bottom: 10px;
+}
+.song-edit-modal-content .register-btn {
+    width: 100%;
+    padding: 14px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.song-edit-modal-content .register-btn:hover {
+    background: #333;
+}
+@media (max-width: 1400px) {
+    .song-edit-modal-content .song-edit-form-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+@media (max-width: 900px) {
+    .song-edit-modal-content .song-edit-form-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+    .song-edit-modal-content .song-edit-form-grid { grid-template-columns: 1fr; }
+    .song-edit-modal-content {
+        min-width: 0;
+        width: 95vw;
+        padding: 18px 6vw 18px 6vw;
+    }
 }
 .crawling-modal-content h3 {
     font-size: 22px;

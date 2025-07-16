@@ -52,7 +52,7 @@
         <table class="holder-table song-table">
             <thead>
             <tr>
-                <th>아티스트명(국문)</th><th>앨범명(국문)</th><th>트랙명(국문)</th><th>유튜브 공식 URL</th><th>권리자명</th><th>크롤링 실행</th>
+                <th>아티스트명(국문)</th><th>앨범명(국문)</th><th>트랙명(국문)</th><th>유튜브 공식 URL</th><th>권리자명</th><th>크롤링 실행</th><th>수정</th>
             </tr>
             </thead>
             <tbody>
@@ -68,12 +68,28 @@
                             th:data-artist-ko="${song.artistKo}" 
                             th:data-title-ko="${song.titleKo}" 
                             th:data-has-crawling="${song.crawlingStartDate != null}">🕹️</button>
+                    
                     <span class="crawling-period" th:if="${song.crawlingStartDate != null and song.crawlingEndDate != null}" 
                           th:text="${#temporals.format(song.crawlingStartDate, 'yy.MM.dd')} + ' ~ ' + ${#temporals.format(song.crawlingEndDate, 'yy.MM.dd')}"></span>
                     <span class="crawling-period empty" th:if="${song.crawlingStartDate == null or song.crawlingEndDate == null}">-</span>
                 </td>
+                <td class="edit-column">
+                    <button type="button" class="edit-btn"
+                            th:data-song-id="${song.id}"
+                            th:data-artist-ko="${song.artistKo}"
+                            th:data-artist-en="${song.artistEn}"
+                            th:data-album-ko="${song.albumKo}"
+                            th:data-album-en="${song.albumEn}"
+                            th:data-title-ko="${song.titleKo}"
+                            th:data-title-en="${song.titleEn}"
+                            th:data-youtube-url="${song.youtubeUrl}"
+                            th:data-melon-song-id="${song.melonSongId}"
+                            th:data-right-holder-name="${song.rightHolder.holderName}"
+                            onclick="openEditModalFromData(this)">수정
+                    </button>
+                </td>
             </tr>
-            <tr th:if="${response.data.content.size() == 0}"><td colspan="6" style="text-align:center;">음원이 없습니다.</td></tr>
+            <tr th:if="${response.data.content.size() == 0}"><td colspan="7" style="text-align:center;">음원이 없습니다.</td></tr>
             </tbody>
         </table>
         <div class="pagination" th:if="${response.data.totalPages > 0}">
@@ -85,6 +101,36 @@
             <a th:if="${response.data.hasNext()}" th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search})}" class="page-btn">다음</a>
         </div>
     </section>
+</div>
+
+<!-- 음원 수정 모달 -->
+<div id="editModal" class="modal">
+    <div class="modal-content song-edit-modal-content">
+        <button type="button" id="closeEditModalBtn" class="close-btn">&times;</button>
+        <h3>음원 수정</h3>
+        <form id="editForm" class="modal-form" method="post">
+            <div class="song-edit-form-grid">
+                <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
+                <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
+                <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
+                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
+                <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
+                <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
+                <div class="form-row"><label>유튜브 공식 URL <span class="required-star">*</span></label><input type="text" name="youtubeUrl" required /></div>
+                <div class="form-row">
+                    <label>권리자명 <span class="required-star">*</span></label>
+                    <select name="rightHolderName" required>
+                        <option value="">권리자를 선택하세요</option>
+                        <option th:each="holder : ${rightHolders}" th:value="${holder}" th:text="${holder}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="register-btn" style="width:100%;">수정 완료</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- 크롤링 실행 모달 -->
@@ -227,6 +273,74 @@ crawlingForm && crawlingForm.addEventListener('submit', function(e) {
         alert('크롤링 실행 중 오류가 발생했습니다.');
     });
 });
+
+// 음원 수정 모달 제어
+const editModal = document.getElementById('editModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const editForm = document.getElementById('editForm');
+
+// 수정 모달 열기/닫기
+closeEditModalBtn && closeEditModalBtn.addEventListener('click', () => {
+    editModal.classList.remove('show');
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === editModal) {
+        editModal.classList.remove('show');
+    }
+});
+
+// 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
+function openEditModalFromData(button) {
+    const songId = button.getAttribute('data-song-id');
+    const artistKo = button.getAttribute('data-artist-ko');
+    const artistEn = button.getAttribute('data-artist-en');
+    const albumKo = button.getAttribute('data-album-ko');
+    const albumEn = button.getAttribute('data-album-en');
+    const titleKo = button.getAttribute('data-title-ko');
+    const titleEn = button.getAttribute('data-title-en');
+    const youtubeUrl = button.getAttribute('data-youtube-url');
+    const melonSongId = button.getAttribute('data-melon-song-id');
+    const rightHolderName = button.getAttribute('data-right-holder-name');
+    
+    const form = document.getElementById('editForm');
+    form.action = `/song/${songId}/update`;
+    
+    form.elements['artistKo'].value = artistKo;
+    form.elements['artistEn'].value = artistEn;
+    form.elements['albumKo'].value = albumKo;
+    form.elements['albumEn'].value = albumEn;
+    form.elements['titleKo'].value = titleKo;
+    form.elements['titleEn'].value = titleEn;
+    form.elements['youtubeUrl'].value = youtubeUrl;
+    form.elements['melonSongId'].value = melonSongId;
+    form.elements['rightHolderName'].value = rightHolderName;
+    
+    editModal.classList.add('show');
+}
+
+// 수정 폼 유효성 및 수정 전 확인
+if (editForm) {
+    editForm.addEventListener('submit', function(e) {
+        // 필수값 체크
+        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'];
+        for (const name of required) {
+            const el = editForm.elements[name];
+            if (!el || !el.value || el.value.trim() === '') {
+                alert(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+                el && el.focus();
+                e.preventDefault();
+                return false;
+            }
+        }
+        // 수정 확인
+        if (!confirm('수정하시겠습니까?')) {
+            e.preventDefault();
+            return false;
+        }
+        // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
+    });
+}
 </script>
 </body>
 </html> 
