@@ -145,8 +145,8 @@ class CrawlingResultSummary:
         
         lines.append(f"🎵 곡: {self.song_info['artist_ko']} - {self.song_info['title_ko']}")
         lines.append(f"⏱️  실행 시간: {summary['execution_time']}")
-        lines.append(f"📈 성공: {summary['statistics']['success']}개, 실패: {summary['statistics']['failed']}개, "
-                    f"오류: {summary['statistics']['error']}개, 건너뜀: {summary['statistics']['skipped']}개")
+        lines.append(f"📈 성공: {summary['statistics']['success']}개 플랫폼, 실패: {summary['statistics']['failed']}개 플랫폼, "
+                    f"오류: {summary['statistics']['error']}개 플랫폼, 건너뜀: {summary['statistics']['skipped']}개 플랫폼")
         
         # 플랫폼별 결과
         for plat, status in self.platform_status.items():
