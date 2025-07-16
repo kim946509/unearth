@@ -497,3 +497,27 @@
         padding: 18px 6vw 18px 6vw;
     }
 } 
+
+/* 필터 영역 스타일 */
+.filter-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filter-select {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+}
+.filter-group label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+} 

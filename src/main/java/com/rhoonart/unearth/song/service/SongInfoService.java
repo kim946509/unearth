@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,8 +66,13 @@ public class SongInfoService {
         return songInfoRepository.searchSearchFields(search, pageable);
     }
 
-    public Page<SongInfoWithCrawlingDto> findSongsWithCrawling(String search, Pageable pageable) {
-        Page<SongInfo> songPage = songInfoRepository.searchSearchFields(search, pageable);
+    public Page<SongInfoWithCrawlingDto> findSongsWithCrawling(String search, Pageable pageable,
+            Boolean isCrawlingActive) {
+        LocalDate now = LocalDate.now();
+
+        // Repository에서 크롤링 필터 조건을 포함하여 조회
+        Page<SongInfo> songPage = songInfoRepository.searchSongsWithCrawlingFilter(search, isCrawlingActive, now,
+                pageable);
 
         List<SongInfoWithCrawlingDto> songsWithCrawling = songPage.getContent().stream()
                 .map(song -> {

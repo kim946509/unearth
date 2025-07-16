@@ -88,10 +88,10 @@ public class CrawlingSchedulerService {
             log.error("❌ 수동 전체 크롤링 실행 중 오류", e);
             throw e;
         } finally {
-            // 30분 후에 상태 초기화
+            // 10분 후에 상태 초기화
             new Thread(() -> {
                 try {
-                    Thread.sleep(30 * 60 * 1000); // 30분
+                    Thread.sleep(10 * 60 * 1000); // 10분
                     isCrawlingRunning = false;
                     log.info("🔄 수동 크롤링 실행 상태 초기화 완료");
                 } catch (InterruptedException e) {

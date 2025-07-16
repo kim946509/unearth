@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/song.css">
+    <link rel="stylesheet" href="/css/bulk-register.css">
 </head>
 <body>
 <div th:replace="~{common/header :: header}"></div>
@@ -44,11 +45,41 @@
             </div>
         </form>
         <form class="search-form" method="get" th:action="@{/song/list}">
-            <div class="search-row">
-                <div class="search-group"><label>검색</label><input type="text" name="search" class="search-input" th:value="${search}" placeholder="검색어 입력" /></div>
-                <div class="search-group search-btn-group"><button type="submit" class="search-btn">검색</button></div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="searchInput">검색</label>
+                    <input id="searchInput" type="text" name="search" class="search-input" th:value="${search}" placeholder="검색어 입력" />
+                </div>
+                <div class="filter-group">
+                    <label for="pageSize">페이지 크기</label>
+                    <select id="pageSize" name="size" class="filter-select" onchange="this.form.submit()">
+                        <option th:value="10" th:selected="${size == 10}">10개</option>
+                        <option th:value="30" th:selected="${size == 30}">30개</option>
+                        <option th:value="50" th:selected="${size == 50}">50개</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <input type="checkbox" id="crawlingActive" name="isCrawlingActive" th:checked="${isCrawlingActive}" onchange="this.form.submit()" />
+                    <label for="crawlingActive">크롤링 실행중 곡만</label>
+                </div>
+                <div class="filter-group search-btn-group">
+                    <button type="submit" class="search-btn">검색</button>
+                </div>
             </div>
         </form>
+        
+        <!-- 일괄등록 버튼 -->
+        <div class="bulk-register-section">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <h3>CSV 일괄등록</h3>
+                <button type="button" class="bulk-register-btn" onclick="openBulkRegisterModal()">
+                    CSV 파일 업로드
+                </button>
+                <span>
+                    CSV 파일을 업로드하여 여러 곡을 한 번에 등록할 수 있습니다.
+                </span>
+            </div>
+        </div>
         <table class="holder-table song-table">
             <thead>
             <tr>
@@ -93,12 +124,12 @@
             </tbody>
         </table>
         <div class="pagination" th:if="${response.data.totalPages > 0}">
-            <a th:if="${response.data.hasPrevious()}" th:href="@{/song/list(page=${response.data.number - 1}, size=${size}, search=${search})}" class="page-btn">이전</a>
+            <a th:if="${response.data.hasPrevious()}" th:href="@{/song/list(page=${response.data.number - 1}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" class="page-btn">이전</a>
             <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
-                <a th:if="${i != response.data.number}" th:href="@{/song/list(page=${i}, size=${size}, search=${search})}" th:text="${i + 1}" class="page-btn"></a>
+                <a th:if="${i != response.data.number}" th:href="@{/song/list(page=${i}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" th:text="${i + 1}" class="page-btn"></a>
                 <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
             </span>
-            <a th:if="${response.data.hasNext()}" th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search})}" class="page-btn">다음</a>
+            <a th:if="${response.data.hasNext()}" th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" class="page-btn">다음</a>
         </div>
     </section>
 </div>
@@ -160,6 +191,73 @@
                 <button type="submit" class="crawling-execute-btn" style="width:100%;">크롤링 실행</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- 일괄등록 모달 -->
+<div id="bulkRegisterModal" class="modal">
+    <div class="modal-content bulk-register-modal-content">
+        <button type="button" id="closeBulkRegisterModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+        <h3>📁 CSV 일괄등록</h3>
+        
+        <!-- 에러 메시지 표시 영역 -->
+        <div id="bulkRegisterError" class="bulk-register-error"></div>
+        
+        <form id="bulkRegisterForm" method="post" th:action="@{/song/bulk-register}" enctype="multipart/form-data">
+            <div class="form-row" style="margin-bottom: 20px;">
+                <label>CSV 파일 선택 <span class="required-star">*</span></label>
+                <input type="file" name="file" accept=".csv" required class="file-input" />
+            </div>
+            
+            <!-- CSV 파일 형식 안내 -->
+            <div class="csv-format-info">
+                <h4>CSV 파일 형식</h4>
+                <p>
+                    <strong>필수 컬럼:</strong> 아티스트명(국문/영문), 트랙명(국문/영문), 권리자, 앨범명(국문/영문), 유튜브 URL, 멜론 ID
+                </p>
+            </div>
+            
+            <!-- 등록된 권리자 목록 -->
+            <div class="right-holders-list">
+                <h4>등록된 권리자 목록</h4>
+                <div style="background-color: #f8f9fa; padding: 10px; border-radius: 5px; border: 1px solid #dee2e6;">
+                    <div th:if="${rightHolders.isEmpty()}" style="color: #dc3545; font-weight: bold;">
+                        ⚠️ 등록된 권리자가 없습니다. 먼저 권리자를 등록해주세요.
+                    </div>
+                    <div th:if="${!rightHolders.isEmpty()}" class="right-holder-tags">
+                        <span th:each="holder : ${rightHolders}" 
+                              class="right-holder-tag"
+                              th:text="${holder}"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-row" style="margin-top: 20px;">
+                <button type="submit" class="bulk-register-submit-btn" 
+                        th:disabled="${rightHolders.isEmpty()}">
+                    <span th:if="${rightHolders.isEmpty()}">권리자 등록 후 이용 가능</span>
+                    <span th:if="${!rightHolders.isEmpty()}">CSV 파일 업로드 및 일괄등록</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 일괄등록 결과 모달 -->
+<div id="bulkRegisterResultModal" class="modal">
+    <div class="modal-content bulk-result-modal-content">
+        <button type="button" id="closeBulkResultModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+        <h3>📊 일괄등록 결과</h3>
+        
+        <div id="bulkRegisterResultContent">
+            <!-- 결과 내용이 여기에 동적으로 추가됩니다 -->
+        </div>
+        
+        <div class="form-row" style="margin-top: 20px; text-align: center;">
+            <button type="button" onclick="closeBulkResultModal()" class="close-result-btn">
+                닫기
+            </button>
+        </div>
     </div>
 </div>
 <script>
@@ -340,6 +438,229 @@ if (editForm) {
         }
         // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
     });
+}
+
+// 일괄등록 모달 제어
+const bulkRegisterModal = document.getElementById('bulkRegisterModal');
+const closeBulkRegisterModalBtn = document.getElementById('closeBulkRegisterModalBtn');
+const bulkRegisterForm = document.getElementById('bulkRegisterForm');
+const bulkRegisterError = document.getElementById('bulkRegisterError');
+
+const bulkRegisterResultModal = document.getElementById('bulkRegisterResultModal');
+const closeBulkResultModalBtn = document.getElementById('closeBulkResultModalBtn');
+const bulkRegisterResultContent = document.getElementById('bulkRegisterResultContent');
+
+// 일괄등록 모달 열기
+function openBulkRegisterModal() {
+    // 권리자가 없으면 경고
+    const rightHoldersEmpty = /*[[${rightHolders.isEmpty()}]]*/ false;
+    if (rightHoldersEmpty) {
+        alert('권리자를 먼저 등록해주세요.');
+        return;
+    }
+    
+    bulkRegisterModal.classList.add('show');
+    bulkRegisterError.style.display = 'none';
+}
+
+// 일괄등록 모달 닫기
+closeBulkRegisterModalBtn && closeBulkRegisterModalBtn.addEventListener('click', () => {
+    bulkRegisterModal.classList.remove('show');
+});
+
+// 일괄등록 결과 모달 닫기
+closeBulkResultModalBtn && closeBulkResultModalBtn.addEventListener('click', () => {
+    bulkRegisterResultModal.classList.remove('show');
+});
+
+function closeBulkResultModal() {
+    bulkRegisterResultModal.classList.remove('show');
+    // 결과 모달 닫을 때 페이지 새로고침
+    location.reload();
+}
+
+// 모달 외부 클릭 시 닫기
+window.addEventListener('click', (e) => {
+    if (e.target === bulkRegisterModal) {
+        bulkRegisterModal.classList.remove('show');
+    }
+    if (e.target === bulkRegisterResultModal) {
+        bulkRegisterResultModal.classList.remove('show');
+        location.reload();
+    }
+});
+
+// 일괄등록 폼 제출
+if (bulkRegisterForm) {
+    bulkRegisterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const fileInput = this.querySelector('input[type="file"]');
+        if (!fileInput.files[0]) {
+            showBulkRegisterError('CSV 파일을 선택해주세요.');
+            return;
+        }
+        
+        if (!confirm('선택한 CSV 파일로 일괄등록을 진행하시겠습니까?')) {
+            return;
+        }
+        
+        const formData = new FormData(this);
+        
+        // 로딩 표시
+        const submitBtn = this.querySelector('.bulk-register-submit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '⏳ 처리 중...';
+        submitBtn.disabled = true;
+        
+        fetch('/song/bulk-register-ajax', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.code === 'SUCCESS') {
+                // 성공 시 결과 모달 표시
+                const result = data.data;
+                showBulkRegisterResult(createResultHtml(result));
+            } else {
+                // 에러 메시지 표시
+                showBulkRegisterError(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showBulkRegisterError('일괄등록 중 오류가 발생했습니다.');
+        })
+        .finally(() => {
+            // 버튼 상태 복원
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+}
+
+// 에러 메시지 표시
+function showBulkRegisterError(message) {
+    bulkRegisterError.textContent = message;
+    bulkRegisterError.style.display = 'block';
+}
+
+// 결과 HTML 생성
+function createResultHtml(result) {
+    let html = `
+        <!-- 전체 통계 -->
+        <div class="result-stats">
+            <h3>📊 일괄등록 완료</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number success">${result.totalCount}</div>
+                    <div class="stat-label">전체 처리</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number success">${result.successCount}</div>
+                    <div class="stat-label">성공</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number warning">${result.duplicateCount}</div>
+                    <div class="stat-label">중복</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number danger">${result.failureCount}</div>
+                    <div class="stat-label">실패</div>
+                </div>
+            </div>
+        </div>`;
+
+    // 성공한 곡 목록
+    if (result.successList && result.successList.length > 0) {
+        html += `
+            <div class="result-section success">
+                <h4>✅ 성공한 곡들 (${result.successCount}개)</h4>
+                <div class="result-list success">`;
+        
+        result.successList.forEach(song => {
+            html += `
+                <div class="result-item">
+                    <div class="result-song-info">
+                        <span class="result-song-name">${song.artistKo} - ${song.titleKo}</span>
+                        <span class="result-right-holder">(${song.rightHolderName})</span>
+                    </div>
+                    <span class="result-status success">✅ 등록됨</span>
+                </div>`;
+        });
+        
+        html += `</div></div>`;
+    }
+
+    // 중복된 곡 목록
+    if (result.duplicateList && result.duplicateList.length > 0) {
+        html += `
+            <div class="result-section warning">
+                <h4>⚠️ 중복된 곡들 (${result.duplicateCount}개)</h4>
+                <div class="result-list warning">`;
+        
+        result.duplicateList.forEach(song => {
+            html += `
+                <div class="result-item">
+                    <div class="result-song-info">
+                        <span class="result-song-name">${song.artistKo} - ${song.titleKo}</span>
+                        <span class="result-right-holder">(${song.rightHolderName})</span>
+                    </div>
+                    <span class="result-status warning">⚠️ 이미 존재</span>
+                </div>`;
+        });
+        
+        html += `</div></div>`;
+    }
+
+    // 실패한 곡 목록
+    if (result.failureList && result.failureList.length > 0) {
+        html += `
+            <div class="result-section danger">
+                <h4>❌ 실패한 곡들 (${result.failureCount}개)</h4>
+                <div class="result-list danger">`;
+        
+        result.failureList.forEach(failure => {
+            html += `
+                <div class="result-item failure">
+                    <div class="result-song-info">
+                        <span class="result-song-name">${failure.artistKo} - ${failure.titleKo}</span>
+                        <span class="result-right-holder">(${failure.rightHolderName})</span>
+                    </div>
+                    <span class="result-status danger">❌ 실패</span>
+                    <div class="result-reason">${failure.reason}</div>
+                </div>`;
+        });
+        
+        html += `</div></div>`;
+    }
+
+    // 안내 메시지
+    html += `
+        <div class="result-info">
+            <h5>💡 안내</h5>
+            <ul>
+                <li>성공한 곡들은 정상적으로 등록되었습니다.</li>
+                <li>중복된 곡들은 이미 등록되어 있어 건너뛰었습니다.</li>
+                <li>실패한 곡들은 오류 사유를 확인 후 다시 시도해주세요.</li>
+                <li>결과 모달을 닫으면 페이지가 새로고침됩니다.</li>
+            </ul>
+        </div>`;
+
+    return html;
+}
+
+// 결과 모달 표시
+function showBulkRegisterResult(content) {
+    bulkRegisterResultContent.innerHTML = content;
+    bulkRegisterModal.classList.remove('show');
+    bulkRegisterResultModal.classList.add('show');
 }
 </script>
 </body>

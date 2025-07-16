@@ -1,0 +1,353 @@
+/* CSV 일괄등록 관련 스타일 */
+
+/* 일괄등록 섹션 */
+.bulk-register-section {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+.bulk-register-section h3 {
+    margin: 0;
+    color: #495057;
+}
+
+.bulk-register-btn {
+    background-color: #256aff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.bulk-register-section span {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* 일괄등록 모달 */
+.bulk-register-modal-content {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.bulk-register-modal-content h3 {
+    margin-bottom: 20px;
+}
+
+/* 에러 메시지 */
+.bulk-register-error {
+    display: none;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* CSV 파일 형식 안내 */
+.csv-format-info {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.csv-format-info h4 {
+    margin: 0 0 10px 0;
+    color: #0056b3;
+}
+
+.csv-format-info p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #0056b3;
+}
+
+/* 권리자 목록 */
+.right-holders-list {
+    margin-top: 15px;
+}
+
+.right-holders-list h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+}
+
+.right-holder-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.right-holder-tag {
+    background-color: #007bff;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 일괄등록 결과 모달 */
+.bulk-result-modal-content {
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.bulk-result-modal-content h3 {
+    margin-bottom: 20px;
+}
+
+/* 결과 통계 */
+.result-stats {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.result-stats h3 {
+    margin: 0 0 15px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stat-number.success {
+    color: #28a745;
+}
+
+.stat-number.warning {
+    color: #ffc107;
+}
+
+.stat-number.danger {
+    color: #dc3545;
+}
+
+.stat-label {
+    font-size: 14px;
+}
+
+/* 결과 목록 */
+.result-section {
+    margin-bottom: 20px;
+}
+
+.result-section h4 {
+    margin-bottom: 10px;
+}
+
+.result-section.success h4 {
+    color: #28a745;
+}
+
+.result-section.warning h4 {
+    color: #ffc107;
+}
+
+.result-section.danger h4 {
+    color: #dc3545;
+}
+
+.result-list {
+    border-radius: 5px;
+    padding: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.result-list.success {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.result-list.warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+}
+
+.result-list.danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.result-item {
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result-item.failure {
+    align-items: flex-start;
+}
+
+.result-item:not(:last-child) {
+    border-bottom: 1px solid;
+}
+
+.result-list.success .result-item:not(:last-child) {
+    border-bottom-color: #e9ecef;
+}
+
+.result-list.warning .result-item:not(:last-child) {
+    border-bottom-color: #ffeaa7;
+}
+
+.result-list.danger .result-item:not(:last-child) {
+    border-bottom-color: #f5c6cb;
+}
+
+.result-song-info {
+    display: flex;
+    align-items: center;
+}
+
+.result-song-name {
+    font-weight: bold;
+}
+
+.result-right-holder {
+    color: #6c757d;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.result-status {
+    font-size: 12px;
+}
+
+.result-status.success {
+    color: #28a745;
+}
+
+.result-status.warning {
+    color: #ffc107;
+}
+
+.result-status.danger {
+    color: #dc3545;
+}
+
+.result-reason {
+    color: #721c24;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* 안내 메시지 */
+.result-info {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.result-info h5 {
+    margin: 0 0 10px 0;
+    color: #0056b3;
+}
+
+.result-info ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #0056b3;
+    font-size: 14px;
+}
+
+/* 해결 방법 안내 */
+.solution-guide {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 3px;
+}
+
+.solution-guide strong {
+    color: #856404;
+}
+
+.solution-guide ul {
+    margin: 8px 0 0 20px;
+    padding: 0;
+    color: #856404;
+}
+
+/* 파일 선택 */
+.file-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 버튼 스타일 */
+.bulk-register-submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+.bulk-register-submit-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.close-result-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .bulk-register-modal-content,
+    .bulk-result-modal-content {
+        max-width: 95vw;
+        margin: 10px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+} 
