@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import jakarta.servlet.http.HttpSession;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,6 +86,18 @@ public class RightHolderController {
         UserDto user = SessionUserUtil.requireAdminRole(session);
         rightHolderService.register(dto);
         // 등록 성공 시 목록으로 이동
+        return "redirect:/right-holder/list";
+    }
+
+    @PostMapping("/{rightHolderId}/update")
+    public String updateSubmit(@PathVariable String rightHolderId,
+            @Valid @ModelAttribute RightHolderUpdateRequestDto dto,
+            HttpSession session,
+            Model model) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+        rightHolderService.update(rightHolderId, dto);
+        // 수정 성공 시 목록으로 이동
         return "redirect:/right-holder/list";
     }
 

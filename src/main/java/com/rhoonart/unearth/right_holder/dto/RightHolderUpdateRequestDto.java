@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class RightHolderRegisterRequestDto {
+public class RightHolderUpdateRequestDto {
     @NotNull(message = "계약 시작일은 필수입니다.")
     private LocalDate contractStart;
 
@@ -21,14 +21,8 @@ public class RightHolderRegisterRequestDto {
     private String businessNumber;
 
     @NotNull(message = "사업자 타입은 필수입니다.")
-    private String holderType; // Enum(HolderType)으로 변환 필요
+    private String holderType;
 
     @NotBlank(message = "사업자 이름은 필수입니다.")
     private String holderName;
-
-    @NotBlank(message = "로그인 아이디는 필수입니다.")
-    private String username;
-
-    @NotBlank(message = "로그인 비밀번호는 필수입니다.")
-    private String password;
 }

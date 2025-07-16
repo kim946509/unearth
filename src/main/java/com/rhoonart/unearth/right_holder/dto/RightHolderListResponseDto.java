@@ -16,5 +16,6 @@ public class RightHolderListResponseDto {
     private final String holderName;
     private final LocalDate contractStart;
     private final LocalDate contractEnd;
+    private final String businessNumber;
     private final int songCount;
 }

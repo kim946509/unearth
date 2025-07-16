@@ -126,6 +126,20 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    margin-right: 8px;
+}
+
+.edit-btn {
+    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
 }
 .pagination {
     display: flex;
@@ -283,20 +297,20 @@
 #closeModalBtn:hover {
     color: #e74c3c;
 }
-#registerForm .form-row {
+.modal-form .form-row {
     display: flex;
     flex-direction: column;
     gap: 7px;
     margin-bottom: 8px;
 }
-#registerForm label {
+.modal-form label {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 2px;
 }
-#registerForm input[type="text"],
-#registerForm input[type="date"],
-#registerForm select {
+.modal-form input[type="text"],
+.modal-form input[type="date"],
+.modal-form select {
     padding: 11px 13px;
     border: 2px solid #111;
     border-radius: 8px;
@@ -305,11 +319,11 @@
     background: #fff;
     transition: border 0.2s;
 }
-#registerForm input:focus,
-#registerForm select:focus {
+.modal-form input:focus,
+.modal-form select:focus {
     border: 2px solid #2d7cf2;
 }
-#registerForm .register-btn {
+.modal-form .register-btn {
     width: 100%;
     padding: 14px 0;
     background: #111;
@@ -321,6 +335,8 @@
     cursor: pointer;
     margin-top: 10px;
 }
+
+
 
 /* 권리자 상세 페이지 스타일 */
 .page-header {

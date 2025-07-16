@@ -2,6 +2,7 @@ package com.rhoonart.unearth.right_holder.service;
 
 import com.rhoonart.unearth.right_holder.dto.RightHolderListResponseDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderSongListResponseDto;
 import com.rhoonart.unearth.right_holder.entity.HolderType;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
@@ -31,7 +32,6 @@ import java.util.stream.Collectors;
 public class RightHolderService {
     private final RightHolderRepository rightHolderRepository;
     private final SongInfoRepository songInfoRepository;
-    private final CrawlingPeriodRepository crawlingPeriodRepository;
     private final CrawlingDataRepository crawlingDataRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +45,7 @@ public class RightHolderService {
                 rh.getHolderName(),
                 rh.getContractStart(),
                 rh.getContractEnd(),
+                rh.getBusinessNumber(),
                 songInfoRepository.countByRightHolder(rh)));
     }
 
@@ -116,5 +117,46 @@ public class RightHolderService {
     public RightHolder findByUserId(String userId) {
         return rightHolderRepository.findByUserId(userId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+    }
+
+    @Transactional
+    public void update(String rightHolderId, RightHolderUpdateRequestDto dto) {
+        // 1. 권리자 존재 여부 확인
+        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // 2. holderName 중복 체크 (자신 제외)
+        if (!rightHolder.getHolderName().equals(dto.getHolderName()) &&
+                rightHolderRepository.existsByHolderName(dto.getHolderName())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 권리사 이름입니다.");
+        }
+
+        // 3. businessNumber 중복 체크 (자신 제외)
+        if (!rightHolder.getBusinessNumber().equals(dto.getBusinessNumber()) &&
+                rightHolderRepository.existsByBusinessNumber(dto.getBusinessNumber())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 사업자 번호입니다.");
+        }
+
+        // 4. username 중복 체크 (권리자명이 변경되는 경우)
+        if (!rightHolder.getHolderName().equals(dto.getHolderName())) {
+            if (userRepository.existsByUsername(dto.getHolderName())) {
+                throw new BaseException(ResponseCode.INVALID_INPUT, "이미 사용 중인 아이디입니다.");
+            }
+        }
+
+        // 5. 권리자 정보 업데이트
+        rightHolder.updateInfo(
+                HolderType.valueOf(dto.getHolderType()),
+                dto.getHolderName(),
+                dto.getContractStart(),
+                dto.getContractEnd(),
+                dto.getBusinessNumber());
+
+        // 6. User의 username도 함께 업데이트
+        User user = rightHolder.getUser();
+        user.updateUsername(dto.getHolderName());
+        userRepository.save(user);
+
+        rightHolderRepository.save(rightHolder);
     }
 }

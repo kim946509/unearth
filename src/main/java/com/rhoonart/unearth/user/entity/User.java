@@ -37,4 +37,8 @@ public class User extends BaseEntity {
 
     @Column(name = "is_login_enabled", nullable = false)
     private boolean isLoginEnabled;
+
+    public void updateUsername(String newUsername) {
+        this.username = newUsername;
+    }
 }

@@ -18,8 +18,8 @@
                     <label>구분</label>
                     <select name="holderType" class="search-input">
                         <option value="" th:selected="${holderType == null}">전체</option>
-                        <option value="PERSONAL" th:selected="${holderType == 'PERSONAL'}">개인</option>
-                        <option value="BUSINESS" th:selected="${holderType == 'BUSINESS'}">사업자</option>
+                        <option value="개인" th:selected="${holderType == '개인'}">개인</option>
+                        <option value="사업자" th:selected="${holderType == '사업자'}">사업자</option>
                     </select>
                 </div>
                 <div class="search-group">
@@ -57,7 +57,7 @@
           <div class="modal-content">
             <button type="button" id="closeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
             <h3 style="margin-bottom:18px;">권리자 등록</h3>
-            <form id="registerForm" method="post" th:action="@{/right-holder/register}">
+            <form id="registerForm" class="modal-form" method="post" th:action="@{/right-holder/register}">
               <div class="form-row">
                 <label>계약 시작일 <span class="required-star">*</span></label>
                 <input type="date" name="contractStart" required />
@@ -68,7 +68,7 @@
               </div>
               <div class="form-row">
                 <label>사업자 번호 <span class="required-star">*</span></label>
-                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" />
+                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
               </div>
               <div class="form-row">
                 <label>사업자 타입 <span class="required-star">*</span></label>
@@ -89,6 +89,41 @@
             </form>
           </div>
         </div>
+        <!-- 권리자 수정 모달 -->
+        <div id="editModal" class="modal">
+          <div class="modal-content">
+            <button type="button" id="closeEditModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+            <h3 style="margin-bottom:18px;">권리자 수정</h3>
+            <form id="editForm" class="modal-form" method="post">
+              <div class="form-row">
+                <label>계약 시작일 <span class="required-star">*</span></label>
+                <input type="date" name="contractStart" required />
+              </div>
+              <div class="form-row">
+                <label>계약 종료일 <span class="required-star">*</span></label>
+                <input type="date" name="contractEnd" required />
+              </div>
+              <div class="form-row">
+                <label>사업자 번호 <span class="required-star">*</span></label>
+                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+              </div>
+              <div class="form-row">
+                <label>사업자 타입 <span class="required-star">*</span></label>
+                <select name="holderType" required>
+                  <option value="개인">개인</option>
+                  <option value="사업자">사업자</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>권리자명 <span class="required-star">*</span><span>수정시 권리자 로그인 아이디가 변경됩니다.</span></label>
+                <input type="text" name="holderName" required />
+              </div>
+              <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="register-btn" style="width:100%;">수정 완료</button>
+              </div>
+            </form>
+          </div>
+        </div>
         <table class="holder-table">
             <thead>
             <tr>
@@ -101,11 +136,21 @@
             </thead>
             <tbody>
             <tr th:each="holder : ${response.data.content}">
-                <td th:text="${holder.holderType == 'PERSONAL' ? '개인' : '사업자'}"></td>
+                <td th:text="${holder.holderType}"></td>
                 <td th:text="${holder.holderName}"></td>
                 <td th:text="${holder.contractStart} + '~' + ${holder.contractEnd}"></td>
                 <td th:text="${#numbers.formatInteger(holder.songCount, 0, 'COMMA')}"></td>
-                <td><a th:href="@{'/right-holder/' + ${holder.holderId}}" class="move-btn">이동</a></td>
+                <td>
+                    <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="move-btn">이동</a>
+                    <button type="button" class="edit-btn" 
+                            th:data-holder-id="${holder.holderId}"
+                            th:data-holder-type="${holder.holderType}"
+                            th:data-holder-name="${holder.holderName}"
+                            th:data-contract-start="${holder.contractStart}"
+                            th:data-contract-end="${holder.contractEnd}"
+                            th:data-business-number="${holder.businessNumber}"
+                            onclick="openEditModalFromData(this)">수정</button>
+                </td>
             </tr>
             <tr th:if="${response.data.content.size() == 0}">
                 <td colspan="5" style="text-align:center;">권리자가 없습니다.</td>
@@ -123,13 +168,40 @@
     </section>
 </div>
 <script>
-// 모달 열기/닫기
+// 등록 모달 열기/닫기
 const openBtn = document.getElementById('openRegisterModalBtn');
 const modal = document.getElementById('registerModal');
 const closeBtn = document.getElementById('closeModalBtn');
 openBtn && openBtn.addEventListener('click', () => { modal.classList.add('show'); });
 closeBtn && closeBtn.addEventListener('click', () => { modal.classList.remove('show'); });
 window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+// 수정 모달 열기/닫기
+const editModal = document.getElementById('editModal');
+const closeEditBtn = document.getElementById('closeEditModalBtn');
+closeEditBtn && closeEditBtn.addEventListener('click', () => { editModal.classList.remove('show'); });
+window.addEventListener('click', (e) => { if (e.target === editModal) editModal.classList.remove('show'); });
+
+// 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
+function openEditModalFromData(button) {
+  const holderId = button.getAttribute('data-holder-id');
+  const holderType = button.getAttribute('data-holder-type');
+  const holderName = button.getAttribute('data-holder-name');
+  const contractStart = button.getAttribute('data-contract-start');
+  const contractEnd = button.getAttribute('data-contract-end');
+  const businessNumber = button.getAttribute('data-business-number');
+  
+  const form = document.getElementById('editForm');
+  form.action = `/right-holder/${holderId}/update`;
+  
+  form.elements['contractStart'].value = contractStart;
+  form.elements['contractEnd'].value = contractEnd;
+  form.elements['businessNumber'].value = businessNumber;
+  form.elements['holderType'].value = holderType;
+  form.elements['holderName'].value = holderName;
+  
+  editModal.classList.add('show');
+}
 // 폼 유효성 및 등록 전 확인
 const form = document.getElementById('registerForm');
 if (form) {
@@ -154,6 +226,14 @@ if (form) {
       e.preventDefault();
       return false;
     }
+    // 사업자 번호 숫자 검증
+    const businessNumber = form.elements['businessNumber'].value;
+    if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
+      alert('사업자 번호는 숫자만 입력 가능합니다.');
+      form.elements['businessNumber'].focus();
+      e.preventDefault();
+      return false;
+    }
     // username=holderName, password=1234 자동 설정
     form.elements['username'].value = form.elements['holderName'].value;
     form.elements['password'].value = '1234';
@@ -163,6 +243,47 @@ if (form) {
       return false;
     }
     // 등록 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
+  };
+}
+
+// 수정 폼 유효성 및 수정 전 확인
+const editForm = document.getElementById('editForm');
+if (editForm) {
+  editForm.onsubmit = function(e) {
+    // 필수값 체크
+    const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
+    for (const name of required) {
+      const el = editForm.elements[name];
+      if (!el || !el.value || el.value.trim() === '') {
+        alert(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+        el && el.focus();
+        e.preventDefault();
+        return false;
+      }
+    }
+    // 날짜 논리 체크
+    const start = editForm.elements['contractStart'].value;
+    const end = editForm.elements['contractEnd'].value;
+    if (start && end && start > end) {
+      alert('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
+      editForm.elements['contractStart'].focus();
+      e.preventDefault();
+      return false;
+    }
+    // 사업자 번호 숫자 검증
+    const businessNumber = editForm.elements['businessNumber'].value;
+    if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
+      alert('사업자 번호는 숫자만 입력 가능합니다.');
+      editForm.elements['businessNumber'].focus();
+      e.preventDefault();
+      return false;
+    }
+    // 수정 확인
+    if (!confirm('수정하시겠습니까?')) {
+      e.preventDefault();
+      return false;
+    }
+    // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
   };
 }
 </script>
