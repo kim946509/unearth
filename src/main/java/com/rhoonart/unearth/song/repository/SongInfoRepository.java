@@ -18,6 +18,15 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
 
     Optional<SongInfo> findByMelonSongId(String melonSongId);
 
+    // artist_ko와 title_ko로 중복 검사
+    boolean existsByArtistKoAndTitleKo(String artistKo, String titleKo);
+
+    // artist_ko와 title_ko로 중복 검사 (자신 제외)
+    @Query("SELECT COUNT(s) > 0 FROM SongInfo s WHERE s.artistKo = :artistKo AND s.titleKo = :titleKo AND s.id != :excludeId")
+    boolean existsByArtistKoAndTitleKoExcludingId(@Param("artistKo") String artistKo,
+            @Param("titleKo") String titleKo,
+            @Param("excludeId") String excludeId);
+
     @Query("""
                 SELECT s FROM SongInfo s
                 WHERE (

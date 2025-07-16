@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,9 @@ import lombok.Builder;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "song_info")
+@Table(name = "song_info", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "artist_ko", "title_ko" })
+})
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

@@ -45,3 +45,5 @@ src/main/resources/env.properties
 user_data/
 
 streaming_crawling/logs/
+
+src/main/resources/static/data/**

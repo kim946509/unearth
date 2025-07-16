@@ -32,12 +32,20 @@ public class SongInfoService {
     public void register(SongInfoRegisterRequestDto dto) {
         // 1. songId(멜론) 중복 체크
         if (songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
-            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 음원입니다.");
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 멜론 곡 ID입니다.");
         }
-        // 2. 권리자명으로 RightHolder 조회
+
+        // 2. artist_ko와 title_ko 중복 체크
+        if (songInfoRepository.existsByArtistKoAndTitleKo(dto.getArtistKo(), dto.getTitleKo())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT,
+                    String.format("이미 등록된 곡입니다: %s - %s", dto.getArtistKo(), dto.getTitleKo()));
+        }
+
+        // 3. 권리자명으로 RightHolder 조회
         RightHolder rightHolder = rightHolderRepository.findByHolderName(dto.getRightHolderName())
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
-        // 3. 엔티티 생성/저장
+
+        // 4. 엔티티 생성/저장
         SongInfo song = SongInfo.builder()
                 .artistKo(dto.getArtistKo())
                 .artistEn(dto.getArtistEn())
@@ -84,14 +92,22 @@ public class SongInfoService {
         // 2. melonSongId 중복 체크 (자신 제외)
         if (!song.getMelonSongId().equals(dto.getMelonSongId()) &&
                 songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
-            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 음원입니다.");
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 멜론 곡 ID입니다.");
         }
 
-        // 3. 권리자명으로 RightHolder 조회
+        // 3. artist_ko와 title_ko 중복 체크 (자신 제외)
+        if (!song.getArtistKo().equals(dto.getArtistKo()) || !song.getTitleKo().equals(dto.getTitleKo())) {
+            if (songInfoRepository.existsByArtistKoAndTitleKoExcludingId(dto.getArtistKo(), dto.getTitleKo(), songId)) {
+                throw new BaseException(ResponseCode.INVALID_INPUT,
+                        String.format("이미 등록된 곡입니다: %s - %s", dto.getArtistKo(), dto.getTitleKo()));
+            }
+        }
+
+        // 4. 권리자명으로 RightHolder 조회
         RightHolder rightHolder = rightHolderRepository.findByHolderName(dto.getRightHolderName())
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
 
-        // 4. 음원 정보 업데이트
+        // 5. 음원 정보 업데이트
         song.updateInfo(
                 dto.getArtistKo(),
                 dto.getArtistEn(),
