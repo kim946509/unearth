@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 from typing import Dict, List, Any
 from collections import defaultdict
+from .slack_notifier import send_slack_message
 
 logger = logging.getLogger(__name__)
 
@@ -106,61 +107,23 @@ class BatchCrawlingLogger:
     def _generate_final_summary(self):
         """최종 요약 로그 생성"""
         elapsed_time = (self.end_time - self.start_time).total_seconds()
+        total_success = self.total_songs - len(self.failed_songs)
         
+        # 요약 메시지 생성
+        summary_message = self._generate_summary_message(elapsed_time, total_success)
+        
+        # 로그로 출력
         logger.info("=" * 80)
         logger.info("📊 크롤링 최종 결과 요약")
         logger.info("=" * 80)
-        
-        # 기본 정보
-        logger.info(f"📅 크롤링 날짜: {self.target_date}")
-        logger.info(f"⏰ 시작 시간: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        logger.info(f"⏰ 종료 시간: {self.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        logger.info(f"⏱️  총 소요 시간: {elapsed_time:.2f}초 ({elapsed_time/60:.2f}분)")
-        logger.info("")
-        
-        # 전체 통계 (성공 = 전체 - 실패)
-        total_success = self.total_songs - len(self.failed_songs)
-        logger.info("📈 전체 통계")
-        logger.info(f"   총 곡 수: {self.total_songs}곡")
-        logger.info(f"   성공한 곡 수: {total_success}곡")
-        logger.info(f"   실패한 곡 수: {len(self.failed_songs)}곡")
-        logger.info("")
-        
-        # 플랫폼별 통계 (성공 = 전체 - 실패)
-        logger.info("🎵 플랫폼별 통계")
-        for platform, stats in self.platform_stats.items():
-            if stats['failed'] > 0 or stats['db_failed'] > 0 or stats['csv_failed'] > 0:
-                platform_success = self.total_songs - stats['failed']
-                logger.info(f"   {platform.upper()}:")
-                logger.info(f"     크롤링 성공: {platform_success}곡")
-                logger.info(f"     크롤링 실패: {stats['failed']}곡")
-                logger.info(f"     DB 저장 실패: {stats['db_failed']}곡")
-                logger.info(f"     CSV 저장 실패: {stats['csv_failed']}곡")
-        logger.info("")
-        
-        # 실패 분석
-        if self.failed_songs:
-            logger.info("❌ 실패한 곡 상세 분석")
-            
-            # 실패 유형별 카운트
-            failure_types = defaultdict(int)
-            for song_name, failures in self.failed_songs.items():
-                for failure in failures:
-                    failure_types[failure] += 1
-            
-            logger.info("   실패 유형별:")
-            for failure_type, count in sorted(failure_types.items()):
-                logger.info(f"     {failure_type}: {count}곡")
-            
-            logger.info("")
-            logger.info("   실패한 곡 목록:")
-            for song_name, failures in sorted(self.failed_songs.items()):
-                failure_str = ", ".join(failures)
-                logger.info(f"     {song_name}: {failure_str}")
-        else:
-            logger.info("✅ 모든 곡이 성공적으로 처리되었습니다!")
-        
+        for line in summary_message.split('\n'):
+            if line.strip():
+                logger.info(line)
         logger.info("=" * 80)
+        
+        # Slack 메시지 전송
+        slack_message = self._generate_slack_message(elapsed_time, total_success)
+        send_slack_message(slack_message)
     
     def get_summary_dict(self) -> Dict[str, Any]:
         """요약 정보를 딕셔너리로 반환"""
@@ -178,4 +141,89 @@ class BatchCrawlingLogger:
             'failed_songs': dict(self.failed_songs),
             'platform_stats': dict(self.platform_stats),
             'total_stats': self.total_stats
-        } 
+        }
+    
+    def _generate_summary_message(self, elapsed_time: float, total_success: int) -> str:
+        """요약 메시지 생성 (로그용)"""
+        lines = []
+        
+        # 기본 정보
+        lines.append(f"📅 크롤링 날짜: {self.target_date}")
+        lines.append(f"⏰ 시작 시간: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"⏰ 종료 시간: {self.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"⏱️  총 소요 시간: {elapsed_time:.2f}초 ({elapsed_time/60:.2f}분)")
+        lines.append("")
+        
+        # 전체 통계
+        lines.append("📈 전체 통계")
+        lines.append(f"   총 곡 수: {self.total_songs}곡")
+        lines.append(f"   성공한 곡 수: {total_success}곡")
+        lines.append(f"   실패한 곡 수: {len(self.failed_songs)}곡")
+        lines.append("")
+        
+        # 플랫폼별 통계
+        lines.append("🎵 플랫폼별 통계")
+        for platform, stats in self.platform_stats.items():
+            if stats['failed'] > 0 or stats['db_failed'] > 0 or stats['csv_failed'] > 0:
+                platform_success = self.total_songs - stats['failed']
+                lines.append(f"   {platform.upper()}:")
+                lines.append(f"     크롤링 성공: {platform_success}곡")
+                lines.append(f"     크롤링 실패: {stats['failed']}곡")
+                lines.append(f"     DB 저장 실패: {stats['db_failed']}곡")
+                lines.append(f"     CSV 저장 실패: {stats['csv_failed']}곡")
+        lines.append("")
+        
+        # 실패 분석
+        if self.failed_songs:
+            lines.append("❌ 실패한 곡 상세 분석")
+            
+            # 실패 유형별 카운트
+            failure_types = defaultdict(int)
+            for song_name, failures in self.failed_songs.items():
+                for failure in failures:
+                    failure_types[failure] += 1
+            
+            lines.append("   실패 유형별:")
+            for failure_type, count in sorted(failure_types.items()):
+                lines.append(f"     {failure_type}: {count}곡")
+            
+            lines.append("")
+            lines.append("   실패한 곡 목록:")
+            for song_name, failures in sorted(self.failed_songs.items()):
+                failure_str = ", ".join(failures)
+                lines.append(f"     {song_name}: {failure_str}")
+        else:
+            lines.append("✅ 모든 곡이 성공적으로 처리되었습니다!")
+            
+        return '\n'.join(lines)
+    
+    def _generate_slack_message(self, elapsed_time: float, total_success: int) -> str:
+        """Slack 메시지용 텍스트 생성"""
+        # 기본 정보
+        message = f"🎵 *전체 크롤링 완료*\n"
+        message += f"📅 날짜: {self.target_date}\n"
+        message += f"⏱️ 소요 시간: {elapsed_time:.2f}초 ({elapsed_time/60:.2f}분)\n\n"
+        
+        # 통계
+        message += f"📊 *통계*\n"
+        message += f"• 총 곡 수: {self.total_songs}곡\n"
+        message += f"• 성공: {total_success}곡\n"
+        message += f"• 실패: {len(self.failed_songs)}곡\n\n"
+        
+        # 플랫폼별 결과 (실패가 있는 경우만)
+        if any(stats['failed'] > 0 or stats['db_failed'] > 0 or stats['csv_failed'] > 0 
+               for stats in self.platform_stats.values()):
+            message += f"🔍 *플랫폼별 실패 현황*\n"
+            for platform, stats in self.platform_stats.items():
+                if stats['failed'] > 0 or stats['db_failed'] > 0 or stats['csv_failed'] > 0:
+                    platform_success = self.total_songs - stats['failed']
+                    message += f"• {platform.upper()}: 성공 {platform_success}곡, 실패 {stats['failed']}곡\n"
+            message += "\n"
+        
+        # 최종 상태
+        if len(self.failed_songs) == 0:
+            message += f"✅ 모든 곡이 성공적으로 처리되었습니다!"
+        else:
+            message += f"⚠️ {len(self.failed_songs)}곡에서 실패가 발생했습니다."
+            
+        return message 

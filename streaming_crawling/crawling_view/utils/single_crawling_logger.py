@@ -4,6 +4,7 @@
 import logging
 from datetime import datetime
 from typing import Dict, Any, List
+from .slack_notifier import send_slack_message
 
 logger = logging.getLogger(__name__)
 
@@ -70,25 +71,21 @@ class CrawlingResultSummary:
         """콘솔에 요약 정보 출력"""
         summary = self.generate_summary()
         
+        # 요약 메시지 생성
+        summary_message = self._generate_summary_message(summary)
+        
+        # 로그로 출력
         logger.info("=" * 60)
         logger.info("📊 크롤링 결과 요약")
         logger.info("=" * 60)
-        logger.info(f"🎵 곡: {self.song_info['artist_ko']} - {self.song_info['title_ko']}")
-        logger.info(f"⏱️  실행 시간: {summary['execution_time']}")
-        logger.info(f"📈 성공: {summary['statistics']['success']}개, 실패: {summary['statistics']['failed']}개, "
-                   f"오류: {summary['statistics']['error']}개, 건너뜀: {summary['statistics']['skipped']}개")
-        
-        # 플랫폼별 결과
-        for plat, status in self.platform_status.items():
-            status_emoji = "✅" if status == 'success' else "❌" if status == 'failed' else "⚠️" if status == 'skipped' else "💥"
-            logger.info(f"{status_emoji} {plat.upper()}: {status}")
-        
-        if summary['statistics']['success'] > 0:
-            logger.info("✅ 크롤링 완료")
-        else:
-            logger.info("❌ 크롤링 실패 (모든 플랫폼 실패)")
-        
+        for line in summary_message.split('\n'):
+            if line.strip():
+                logger.info(line)
         logger.info("=" * 60)
+        
+        # Slack 메시지 전송
+        slack_message = self.generate_slack_message()
+        send_slack_message(slack_message)
         
     def generate_slack_message(self) -> str:
         """Slack 메시지용 텍스트 생성"""
@@ -114,7 +111,7 @@ class CrawlingResultSummary:
         
         # 최종 상태
         if stats['success'] > 0:
-            message += f"\n✅ 크롤링 완료 (일부 성공)"
+            message += f"\n✅ 크롤링 완료"
         else:
             message += f"\n❌ 크롤링 실패 (모든 플랫폼 실패)"
             
@@ -141,6 +138,27 @@ class CrawlingResultSummary:
             }
             
         return report
+    
+    def _generate_summary_message(self, summary: Dict[str, Any]) -> str:
+        """요약 메시지 생성 (로그용)"""
+        lines = []
+        
+        lines.append(f"🎵 곡: {self.song_info['artist_ko']} - {self.song_info['title_ko']}")
+        lines.append(f"⏱️  실행 시간: {summary['execution_time']}")
+        lines.append(f"📈 성공: {summary['statistics']['success']}개, 실패: {summary['statistics']['failed']}개, "
+                    f"오류: {summary['statistics']['error']}개, 건너뜀: {summary['statistics']['skipped']}개")
+        
+        # 플랫폼별 결과
+        for plat, status in self.platform_status.items():
+            status_emoji = "✅" if status == 'success' else "❌" if status == 'failed' else "⚠️" if status == 'skipped' else "💥"
+            lines.append(f"{status_emoji} {plat.upper()}: {status}")
+        
+        if summary['statistics']['success'] > 0:
+            lines.append("✅ 크롤링 완료")
+        else:
+            lines.append("❌ 크롤링 실패 (모든 플랫폼 실패)")
+            
+        return '\n'.join(lines)
 
 
 def create_summary_logger(song_info: Dict[str, Any]) -> CrawlingResultSummary:
