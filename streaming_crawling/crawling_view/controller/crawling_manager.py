@@ -9,7 +9,7 @@
 import logging
 from datetime import date
 from crawling_view.data.song_service import SongService
-from crawling_view.data.db_writer import save_genie_to_db, save_youtube_to_db, save_youtube_music_to_db, save_melon_to_db
+from crawling_view.data.db_writer import save_genie_to_db, save_youtube_to_db, save_youtube_music_to_db, save_melon_to_db, save_all_platforms_for_songs
 from crawling_view.data.csv_writer import save_genie_csv, save_youtube_csv, save_youtube_music_csv, save_melon_csv
 from crawling_view.controller.platform_crawlers import create_crawler
 from crawling_view.utils.constants import Platforms
@@ -58,6 +58,8 @@ def run_crawling(target_date=None):
                 if song.id not in successful_song_ids:
                     song_name = f"{song.artist_ko} - {song.title_ko}"
                     log_writer.add_crawling_failure(song_name, 'genie')
+        else:
+            genie_results = None
         
         # YouTube Music 크롤링
         ytmusic_songs = SongService.get_songs_by_platform(active_songs, 'youtube_music')
@@ -73,6 +75,8 @@ def run_crawling(target_date=None):
                 if song.id not in successful_song_ids:
                     song_name = f"{song.artist_ko} - {song.title_ko}"
                     log_writer.add_crawling_failure(song_name, 'youtube_music')
+        else:
+            ytmusic_results = None
         
         # YouTube 크롤링
         youtube_songs = SongService.get_songs_by_platform(active_songs, 'youtube')
@@ -88,6 +92,8 @@ def run_crawling(target_date=None):
                 if song.id not in successful_song_ids:
                     song_name = f"{song.artist_ko} - {song.title_ko}"
                     log_writer.add_crawling_failure(song_name, 'youtube')
+        else:
+            youtube_results = None
         
         # Melon 크롤링
         melon_songs = SongService.get_songs_by_platform(active_songs, 'melon')
@@ -103,41 +109,26 @@ def run_crawling(target_date=None):
                 if song.id not in successful_song_ids:
                     song_name = f"{song.artist_ko} - {song.title_ko}"
                     log_writer.add_crawling_failure(song_name, 'melon')
+        else:
+            melon_results = None
         
-        # 3단계: DB 저장
-        db_results = {}
+        # 3단계: DB 저장 (모든 곡에 대해 무조건 저장)
+        all_song_ids = [song.id for song in active_songs]
         
-        if 'genie' in crawling_results:
-            db_results['genie'] = save_genie_to_db(crawling_results['genie'])
-            # DB 저장 실패만 기록
-            if db_results['genie'].get('saved_count', 0) == 0 and db_results['genie'].get('updated_count', 0) == 0:
-                for song in genie_songs:
-                    song_name = f"{song.artist_ko} - {song.title_ko}"
-                    log_writer.add_db_failure(song_name, 'genie')
+        # 모든 플랫폼을 한 번에 저장 (크롤링 실패한 곡도 -999로 저장)
+        db_results = save_all_platforms_for_songs(
+            song_ids=all_song_ids,
+            genie_results=crawling_results.get('genie'),
+            youtube_music_results=crawling_results.get('youtube_music'),
+            youtube_results=crawling_results.get('youtube'),
+            melon_results=crawling_results.get('melon')
+        )
         
-        if 'youtube_music' in crawling_results:
-            db_results['youtube_music'] = save_youtube_music_to_db(crawling_results['youtube_music'])
-            # DB 저장 실패만 기록
-            if db_results['youtube_music'].get('saved_count', 0) == 0 and db_results['youtube_music'].get('updated_count', 0) == 0:
-                for song in ytmusic_songs:
-                    song_name = f"{song.artist_ko} - {song.title_ko}"
-                    log_writer.add_db_failure(song_name, 'youtube_music')
-        
-        if 'youtube' in crawling_results:
-            db_results['youtube'] = save_youtube_to_db(crawling_results['youtube'])
-            # DB 저장 실패만 기록
-            if db_results['youtube'].get('saved_count', 0) == 0 and db_results['youtube'].get('updated_count', 0) == 0:
-                for song in youtube_songs:
-                    song_name = f"{song.artist_ko} - {song.title_ko}"
-                    log_writer.add_db_failure(song_name, 'youtube')
-        
-        if 'melon' in crawling_results:
-            db_results['melon'] = save_melon_to_db(crawling_results['melon'])
-            # DB 저장 실패만 기록
-            if db_results['melon'].get('saved_count', 0) == 0 and db_results['melon'].get('updated_count', 0) == 0:
-                for song in melon_songs:
-                    song_name = f"{song.artist_ko} - {song.title_ko}"
-                    log_writer.add_db_failure(song_name, 'melon')
+        # DB 저장 실패 기록 (전체 실패 시에만)
+        if db_results.get('total_saved', 0) == 0 and db_results.get('total_updated', 0) == 0:
+            for song in active_songs:
+                song_name = f"{song.artist_ko} - {song.title_ko}"
+                log_writer.add_db_failure(song_name, 'all_platforms')
         
         # 4단계: CSV 저장
         csv_results = {}
@@ -224,6 +215,10 @@ def run_platform_crawling(platform, target_date=None):
         crawler = create_crawler(platform)
         crawling_data = SongService.convert_to_crawling_format(platform_songs, platform)
         crawling_results = crawler.crawl_songs(crawling_data)
+        
+        # 크롤링 결과가 없으면 None으로 설정
+        if not crawling_results:
+            crawling_results = None
         
         # 실패한 곡만 기록 (플랫폼별 결과 형태에 따라 처리)
         if platform == Platforms.YOUTUBE:
