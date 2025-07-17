@@ -81,9 +81,10 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 # 성공 여부 확인 및 결과 추가
                 if ytmusic_results and len(ytmusic_results) > 0:
                     summary_logger.add_platform_result('youtube_music', 'success', ytmusic_results)
+                    youtube_music_results = ytmusic_results  # 성공 시 결과 할당
                 else:
                     summary_logger.add_platform_result('youtube_music', 'failed')
-                    ytmusic_results = None  # 실패 시 None으로 설정 (DB에서 -999로 처리)
+                    youtube_music_results = None  # 실패 시 None으로 설정 (DB에서 -999로 처리)
                     
             elif plat == Platforms.YOUTUBE:
                 # YouTube는 song_dict에서 직접 URL 정보 사용

@@ -206,8 +206,8 @@ def _save_crawling_data(results, platform, platform_type, song_ids=None):
                             break
             
             # 데이터 검증 및 정리 (무조건 저장)
-            # results가 None이면 크롤링 실패로 간주하여 -999로 처리
-            if results is None:
+            # results가 None이거나 빈 컨테이너이면 크롤링 실패로 간주하여 -999로 처리
+            if results is None or (isinstance(results, (list, dict)) and len(results) == 0):
                 clean_data = _validate_and_clean_data(None, platform, song_id)
             else:
                 clean_data = _validate_and_clean_data(result_data, platform, song_id)
