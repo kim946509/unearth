@@ -11,6 +11,7 @@
     flex: 1;
     padding: 40px 40px 0 40px;
     background: #fff;
+    overflow-x: hidden;
 }
 
 /* 검색 폼 */

@@ -10,9 +10,7 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <!-- 관리자/슈퍼관리자만 사이드바 표시 -->
-<!--    <div th:if="${user.role == 'SUPER_ADMIN' or user.role == 'ADMIN'}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>-->
-    <!-- ✅ fragment 호출 조건만 분리 -->
+
     <!-- 조건문 블록으로 분리 -->
     <th:block th:if="${userRole == 'SUPER_ADMIN' or userRole == 'ADMIN'}">
         <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
@@ -22,6 +20,10 @@
     <section th:class="${user.role == 'RIGHT_HOLDER'} ? 'content full-width' : 'content'">
         <div class="page-header">
             <h2 th:text="${rightHolder.holderName}">권리자 상세</h2>
+            <!-- 권리자일 경우에만 비밀번호 변경 버튼 표시 -->
+            <th:block th:if="${userRole == 'RIGHT_HOLDER'}">
+                <button type="button" class="password-change-btn" id="openPasswordChangeModalBtn">비밀번호 변경</button>
+            </th:block>
         </div>
         
         <form class="search-form" method="get" th:action="@{'/right-holder/' + ${rightHolderId}}">
@@ -90,7 +92,120 @@
             </span>
             <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search})}" class="page-btn">다음</a>
         </div>
+        
+        <!-- 비밀번호 변경 모달 -->
+        <div id="passwordChangeModal" class="modal">
+            <div class="modal-content">
+                <button type="button" id="closePasswordChangeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+                <h3 style="margin-bottom:18px;">비밀번호 변경</h3>
+                <form id="passwordChangeForm" class="modal-form">
+                    <div class="form-row">
+                        <label>현재 비밀번호 <span class="required-star">*</span></label>
+                        <input type="password" name="currentPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 <span class="required-star">*</span></label>
+                        <input type="password" name="newPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 확인 <span class="required-star">*</span></label>
+                        <input type="password" name="confirmPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>사업자 등록번호 <span class="required-star">*</span></label>
+                        <input type="text" name="businessRegistrationNumber" maxlength="10" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                    </div>
+                    <div class="form-row" style="margin-top:18px;">
+                        <button type="submit" class="register-btn" style="width:100%;">변경</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
 </div>
+
+<script>
+// 비밀번호 변경 모달 열기/닫기
+const passwordChangeBtn = document.getElementById('openPasswordChangeModalBtn');
+const passwordChangeModal = document.getElementById('passwordChangeModal');
+const closePasswordChangeBtn = document.getElementById('closePasswordChangeModalBtn');
+
+if (passwordChangeBtn) {
+    passwordChangeBtn.addEventListener('click', () => { 
+        passwordChangeModal.classList.add('show'); 
+    });
+}
+
+if (closePasswordChangeBtn) {
+    closePasswordChangeBtn.addEventListener('click', () => { 
+        passwordChangeModal.classList.remove('show'); 
+    });
+}
+
+window.addEventListener('click', (e) => { 
+    if (e.target === passwordChangeModal) passwordChangeModal.classList.remove('show'); 
+});
+
+// 비밀번호 변경 폼 제출 처리
+const passwordChangeForm = document.getElementById('passwordChangeForm');
+if (passwordChangeForm) {
+    passwordChangeForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 필수값 체크
+        const currentPassword = this.elements['currentPassword'].value;
+        const newPassword = this.elements['newPassword'].value;
+        const confirmPassword = this.elements['confirmPassword'].value;
+        const businessRegistrationNumber = this.elements['businessRegistrationNumber'].value;
+        
+        if (!currentPassword || !newPassword || !confirmPassword || !businessRegistrationNumber) {
+            alert('모든 필드를 입력해주세요.');
+            return;
+        }
+        
+        // 새 비밀번호 일치 확인
+        if (newPassword !== confirmPassword) {
+            alert('새 비밀번호가 일치하지 않습니다.');
+            this.elements['confirmPassword'].focus();
+            return;
+        }
+        
+        // 비밀번호 길이 확인 (최소 8자)
+        if (newPassword.length < 8) {
+            alert('새 비밀번호는 최소 8자 이상이어야 합니다.');
+            this.elements['newPassword'].focus();
+            return;
+        }
+
+        // API 호출
+        fetch('/user/password/change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentPassword: currentPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword,
+                businessRegistrationNumber: businessRegistrationNumber
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 'SUCCESS') {
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+                passwordChangeModal.classList.remove('show');
+                passwordChangeForm.reset();
+            } else {
+                alert(data.message || '비밀번호 변경에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('비밀번호 변경 중 오류가 발생했습니다.');
+        });
+    });
+}
+</script>
 </body>
 </html> 

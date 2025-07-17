@@ -10,7 +10,6 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
     <section class="content">
         <div class="page-header">
             <h2 th:text="${songInfo.artistKo} + ' - ' + ${songInfo.titleKo}">크롤링 데이터</h2>

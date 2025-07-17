@@ -308,6 +308,7 @@
     font-weight: 500;
     margin-bottom: 2px;
 }
+.modal-form input,
 .modal-form input[type="text"],
 .modal-form input[type="date"],
 .modal-form select {
@@ -346,6 +347,10 @@
     margin-bottom: 32px;
 }
 
+.page-header .password-change-btn {
+    margin-left: auto;
+}
+
 .page-header h2 {
     font-size: 24px;
     font-weight: bold;
@@ -367,6 +372,22 @@
 .back-btn:hover {
     background: #e9e9e9;
     border-color: #ccc;
+}
+
+.password-change-btn {
+    padding: 10px 20px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.password-change-btn:hover {
+    background: #333;
 }
 
 .youtube-link {

@@ -41,4 +41,11 @@ public class User extends BaseEntity {
     public void updateUsername(String newUsername) {
         this.username = newUsername;
     }
+
+    /**
+     * 비밀번호 변경
+     */
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
