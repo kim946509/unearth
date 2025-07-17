@@ -74,7 +74,7 @@
                     <a th:href="${song.youtubeUrl}" target="_blank" class="youtube-link">보기</a>
                 </td>
                 <td>
-                    <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">크롤링 데이터 보기</a>
+                    <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">데이터 보기</a>
                     <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">크롤링 데이터 없음</span>
                 </td>
             </tr>
