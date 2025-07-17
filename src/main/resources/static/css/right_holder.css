@@ -718,6 +718,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    table-layout: fixed; /* 고정 테이블 레이아웃 */
 }
 
 .data-table th {
@@ -736,6 +737,32 @@
     border-bottom: 1px solid #e9ecef;
     vertical-align: middle;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 크롤링 데이터 테이블 컬럼 너비 설정 */
+.data-table th:nth-child(1), .data-table td:nth-child(1) { /* 날짜 */
+    width: 12%;
+}
+.data-table th:nth-child(2), .data-table td:nth-child(2) { /* 플랫폼 */
+    width: 12%;
+}
+.data-table th:nth-child(3), .data-table td:nth-child(3) { /* 조회수 */
+    width: 12%;
+}
+.data-table th:nth-child(4), .data-table td:nth-child(4) { /* 조회수 증가 */
+    width: 12%;
+}
+.data-table th:nth-child(5), .data-table td:nth-child(5) { /* 청취자 수 */
+    width: 12%;
+}
+.data-table th:nth-child(6), .data-table td:nth-child(6) { /* 청취자 수 증가 */
+    width: 10%;
+}
+.data-table th:nth-child(7), .data-table td:nth-child(7) { /* 영상 정보 */
+    width: 30%;
 }
 
 /* 날짜 셀 스타일 */
@@ -749,16 +776,18 @@
 /* 영상 정보 셀 스타일 */
 .video-info-cell {
     text-align: left;
-    max-width: 350px;
     border-right: 2px solid #dee2e6;
+    white-space: normal; /* 영상 정보는 줄바꿈 허용 */
+    word-wrap: break-word;
 }
 
 .video-info-item {
-    margin-bottom: 8px;
-    padding: 8px;
+    margin-bottom: 6px;
+    padding: 6px;
     background: #f8f9fa;
     border-radius: 4px;
     border-left: 3px solid #007bff;
+    word-wrap: break-word;
 }
 
 .video-info-item:last-child {
@@ -768,16 +797,21 @@
 .video-channel {
     font-weight: 600;
     color: #495057;
-    font-size: 12px;
-    margin-bottom: 4px;
+    font-size: 11px;
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .video-title a {
     color: #007bff;
     text-decoration: none;
     font-weight: 500;
-    font-size: 13px;
-    line-height: 1.3;
+    font-size: 12px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    display: block;
 }
 
 .video-title a:hover {
@@ -787,20 +821,20 @@
 
 .video-order {
     color: #6c757d;
-    font-size: 11px;
+    font-size: 10px;
     margin-top: 2px;
 }
 
 .video-upload {
     color: #6c757d;
-    font-size: 11px;
+    font-size: 10px;
     margin-top: 2px;
 }
 
 /* 새로운 영상 정보 스타일 */
 .video-info-row {
     display: flex;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     align-items: flex-start;
 }
 
@@ -811,22 +845,26 @@
 .video-label {
     font-weight: 600;
     color: #495057;
-    font-size: 11px;
-    min-width: 70px;
-    margin-right: 8px;
+    font-size: 10px;
+    min-width: 60px;
+    margin-right: 6px;
     flex-shrink: 0;
 }
 
 .video-value {
     color: #212529;
-    font-size: 11px;
+    font-size: 10px;
     word-break: break-word;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .video-value a {
     color: #007bff;
     text-decoration: none;
     font-weight: 500;
+    word-wrap: break-word;
 }
 
 .video-value a:hover {

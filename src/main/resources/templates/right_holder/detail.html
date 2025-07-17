@@ -47,7 +47,7 @@
         </form>
 
         <!-- 안내문구 영역 제거 및 팝업 처리 -->
-        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+        <div th:if="${response.code.name() != 'SUCCESS' and response.message != null and !#strings.isEmpty(response.message)}">
             <script th:inline="javascript">
                 alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
             </script>
