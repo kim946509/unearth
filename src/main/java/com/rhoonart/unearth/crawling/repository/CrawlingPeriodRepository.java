@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,4 +21,36 @@ public interface CrawlingPeriodRepository extends JpaRepository<CrawlingPeriod, 
                 LIMIT 1
             """)
     Optional<CrawlingPeriod> findLatestBySong(@Param("song") SongInfo song);
+
+    /**
+     * 특정 음원의 특정 시작일 크롤링 기간을 조회합니다.
+     */
+    @Query("""
+                SELECT cp FROM CrawlingPeriod cp
+                WHERE cp.song.id = :songId
+                AND cp.startDate = :startDate
+                ORDER BY cp.songOrder ASC
+            """)
+    List<CrawlingPeriod> findBySongIdAndStartDate(
+            @Param("songId") String songId,
+            @Param("startDate") LocalDate startDate);
+
+    /**
+     * 특정 음원의 모든 크롤링 기간을 조회합니다. (디버깅용)
+     */
+    @Query("""
+                SELECT cp FROM CrawlingPeriod cp
+                WHERE cp.song.id = :songId
+                ORDER BY cp.startDate DESC
+            """)
+    List<CrawlingPeriod> findAllBySongId(@Param("songId") String songId);
+
+    /**
+     * 특정 음원의 크롤링 기간 개수를 조회합니다. (디버깅용)
+     */
+    @Query("""
+                SELECT COUNT(cp) FROM CrawlingPeriod cp
+                WHERE cp.song.id = :songId
+            """)
+    long countBySongId(@Param("songId") String songId);
 }

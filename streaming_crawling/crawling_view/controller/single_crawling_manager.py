@@ -59,7 +59,7 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 genie_results = genie_crawler.crawl_songs(genie_data)
                 
                 # 성공 여부 확인 및 결과 추가
-                if genie_results and len(genie_results) > 0 and genie_results[0]:
+                if genie_results and len(genie_results) > 0:
                     summary_logger.add_platform_result('genie', 'success', genie_results)
                 else:
                     summary_logger.add_platform_result('genie', 'failed')
@@ -79,7 +79,7 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 ytmusic_results = ytmusic_crawler.crawl_songs(ytmusic_data)
                 
                 # 성공 여부 확인 및 결과 추가
-                if ytmusic_results and len(ytmusic_results) > 0 and ytmusic_results[0]:
+                if ytmusic_results and len(ytmusic_results) > 0:
                     summary_logger.add_platform_result('youtube_music', 'success', ytmusic_results)
                 else:
                     summary_logger.add_platform_result('youtube_music', 'failed')
@@ -122,7 +122,7 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                     melon_results = melon_crawler.crawl_songs(melon_data)
                     
                     # 성공 여부 확인 및 결과 추가
-                    if melon_results and len(melon_results) > 0 and melon_results[0]:
+                    if melon_results and len(melon_results) > 0:
                         summary_logger.add_platform_result('melon', 'success', melon_results)
                     else:
                         summary_logger.add_platform_result('melon', 'failed')

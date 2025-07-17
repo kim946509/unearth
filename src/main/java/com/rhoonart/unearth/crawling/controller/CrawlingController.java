@@ -86,6 +86,7 @@ public class CrawlingController {
                 songId, startDate, endDate, platform, pageNumber, pageSize);
 
         model.addAttribute("response", CommonResponse.success(crawlingDataWithSongInfo.getCrawlingDataList()));
+        model.addAttribute("crawlingData", crawlingDataWithSongInfo); // 그룹화된 데이터 포함
         model.addAttribute("songId", songId);
         model.addAttribute("rightHolderId", crawlingDataWithSongInfo.getSongInfo().getRightHolder().getId());
         model.addAttribute("startDate", startDateStr);

@@ -62,7 +62,7 @@ public class CrawlingService {
                 .channel(dto.getChannel())
                 .youtubeTitle(dto.getYoutubeTitle())
                 .youtubeUrl(dto.getYoutubeUrl())
-                .song_order(dto.getSongOrder())
+                .songOrder(dto.getSongOrder())
                 .build();
 
         crawlingPeriodRepository.save(crawlingPeriod);
@@ -81,6 +81,16 @@ public class CrawlingService {
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
 
+        // 디버깅: CrawlingPeriod 데이터 확인
+        long periodCount = crawlingPeriodRepository.countBySongId(songId);
+        log.info("음원 {}의 CrawlingPeriod 개수: {}", songId, periodCount);
+
+        if (periodCount > 0) {
+            List<CrawlingPeriod> allPeriods = crawlingPeriodRepository.findAllBySongId(songId);
+            log.info("음원 {}의 CrawlingPeriod 목록: {}", songId,
+                    allPeriods.stream().map(p -> p.getStartDate() + ":" + p.getYoutubeTitle()).toList());
+        }
+
         // 1. Pageable 생성 (페이지는 0부터 시작하므로 -1)
         Pageable pageable = PageRequest.of(page - 1, size);
 
@@ -88,62 +98,134 @@ public class CrawlingService {
         Page<CrawlingData> pagedResult = crawlingDataRepository.findPagedCrawlingData(
                 songId, platform, startDate, endDate, pageable);
 
-        // 3. 페이징된 데이터에 대해 이전날 데이터 조회 및 증가량 계산
-        List<CrawlingDataResponseDto> resultList = new ArrayList<>();
+        // 3. 날짜별로 그룹화
+        Map<LocalDate, List<CrawlingData>> dataByDate = pagedResult.getContent().stream()
+                .collect(Collectors.groupingBy(data -> data.getCreatedAt().toLocalDate()));
 
-        for (CrawlingData currentData : pagedResult.getContent()) {
-            LocalDate currentDate = currentData.getCreatedAt().toLocalDate();
+        // 4. 날짜별로 그룹화된 데이터 생성
+        List<CrawlingDataResponseDto.DateGroupedData> groupedDataList = new ArrayList<>();
 
-            // 이전날 데이터를 DB에서 직접 조회
-            LocalDate previousDate = currentDate.minusDays(1);
-            Optional<CrawlingData> previousDataOpt = crawlingDataRepository
-                    .findBySongIdAndPlatformAndDate(songId, currentData.getPlatform(), previousDate);
+        for (Map.Entry<LocalDate, List<CrawlingData>> entry : dataByDate.entrySet()) {
+            LocalDate currentDate = entry.getKey();
+            List<CrawlingData> currentDataList = entry.getValue();
 
-            long viewsIncrease = -1; // 기본값: 이전 데이터 없음
-            long listenersIncrease = -1; // 기본값: 이전 데이터 없음
+            // 영상 정보 조회 (startDate인 날에만)
+            List<CrawlingDataResponseDto.VideoInfo> videoInfos = new ArrayList<>();
+            boolean isStartDate = isStartDate(songId, currentDate);
+            log.debug("날짜 {}는 시작일인가? {}", currentDate, isStartDate);
 
-            if (previousDataOpt.isPresent()) {
-                CrawlingData previousData = previousDataOpt.get();
-
-                // 조회수 증가량 계산
-                if (currentData.getViews() == -999 || previousData.getViews() == -999) {
-                    viewsIncrease = -999; // 오류 상황
-                } else if (currentData.getViews() == -1 || previousData.getViews() == -1) {
-                    viewsIncrease = -1; // 데이터 제공되지 않음
-                } else {
-                    viewsIncrease = currentData.getViews() - previousData.getViews();
-                }
-
-                // 청취자수 증가량 계산
-                if (currentData.getListeners() == -999 || previousData.getListeners() == -999) {
-                    listenersIncrease = -999; // 오류 상황
-                } else if (currentData.getListeners() == -1 || previousData.getListeners() == -1) {
-                    listenersIncrease = -1; // 데이터 제공되지 않음
-                } else {
-                    listenersIncrease = currentData.getListeners() - previousData.getListeners();
-                }
+            if (isStartDate) {
+                videoInfos = getVideoInfosForDate(songId, currentDate);
+                log.debug("날짜 {}의 영상 정보 개수: {}", currentDate, videoInfos.size());
             }
 
-            CrawlingDataResponseDto dto = CrawlingDataResponseDto.builder()
+            // 플랫폼별 데이터 생성
+            List<CrawlingDataResponseDto.DateGroupedData.PlatformData> platformDataList = new ArrayList<>();
+
+            for (CrawlingData currentData : currentDataList) {
+                // 이전날 데이터를 DB에서 직접 조회
+                LocalDate previousDate = currentDate.minusDays(1);
+                Optional<CrawlingData> previousDataOpt = crawlingDataRepository
+                        .findBySongIdAndPlatformAndDate(songId, currentData.getPlatform(), previousDate);
+
+                long viewsIncrease = -1; // 기본값: 이전 데이터 없음
+                long listenersIncrease = -1; // 기본값: 이전 데이터 없음
+
+                if (previousDataOpt.isPresent()) {
+                    CrawlingData previousData = previousDataOpt.get();
+
+                    // 조회수 증가량 계산
+                    if (currentData.getViews() == -999 || previousData.getViews() == -999) {
+                        viewsIncrease = -999; // 오류 상황
+                    } else if (currentData.getViews() == -1 || previousData.getViews() == -1) {
+                        viewsIncrease = -1; // 데이터 제공되지 않음
+                    } else {
+                        viewsIncrease = currentData.getViews() - previousData.getViews();
+                    }
+
+                    // 청취자수 증가량 계산
+                    if (currentData.getListeners() == -999 || previousData.getListeners() == -999) {
+                        listenersIncrease = -999; // 오류 상황
+                    } else if (currentData.getListeners() == -1 || previousData.getListeners() == -1) {
+                        listenersIncrease = -1; // 데이터 제공되지 않음
+                    } else {
+                        listenersIncrease = currentData.getListeners() - previousData.getListeners();
+                    }
+                }
+
+                CrawlingDataResponseDto.DateGroupedData.PlatformData platformData = CrawlingDataResponseDto.DateGroupedData.PlatformData
+                        .builder()
+                        .platform(currentData.getPlatform())
+                        .views(currentData.getViews())
+                        .listeners(currentData.getListeners())
+                        .viewsIncrease(viewsIncrease)
+                        .listenersIncrease(listenersIncrease)
+                        .build();
+
+                platformDataList.add(platformData);
+            }
+
+            CrawlingDataResponseDto.DateGroupedData groupedData = CrawlingDataResponseDto.DateGroupedData.builder()
                     .date(currentDate)
-                    .platform(currentData.getPlatform())
-                    .views(currentData.getViews())
-                    .listeners(currentData.getListeners())
-                    .viewsIncrease(viewsIncrease)
-                    .listenersIncrease(listenersIncrease)
+                    .videoInfos(videoInfos)
+                    .platformDataList(platformDataList)
                     .build();
 
-            resultList.add(dto);
+            groupedDataList.add(groupedData);
+        }
+
+        // 5. 기존 형식으로 변환 (호환성을 위해)
+        List<CrawlingDataResponseDto> resultList = new ArrayList<>();
+        for (CrawlingDataResponseDto.DateGroupedData groupedData : groupedDataList) {
+            for (CrawlingDataResponseDto.DateGroupedData.PlatformData platformData : groupedData
+                    .getPlatformDataList()) {
+                CrawlingDataResponseDto dto = CrawlingDataResponseDto.builder()
+                        .date(groupedData.getDate())
+                        .platform(platformData.getPlatform())
+                        .views(platformData.getViews())
+                        .listeners(platformData.getListeners())
+                        .viewsIncrease(platformData.getViewsIncrease())
+                        .listenersIncrease(platformData.getListenersIncrease())
+                        .videoInfos(groupedData.getVideoInfos())
+                        .build();
+
+                resultList.add(dto);
+            }
         }
 
         return CrawlingDataWithSongInfoDto.builder()
                 .songInfo(songInfo)
                 .crawlingDataList(resultList)
+                .groupedDataList(groupedDataList)
                 .totalPages(pagedResult.getTotalPages())
                 .totalElements(pagedResult.getTotalElements())
                 .currentPage(page)
                 .pageSize(size)
                 .build();
+    }
+
+    /**
+     * 특정 날짜가 크롤링 시작일인지 확인합니다.
+     */
+    private boolean isStartDate(String songId, LocalDate date) {
+        return !crawlingPeriodRepository.findBySongIdAndStartDate(songId, date).isEmpty();
+    }
+
+    /**
+     * 특정 날짜의 영상 정보를 조회합니다.
+     */
+    private List<CrawlingDataResponseDto.VideoInfo> getVideoInfosForDate(String songId, LocalDate date) {
+        List<CrawlingPeriod> periods = crawlingPeriodRepository.findBySongIdAndStartDate(songId, date);
+
+        return periods.stream()
+                .map(period -> CrawlingDataResponseDto.VideoInfo.builder()
+                        .channel(period.getChannel())
+                        .youtubeTitle(period.getYoutubeTitle())
+                        .youtubeUrl(period.getYoutubeUrl())
+                        .songOrder(period.getSongOrder())
+                        .uploadAt(period.getUploadAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     /**
