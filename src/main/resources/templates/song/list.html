@@ -68,15 +68,25 @@
             </div>
         </form>
         
-        <!-- 일괄등록 버튼 -->
+        <!-- 일괄등록 및 전체 크롤링 버튼 -->
         <div class="bulk-register-section">
-            <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
                 <h3>CSV 일괄등록</h3>
                 <button type="button" class="bulk-register-btn" onclick="openBulkRegisterModal()">
                     CSV 파일 업로드
                 </button>
                 <span>
                     CSV 파일을 업로드하여 여러 곡을 한 번에 등록할 수 있습니다.
+                </span>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <h3>전체 크롤링</h3>
+                <button type="button" class="full-crawling-btn" onclick="executeFullCrawling()">
+                    전체 크롤링 실행
+                </button>
+                <span>
+                    등록된 모든 곡에 대해 크롤링을 일괄 실행합니다. (테스트용)
                 </span>
             </div>
         </div>
@@ -661,6 +671,44 @@ function showBulkRegisterResult(content) {
     bulkRegisterResultContent.innerHTML = content;
     bulkRegisterModal.classList.remove('show');
     bulkRegisterResultModal.classList.add('show');
+}
+
+// 전체 크롤링 실행 함수
+function executeFullCrawling() {
+    if (!confirm('전체 크롤링을 실행하시겠습니까?\n\n이 작업은 시간이 오래 걸릴 수 있습니다.')) {
+        return;
+    }
+    
+    // 버튼 비활성화
+    const btn = document.querySelector('.full-crawling-btn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '⏳ 실행 중...';
+    btn.disabled = true;
+    
+    // API 호출
+    fetch('/api/crawling/execute-full', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 'SUCCESS') {
+            alert('전체 크롤링이 시작되었습니다.\n\n크롤링이 완료되면 페이지를 새로고침하여 결과를 확인하세요.');
+        } else {
+            alert('크롤링 실행 중 오류가 발생했습니다: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('크롤링 실행 중 오류가 발생했습니다.');
+    })
+    .finally(() => {
+        // 버튼 상태 복원
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    });
 }
 </script>
 </body>

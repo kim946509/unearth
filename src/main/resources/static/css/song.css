@@ -521,4 +521,26 @@
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0;
+}
+
+/* 전체 크롤링 버튼 스타일 */
+.full-crawling-btn {
+    padding: 12px 24px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.full-crawling-btn:hover {
+    background: #c82333;
+}
+
+.full-crawling-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
 } 
