@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -50,5 +51,8 @@ public class CrawlingPeriod extends BaseEntity {
     private String youtubeUrl;
 
     @Column(name = "song_order", nullable = false)
-    private int song_order;
+    private int songOrder;
+
+    @Column(name = "upload_at", nullable = true)
+    private LocalDateTime uploadAt;
 }
