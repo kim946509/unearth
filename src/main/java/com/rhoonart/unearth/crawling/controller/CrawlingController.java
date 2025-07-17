@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Controller
@@ -60,8 +61,26 @@ public class CrawlingController {
         }
 
         // 날짜 파싱 (전체 기간으로 설정)
-        LocalDate startDate = startDateStr != null ? LocalDate.parse(startDateStr) : null;
-        LocalDate endDate = endDateStr != null ? LocalDate.parse(endDateStr) : null;
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+
+        if (startDateStr != null && !startDateStr.trim().isEmpty()) {
+            try {
+                startDate = LocalDate.parse(startDateStr);
+            } catch (DateTimeParseException e) {
+                // 잘못된 날짜 형식이면 null로 처리
+                startDate = null;
+            }
+        }
+
+        if (endDateStr != null && !endDateStr.trim().isEmpty()) {
+            try {
+                endDate = LocalDate.parse(endDateStr);
+            } catch (DateTimeParseException e) {
+                // 잘못된 날짜 형식이면 null로 처리
+                endDate = null;
+            }
+        }
 
         // 플랫폼 파싱 (빈 문자열이면 null로 처리)
         PlatformType platform = null;
