@@ -96,6 +96,32 @@
     color: #222;
 }
 
+/* 권리자 리스트 테이블 컬럼 너비 조정 */
+.holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 구분 */
+    width: 7%;
+}
+.holder-table th:nth-child(2), .holder-table td:nth-child(2) { /* 권리자명 */
+    width: 12%;
+}
+.holder-table th:nth-child(3), .holder-table td:nth-child(3) { /* 계약 기간 */
+    width: 18%;
+}
+.holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 남은 일수 */
+    width: 8%;
+}
+.holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 계약 연장 */
+    width: 8%;
+}
+.holder-table th:nth-child(6), .holder-table td:nth-child(6) { /* 등록 곡 수 */
+    width: 10%;
+}
+.holder-table th:nth-child(7), .holder-table td:nth-child(7) { /* 권리자 페이지 */
+    width: 20%;
+}
+.holder-table th:nth-child(8), .holder-table td:nth-child(8) { /* 로그인 상태 */
+    width: 17%;
+}
+
 /* 권리자 상세페이지 테이블 컬럼 너비 조정 */
 .holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 권리자명 */
     width: 10%;
@@ -140,6 +166,77 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+}
+
+.extend-btn {
+    padding: 6px 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.extend-btn:hover {
+    background: #218838;
+}
+
+/* 계약 남은 일수 스타일 */
+.contract-normal {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.contract-warning {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.contract-expired {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* 로그인 상태 버튼 스타일 */
+.login-enable-btn {
+    padding: 6px 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.login-enable-btn:hover {
+    background: #218838;
+}
+
+.login-disable-btn {
+    padding: 6px 12px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.login-disable-btn:hover {
+    background: #c82333;
 }
 .pagination {
     display: flex;

@@ -18,4 +18,6 @@ public class RightHolderListResponseDto {
     private final LocalDate contractEnd;
     private final String businessNumber;
     private final int songCount;
+    private final long daysLeft;
+    private final boolean isLoginEnabled;
 }

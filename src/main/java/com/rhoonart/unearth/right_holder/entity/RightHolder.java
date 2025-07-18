@@ -57,4 +57,8 @@ public class RightHolder extends BaseEntity {
         this.contractEnd = contractEnd;
         this.businessNumber = businessNumber;
     }
+
+    public void updateContractEnd(LocalDate newContractEnd) {
+        this.contractEnd = newContractEnd;
+    }
 }

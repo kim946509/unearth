@@ -23,10 +23,14 @@ import org.springframework.data.domain.Pageable;
 import jakarta.servlet.http.HttpSession;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
+import com.rhoonart.unearth.right_holder.dto.ContractExtendRequestDto;
+import com.rhoonart.unearth.right_holder.dto.LoginToggleRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import com.rhoonart.unearth.common.exception.BaseException;
@@ -138,5 +142,32 @@ public class RightHolderController {
         var rightHolder = rightHolderService.findById(rightHolderId);
         model.addAttribute("rightHolder", rightHolder);
         return "right_holder/detail";
+    }
+
+    @PostMapping("/{rightHolderId}/extend")
+    @ResponseBody
+    public CommonResponse<String> extendContract(
+            @PathVariable String rightHolderId,
+            @Valid @RequestBody ContractExtendRequestDto dto,
+            HttpSession session) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+
+        rightHolderService.extendContract(rightHolderId, dto.getNewEndDate());
+        return CommonResponse.success("계약이 성공적으로 연장되었습니다.");
+    }
+
+    @PostMapping("/{rightHolderId}/toggle-login")
+    @ResponseBody
+    public CommonResponse<String> toggleLoginStatus(
+            @PathVariable String rightHolderId,
+            @Valid @RequestBody LoginToggleRequestDto dto,
+            HttpSession session) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+
+        rightHolderService.toggleLoginStatus(rightHolderId, dto.isLoginEnabled());
+        String action = dto.isLoginEnabled() ? "활성화" : "비활성화";
+        return CommonResponse.success("로그인이 성공적으로 " + action + "되었습니다.");
     }
 }

@@ -130,8 +130,11 @@
                 <th>구분</th>
                 <th>권리자명</th>
                 <th>계약 기간</th>
+                <th>남은 일수</th>
+                <th>계약 연장</th>
                 <th>등록 곡 수</th>
                 <th>권리자 페이지</th>
+                <th>로그인 상태</th>
             </tr>
             </thead>
             <tbody>
@@ -139,6 +142,18 @@
                 <td th:text="${holder.holderType}"></td>
                 <td th:text="${holder.holderName}"></td>
                 <td th:text="${holder.contractStart} + '~' + ${holder.contractEnd}"></td>
+                <td>
+                    <span th:class="${holder.daysLeft < 0 ? 'contract-expired' : holder.daysLeft <= 30 ? 'contract-warning' : 'contract-normal'}"
+                          th:text="${holder.daysLeft < 0 ? '만료됨' : holder.daysLeft + '일'}">
+                    </span>
+                </td>
+                <td>
+                    <button type="button" class="extend-btn" 
+                            th:data-holder-id="${holder.holderId}"
+                            th:data-holder-name="${holder.holderName}"
+                            th:data-contract-end="${holder.contractEnd}"
+                            onclick="extendContract(this)">연장</button>
+                </td>
                 <td th:text="${#numbers.formatInteger(holder.songCount, 0, 'COMMA')}"></td>
                 <td>
                     <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="move-btn">이동</a>
@@ -151,9 +166,19 @@
                             th:data-business-number="${holder.businessNumber}"
                             onclick="openEditModalFromData(this)">수정</button>
                 </td>
+                <td>
+                    <button type="button" 
+                            th:class="${holder.isLoginEnabled ? 'login-disable-btn' : 'login-enable-btn'}"
+                            th:data-holder-id="${holder.holderId}"
+                            th:data-holder-name="${holder.holderName}"
+                            th:data-is-enabled="${holder.isLoginEnabled}"
+                            th:text="${holder.isLoginEnabled ? '비활성화' : '활성화'}"
+                            onclick="toggleLoginStatus(this)">
+                    </button>
+                </td>
             </tr>
             <tr th:if="${response.data.content.size() == 0}">
-                <td colspan="5" style="text-align:center;">권리자가 없습니다.</td>
+                <td colspan="8" style="text-align:center;">권리자가 없습니다.</td>
             </tr>
             </tbody>
         </table>
@@ -164,6 +189,22 @@
                 <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
             </span>
             <a th:if="${response.data.hasNext()}" th:href="@{/right-holder/list(page=${response.data.number + 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" class="page-btn">다음</a>
+        </div>
+        
+        <!-- 계약 연장 확인 모달 -->
+        <div id="extendModal" class="modal">
+            <div class="modal-content">
+                <button type="button" id="closeExtendModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+                <h3 style="margin-bottom:18px;">계약 연장 확인</h3>
+                <div id="extendModalContent">
+                    <p>권리자 <strong id="extendHolderName"></strong>의 계약을 연장하시겠습니까?</p>
+                    <p>현재 계약 종료일: <strong id="currentEndDate"></strong></p>
+                    <p>연장 후 계약 종료일: <strong id="newEndDate"></strong></p>
+                </div>
+                <div class="form-row" style="margin-top:18px;">
+                    <button type="button" id="confirmExtendBtn" class="register-btn" style="width:100%;">연장 확인</button>
+                </div>
+            </div>
         </div>
     </section>
 </div>
@@ -201,6 +242,114 @@ function openEditModalFromData(button) {
   form.elements['holderName'].value = holderName;
   
   editModal.classList.add('show');
+}
+
+// 계약 연장 모달 제어
+const extendModal = document.getElementById('extendModal');
+const closeExtendBtn = document.getElementById('closeExtendModalBtn');
+const confirmExtendBtn = document.getElementById('confirmExtendBtn');
+
+closeExtendBtn && closeExtendBtn.addEventListener('click', () => { 
+    extendModal.classList.remove('show'); 
+});
+
+window.addEventListener('click', (e) => { 
+    if (e.target === extendModal) extendModal.classList.remove('show'); 
+});
+
+// 계약 연장 함수
+function extendContract(button) {
+    const holderId = button.getAttribute('data-holder-id');
+    const holderName = button.getAttribute('data-holder-name');
+    const contractEnd = button.getAttribute('data-contract-end');
+    
+    // 현재 계약 종료일을 Date 객체로 변환
+    const currentEndDate = new Date(contractEnd);
+    
+    // 1년 후 날짜 계산
+    const newEndDate = new Date(currentEndDate);
+    newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+    
+    // 모달 내용 설정
+    document.getElementById('extendHolderName').textContent = holderName;
+    document.getElementById('currentEndDate').textContent = contractEnd;
+    document.getElementById('newEndDate').textContent = newEndDate.toISOString().split('T')[0];
+    
+    // 확인 버튼에 데이터 설정
+    confirmExtendBtn.setAttribute('data-holder-id', holderId);
+    confirmExtendBtn.setAttribute('data-new-end-date', newEndDate.toISOString().split('T')[0]);
+    
+    extendModal.classList.add('show');
+}
+
+// 계약 연장 확인 처리
+confirmExtendBtn && confirmExtendBtn.addEventListener('click', function() {
+    const holderId = this.getAttribute('data-holder-id');
+    const newEndDate = this.getAttribute('data-new-end-date');
+    
+    // API 호출
+    fetch(`/right-holder/${holderId}/extend`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            newEndDate: newEndDate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 'SUCCESS') {
+            alert('계약이 성공적으로 연장되었습니다.');
+            location.reload(); // 페이지 새로고침
+        } else {
+            alert(data.message || '계약 연장에 실패했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('계약 연장 중 오류가 발생했습니다.');
+    })
+    .finally(() => {
+        extendModal.classList.remove('show');
+    });
+});
+
+// 로그인 상태 토글 함수
+function toggleLoginStatus(button) {
+    const holderId = button.getAttribute('data-holder-id');
+    const holderName = button.getAttribute('data-holder-name');
+    const isCurrentlyEnabled = button.getAttribute('data-is-enabled') === 'true';
+    const newStatus = !isCurrentlyEnabled;
+    
+    const action = newStatus ? '활성화' : '비활성화';
+    const confirmMessage = `권리자 "${holderName}"의 로그인을 ${action}하시겠습니까?`;
+    
+    if (confirm(confirmMessage)) {
+        // API 호출
+        fetch(`/right-holder/${holderId}/toggle-login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isLoginEnabled: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 'SUCCESS') {
+                alert(`로그인이 성공적으로 ${action}되었습니다.`);
+                location.reload(); // 페이지 새로고침
+            } else {
+                alert(data.message || `로그인 ${action}에 실패했습니다.`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(`로그인 ${action} 중 오류가 발생했습니다.`);
+        });
+    }
 }
 // 폼 유효성 및 등록 전 확인
 const form = document.getElementById('registerForm');
