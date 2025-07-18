@@ -53,7 +53,8 @@
                     window.location.href = '/home';
                 }
             } else {
-                document.getElementById('errorMessage').innerText = result.message || '로그인에 실패했습니다.';
+                // 에러 모달 표시 (헤더에서 제공하는 전역 함수 사용)
+                showModal(result.message || '로그인에 실패했습니다.');
             }
         });
     </script>

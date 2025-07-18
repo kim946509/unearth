@@ -29,12 +29,17 @@ public class LoginService {
             throw new LoginException("존재하지 않는 아이디입니다.");
         }
         User user = userOpt.get();
-        if (!user.isLoginEnabled()) {
-            throw new LoginException("비활성화된 계정입니다. 관리자에게 문의하세요.");
-        }
+
+        // 비밀번호를 먼저 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new LoginException("비밀번호가 일치하지 않습니다.");
         }
+
+        // 비밀번호가 맞으면 계정 활성화 상태 확인
+        if (!user.isLoginEnabled()) {
+            throw new LoginException("비활성화된 계정입니다. 관리자에게 문의하세요.");
+        }
+
         return toLoginSuccess(user);
     }
 
