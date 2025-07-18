@@ -233,20 +233,42 @@ def run_platform_crawling(platform, target_date=None):
                 song_name = f"{song.artist_ko} - {song.title_ko}"
                 log_writer.add_crawling_failure(song_name, platform)
         
-        # 3단계: DB 저장
+        # 3단계: DB 저장 (모든 곡에 대해 무조건 저장)
+        all_song_ids = [song.id for song in platform_songs]
+        
+        # 모든 플랫폼을 한 번에 저장 (크롤링 실패한 곡도 -999로 저장)
         if platform == Platforms.GENIE:
-            db_results = save_genie_to_db(crawling_results)
+            db_results = save_all_platforms_for_songs(
+                song_ids=all_song_ids,
+                genie_results=crawling_results
+            )
         elif platform == Platforms.YOUTUBE_MUSIC:
-            db_results = save_youtube_music_to_db(crawling_results)
+            db_results = save_all_platforms_for_songs(
+                song_ids=all_song_ids,
+                youtube_music_results=crawling_results
+            )
         elif platform == Platforms.YOUTUBE:
-            db_results = save_youtube_to_db(crawling_results)
+            db_results = save_all_platforms_for_songs(
+                song_ids=all_song_ids,
+                youtube_results=crawling_results
+            )
         elif platform == Platforms.MELON:
-            db_results = save_melon_to_db(crawling_results)
+            db_results = save_all_platforms_for_songs(
+                song_ids=all_song_ids,
+                melon_results=crawling_results
+            )
         else:
             db_results = {'error': '지원하지 않는 플랫폼'}
         
-        # DB 저장 실패만 기록
-        if db_results.get('saved_count', 0) == 0 and db_results.get('updated_count', 0) == 0:
+        # DB 저장 실패만 기록 (save_all_platforms_for_songs 결과 구조에 맞게 수정)
+        platform_key = platform.lower()
+        if platform_key in db_results:
+            platform_result = db_results[platform_key]
+            if platform_result.get('saved_count', 0) == 0 and platform_result.get('updated_count', 0) == 0:
+                for song in platform_songs:
+                    song_name = f"{song.artist_ko} - {song.title_ko}"
+                    log_writer.add_db_failure(song_name, platform)
+        elif db_results.get('total_saved', 0) == 0 and db_results.get('total_updated', 0) == 0:
             for song in platform_songs:
                 song_name = f"{song.artist_ko} - {song.title_ko}"
                 log_writer.add_db_failure(song_name, platform)
@@ -272,13 +294,21 @@ def run_platform_crawling(platform, target_date=None):
         # 로그 라이터 종료 및 최종 요약 생성
         log_writer.end_crawling()
         
+        # DB 결과에서 해당 플랫폼 결과만 추출
+        platform_db_result = {}
+        platform_key = platform.lower()
+        if platform_key in db_results:
+            platform_db_result = db_results[platform_key]
+        else:
+            platform_db_result = db_results
+        
         summary = {
             'status': 'success',
             'platform': platform,
             'target_date': target_date or date.today(),
             'total_songs': len(platform_songs),
             'crawling_results': crawling_results,
-            'db_results': db_results,
+            'db_results': platform_db_result,
             'csv_results': csv_results,
             'log_summary': log_writer.get_summary_dict()
         }

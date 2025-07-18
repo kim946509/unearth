@@ -57,7 +57,7 @@ def _process_numeric_field(value, field_name, platform, song_id):
     Returns:
         int: 처리된 값
             - 정상값: 양수
-            - 0: 실제로 0인 경우
+            - 0: 실제로 0인 경우 또는 멜론의 빈 값
             - -1: 해당 플랫폼에서 제공하지 않는 데이터
             - -999: 크롤링 실패/오류
     """
@@ -73,7 +73,12 @@ def _process_numeric_field(value, field_name, platform, song_id):
         
         # 문자열인 경우 변환
         if isinstance(value, str):
-            # 빈 문자열이나 'None' 문자열
+            # 멜론의 경우 빈 문자열을 0으로 처리
+            if platform == 'melon' and (not value or value == ""):
+                logger.info(f"ℹ️ {platform} {field_name} 빈 값 발견, 0으로 처리: song_id={song_id}")
+                return 0
+            
+            # 다른 플랫폼의 빈 문자열이나 'None' 문자열
             if not value or value.lower() == 'none':
                 logger.info(f"ℹ️ {platform} {field_name} 제공하지 않음: song_id={song_id}")
                 return -1
