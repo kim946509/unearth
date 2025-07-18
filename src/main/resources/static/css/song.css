@@ -194,7 +194,7 @@
 /* 음원 등록 폼 5열 그리드 */
 .song-form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 22px 18px;
     margin-bottom: 10px;
 }
@@ -414,7 +414,7 @@
 }
 .song-edit-modal-content .song-edit-form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 22px 18px;
     margin-bottom: 10px;
 }
