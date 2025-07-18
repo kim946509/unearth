@@ -231,21 +231,6 @@
                 </p>
             </div>
             
-            <!-- 등록된 권리자 목록 -->
-            <div class="right-holders-list">
-                <h4>등록된 권리자 목록</h4>
-                <div style="background-color: #f8f9fa; padding: 10px; border-radius: 5px; border: 1px solid #dee2e6;">
-                    <div th:if="${rightHolders.isEmpty()}" style="color: #dc3545; font-weight: bold;">
-                        ⚠️ 등록된 권리자가 없습니다. 먼저 권리자를 등록해주세요.
-                    </div>
-                    <div th:if="${!rightHolders.isEmpty()}" class="right-holder-tags">
-                        <span th:each="holder : ${rightHolders}" 
-                              class="right-holder-tag"
-                              th:text="${holder}"></span>
-                    </div>
-                </div>
-            </div>
-            
             <div class="form-row" style="margin-top: 20px;">
                 <button type="submit" class="bulk-register-submit-btn" 
                         th:disabled="${rightHolders.isEmpty()}">
