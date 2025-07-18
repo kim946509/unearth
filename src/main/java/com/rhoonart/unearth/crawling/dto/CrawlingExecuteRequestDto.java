@@ -31,4 +31,7 @@ public class CrawlingExecuteRequestDto {
     @NotNull(message = "수록 순서는 필수입니다.")
     @Min(value = 1, message = "수록 순서는 1 이상이어야 합니다.")
     private Integer songOrder;
+
+    @NotNull(message = "영상 업로드 시점은 필수입니다.")
+    private String uploadAt;
 }

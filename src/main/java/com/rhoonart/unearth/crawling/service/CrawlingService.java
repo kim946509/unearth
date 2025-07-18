@@ -63,6 +63,7 @@ public class CrawlingService {
                 .youtubeTitle(dto.getYoutubeTitle())
                 .youtubeUrl(dto.getYoutubeUrl())
                 .songOrder(dto.getSongOrder())
+                .uploadAt(parseUploadAt(dto.getUploadAt()))
                 .build();
 
         crawlingPeriodRepository.save(crawlingPeriod);
@@ -73,6 +74,18 @@ public class CrawlingService {
 
     private LocalDate calculateStartDate() {
         return LocalDate.now();
+    }
+
+    private java.time.LocalDateTime parseUploadAt(String uploadAtStr) {
+        if (uploadAtStr == null || uploadAtStr.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return java.time.LocalDateTime.parse(uploadAtStr);
+        } catch (Exception e) {
+            log.warn("영상 업로드 시점 파싱 실패: {}", uploadAtStr, e);
+            return null;
+        }
     }
 
     public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(String songId, LocalDate startDate,

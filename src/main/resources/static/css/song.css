@@ -476,8 +476,7 @@
     font-weight: 500;
     margin-bottom: 2px;
 }
-.crawling-modal-content input[type="text"],
-.crawling-modal-content input[type="number"],
+.crawling-modal-content input,
 .crawling-modal-content select {
     padding: 11px 13px;
     border: 2px solid #111;

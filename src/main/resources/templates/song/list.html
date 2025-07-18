@@ -197,6 +197,10 @@
                 <label>수록 순서 <span class="required-star">*</span></label>
                 <input type="number" name="songOrder" min="1" required />
             </div>
+            <div class="form-row">
+                <label>영상 업로드 시점 <span class="required-star">*</span></label>
+                <input type="datetime-local" name="uploadAt" required />
+            </div>
             <div class="form-row" style="margin-top:18px;">
                 <button type="submit" class="crawling-execute-btn" style="width:100%;">크롤링 실행</button>
             </div>
@@ -343,6 +347,21 @@ function handleCrawlingClick(songId, artistKo, titleKo, hasCrawlingHistory) {
 function openCrawlingModal(songId, artistKo, titleKo) {
     crawlingModalTitle.textContent = artistKo + ' - ' + titleKo;
     crawlingSongId.value = songId;
+    
+    // 영상 업로드 시점을 현재 시간으로 기본 설정 (사용자가 수정 가능)
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const currentDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+    const uploadAtInput = document.querySelector('input[name="uploadAt"]');
+    if (uploadAtInput) {
+        uploadAtInput.value = currentDateTime;
+    }
+    
     crawlingModal.classList.add('show');
 }
 
