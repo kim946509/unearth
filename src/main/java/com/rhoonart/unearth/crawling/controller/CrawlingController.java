@@ -20,6 +20,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Controller
 @RequestMapping("/crawling")
@@ -35,6 +36,15 @@ public class CrawlingController {
             HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
         crawlingService.executeCrawling(dto);
+        return CommonResponse.success("크롤링이 성공적으로 실행되었습니다.");
+    }
+
+    @PostMapping("/execute-only")
+    @ResponseBody
+    public CommonResponse<String> executeCrawlingOnly(
+            HttpSession session, @RequestParam String songId) {
+        SessionUserUtil.requireAdminRole(session);
+        crawlingService.executeCrawlingOnly(songId);
         return CommonResponse.success("크롤링이 성공적으로 실행되었습니다.");
     }
 
@@ -115,5 +125,23 @@ public class CrawlingController {
         model.addAttribute("songInfo", crawlingDataWithSongInfo.getSongInfo());
 
         return "crawling/data";
+    }
+
+    @GetMapping("/failures")
+    public String viewCrawlingFailures(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model,
+            HttpSession session) {
+        SessionUserUtil.requireAdminRole(session);
+        Page<com.rhoonart.unearth.crawling.dto.CrawlingFailureDto> failures = crawlingService.getCrawlingFailures(page,
+                size);
+        model.addAttribute("failures", failures);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        // 권리자 드롭다운용 목록
+        var rightHolders = rightHolderService.findAllForDropdown();
+        model.addAttribute("rightHolders", rightHolders);
+        return "crawling/failures";
     }
 }

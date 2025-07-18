@@ -77,9 +77,15 @@ public class SongInfoController {
     @PostMapping("/{songId}/update")
     public String update(@PathVariable String songId,
             @Valid @ModelAttribute SongInfoUpdateRequestDto dto,
+            @RequestParam(value = "redirect", required = false) String redirect,
             HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
         songInfoService.update(songId, dto);
+
+        // redirect 파라미터가 있으면 해당 페이지로, 없으면 기본 음원 리스트로
+        if (redirect != null && !redirect.trim().isEmpty()) {
+            return "redirect:" + redirect;
+        }
         return "redirect:/song/list";
     }
 

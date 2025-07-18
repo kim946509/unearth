@@ -1,0 +1,340 @@
+/* 크롤링 실패 페이지 스타일 */
+
+/* 기본 레이아웃 */
+.main-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.content {
+    flex: 1;
+    padding: 40px 40px 0 40px;
+    background: #fff;
+}
+
+.failures-container {
+    padding: 20px;
+}
+
+.failures-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.failures-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.failures-table th {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.failures-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.failures-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* 실패한 플랫폼 뱃지 스타일 */
+.failed-platform-badge {
+    background: #dc3545;
+    color: #fff;
+    border-radius: 6px;
+    padding: 3px 10px;
+    margin-right: 4px;
+    font-size: 13px;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+/* 크롤링 재실행 버튼 */
+.retry-crawling-btn {
+    padding: 7px 18px;
+    font-size: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.retry-crawling-btn:hover {
+    background: #0056b3;
+}
+
+/* 수정 버튼 */
+.edit-song-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-song-btn:hover {
+    background: #1e7e34;
+}
+
+/* 실패한 플랫폼 컬럼 너비 조정 */
+.failed-platforms-column {
+    width: 25%;
+}
+
+/* 빈 데이터 메시지 */
+.no-failures-message {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* 페이지네이션 스타일 (기존 스타일과 동일) */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.page-btn {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background: white;
+    color: #007bff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.page-btn:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.page-btn.current {
+    background: #000000;
+    color: white;
+    border-color: #000000;
+}
+
+/* 모달 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* 음원 수정 모달 스타일 */
+.song-edit-modal-content {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 32px 28px 32px;
+    min-width: 1200px;
+    max-width: 1600px;
+    margin: auto;
+    position: relative;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.song-edit-modal-content h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.song-edit-modal-content .close-btn {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #222;
+    transition: color 0.15s;
+}
+
+.song-edit-modal-content .close-btn:hover {
+    color: #e74c3c;
+}
+
+.song-edit-modal-content .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+
+.song-edit-modal-content label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.song-edit-modal-content input[type="text"],
+.song-edit-modal-content input[type="number"],
+.song-edit-modal-content select {
+    padding: 11px 13px;
+    border: 2px solid #111;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.song-edit-modal-content input:focus,
+.song-edit-modal-content select:focus {
+    border: 2px solid #2d7cf2;
+}
+
+.song-edit-modal-content .song-edit-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 22px 18px;
+    margin-bottom: 10px;
+}
+
+
+
+.song-edit-modal-content .register-btn {
+    width: 100%;
+    padding: 14px 0;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.song-edit-modal-content .register-btn:hover {
+    background: #333;
+}
+
+@media (max-width: 1400px) {
+    .song-edit-modal-content .song-edit-form-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .song-edit-modal-content .song-edit-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .song-edit-modal-content .song-edit-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .song-edit-modal-content {
+        min-width: 0;
+        width: 95vw;
+        padding: 18px 6vw 18px 6vw;
+    }
+}
+
+.modal-form {
+    margin-top: 20px;
+}
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-row label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-row input
+{
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.required-star {
+    color: #dc3545;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .song-edit-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .failures-table {
+        font-size: 14px;
+    }
+    
+    .failures-table th,
+    .failures-table td {
+        padding: 8px 4px;
+    }
+    
+    .failed-platforms-column {
+        width: auto;
+    }
+}

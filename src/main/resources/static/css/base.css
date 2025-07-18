@@ -143,6 +143,7 @@ img {
     width: 300px;
     border-radius: 8px;
     text-align: center;
+    margin: 40vh auto;
 }
 .modal-close {
     color: #aaa;

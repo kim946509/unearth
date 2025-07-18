@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>UNEARTH | 크롤링 실패 곡 목록</title>
+    <link rel="icon" type="image/png" href="/img/unearth_icon.png">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/failures.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+<div class="main-container">
+    <div th:replace="~{common/sidebar :: sidebar(activeMenu='crawlingFailures')}"></div>
+    <section class="content">
+        <h2 class="failures-title">크롤링 실패 곡 목록</h2>
+        <table class="failures-table">
+            <thead>
+            <tr>
+                <th>아티스트명(국문)</th>
+                <th>트랙명(국문)</th>
+                <th>크롤링 실행 날짜/시간</th>
+                <th class="failed-platforms-column">실패한 플랫폼</th>
+                <th>크롤링 재실행</th>
+                <th>수정</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fail : ${failures.content}">
+                <td th:text="${fail.artistKo}"></td>
+                <td th:text="${fail.titleKo}"></td>
+                <td th:text="${#temporals.format(fail.failedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td>
+                    <span th:each="platform : ${fail.failedPlatforms}" class="failed-platform-badge" th:text="${platform}"></span>
+                </td>
+                <td>
+                    <button type="button" class="retry-crawling-btn" th:attr="data-song-id=${fail.songId}" onclick="retryCrawling(this)">재실행</button>
+                </td>
+                <td>
+                    <button type="button" class="edit-song-btn" 
+                            th:attr="data-song-id=${fail.songId},
+                                     data-artist-ko=${fail.artistKo},
+                                     data-artist-en=${fail.artistEn},
+                                     data-album-ko=${fail.albumKo},
+                                     data-album-en=${fail.albumEn},
+                                     data-title-ko=${fail.titleKo},
+                                     data-title-en=${fail.titleEn},
+                                     data-youtube-url=${fail.youtubeUrl},
+                                     data-melon-song-id=${fail.melonSongId},
+                                     data-right-holder-name=${fail.rightHolderName}"
+                            onclick="openEditModalFromData(this)">수정</button>
+                </td>
+            </tr>
+            <tr th:if="${failures.content.size() == 0}">
+                <td colspan="6" class="no-failures-message">크롤링 실패 곡이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${failures.totalPages > 0}">
+            <a th:if="${failures.hasPrevious()}" th:href="@{/crawling/failures(page=${failures.number - 1}, size=${size})}" class="page-btn">이전</a>
+            <span th:each="i : ${#numbers.sequence(0, failures.totalPages - 1)}">
+                <a th:if="${i != failures.number}" th:href="@{/crawling/failures(page=${i}, size=${size})}" th:text="${i + 1}" class="page-btn"></a>
+                <span th:if="${i == failures.number}" th:text="${i + 1}" class="page-btn current"></span>
+            </span>
+            <a th:if="${failures.hasNext()}" th:href="@{/crawling/failures(page=${failures.number + 1}, size=${size})}" class="page-btn">다음</a>
+        </div>
+    </section>
+</div>
+
+<!-- 음원 수정 모달 -->
+<div id="editModal" class="modal">
+    <div class="modal-content song-edit-modal-content">
+        <button type="button" id="closeEditModalBtn" class="close-btn">&times;</button>
+        <h3>음원 수정</h3>
+        <form id="editForm" class="modal-form" method="post">
+            <div class="song-edit-form-grid">
+                <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
+                <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
+                <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
+                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
+                <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
+                <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
+                <div class="form-row"><label>유튜브 공식 URL <span class="required-star">*</span></label><input type="text" name="youtubeUrl" required /></div>
+                <div class="form-row">
+                    <label>권리자명 <span class="required-star">*</span></label>
+                    <select name="rightHolderName" required>
+                        <option value="">권리자를 선택하세요</option>
+                        <option th:each="holder : ${rightHolders}" th:value="${holder}" th:text="${holder}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" style="margin-top:18px;">
+                <button type="submit" class="register-btn" style="width:100%;">수정 완료</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+// 음원 수정 모달 제어
+const editModal = document.getElementById('editModal');
+const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+const editForm = document.getElementById('editForm');
+
+// 수정 모달 열기/닫기
+closeEditModalBtn && closeEditModalBtn.addEventListener('click', () => {
+    editModal.classList.remove('show');
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === editModal) {
+        editModal.classList.remove('show');
+    }
+});
+
+// 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
+function openEditModalFromData(button) {
+    const songId = button.getAttribute('data-song-id');
+    const artistKo = button.getAttribute('data-artist-ko');
+    const artistEn = button.getAttribute('data-artist-en');
+    const albumKo = button.getAttribute('data-album-ko');
+    const albumEn = button.getAttribute('data-album-en');
+    const titleKo = button.getAttribute('data-title-ko');
+    const titleEn = button.getAttribute('data-title-en');
+    const youtubeUrl = button.getAttribute('data-youtube-url');
+    const melonSongId = button.getAttribute('data-melon-song-id');
+    const rightHolderName = button.getAttribute('data-right-holder-name');
+    
+    const form = document.getElementById('editForm');
+    form.action = `/song/${songId}/update?redirect=/crawling/failures`;
+    
+    form.elements['artistKo'].value = artistKo || '';
+    form.elements['artistEn'].value = artistEn || '';
+    form.elements['albumKo'].value = albumKo || '';
+    form.elements['albumEn'].value = albumEn || '';
+    form.elements['titleKo'].value = titleKo || '';
+    form.elements['titleEn'].value = titleEn || '';
+    form.elements['youtubeUrl'].value = youtubeUrl || '';
+    form.elements['melonSongId'].value = melonSongId || '';
+    form.elements['rightHolderName'].value = rightHolderName || '';
+    
+    editModal.classList.add('show');
+}
+
+// 수정 폼 유효성 및 수정 전 확인
+if (editForm) {
+    editForm.addEventListener('submit', function(e) {
+        // 필수값 체크
+        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'];
+        for (const name of required) {
+            const el = editForm.elements[name];
+            if (!el || !el.value || el.value.trim() === '') {
+                showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+                el && el.focus();
+                e.preventDefault();
+                return false;
+            }
+        }
+        // 수정 확인
+        if (!confirm('수정하시겠습니까?')) {
+            e.preventDefault();
+            return false;
+        }
+        // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
+    });
+}
+
+function retryCrawling(button) {
+    const songId = button.getAttribute('data-song-id');
+    if (!confirm('이 곡의 크롤링을 재실행하시겠습니까?')) return;
+    fetch(`/crawling/execute-only`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `songId=${encodeURIComponent(songId)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 'SUCCESS') {
+            showModal('크롤링이 성공적으로 재실행되었습니다.', true);
+        } else {
+            showModal(data.message || '크롤링 재실행에 실패했습니다.');
+        }
+    })
+    .catch(error => {
+        showModal('크롤링 재실행 중 오류가 발생했습니다.');
+    });
+}
+</script>
+</body>
+</html> 

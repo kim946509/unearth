@@ -14,6 +14,7 @@ from crawling_view.data.csv_writer import save_genie_csv, save_youtube_csv, save
 from crawling_view.controller.platform_crawlers import create_crawler
 from crawling_view.utils.constants import Platforms
 from crawling_view.utils.batch_crawling_logger import BatchCrawlingLogger
+from crawling_view.data.failure_service import FailureService
 
 logger = logging.getLogger(__name__)
 
@@ -165,6 +166,10 @@ def run_crawling(target_date=None):
                     song_name = f"{song.artist_ko} - {song.title_ko}"
                     log_writer.add_csv_failure(song_name, 'melon')
         
+        # 배치 크롤링 실패 처리 (모든 곡에 대해, 즉시 실행)
+        for song in active_songs:
+            FailureService.check_db_failures_and_handle(song.id, target_date)
+        
         # 로그 라이터 종료 및 최종 요약 생성
         log_writer.end_crawling()
         
@@ -301,6 +306,10 @@ def run_platform_crawling(platform, target_date=None):
             platform_db_result = db_results[platform_key]
         else:
             platform_db_result = db_results
+        
+        # 실패 처리 (배치 크롤링에서는 DB에서 직접 -999 값 조회)
+        for song in platform_songs:
+            FailureService.check_db_failures_and_handle(song.id, target_date)
         
         summary = {
             'status': 'success',

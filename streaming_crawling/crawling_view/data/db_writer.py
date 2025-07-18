@@ -213,8 +213,10 @@ def _save_crawling_data(results, platform, platform_type, song_ids=None):
             # 데이터 검증 및 정리 (무조건 저장)
             # results가 None이거나 빈 컨테이너이면 크롤링 실패로 간주하여 -999로 처리
             if results is None or (isinstance(results, (list, dict)) and len(results) == 0):
+                logger.warning(f"⚠️ {platform} 크롤링 결과 없음, -999로 저장: song_id={song_id}")
                 clean_data = _validate_and_clean_data(None, platform, song_id)
             else:
+                logger.info(f"ℹ️ {platform} 크롤링 결과 있음, 정상 저장: song_id={song_id}")
                 clean_data = _validate_and_clean_data(result_data, platform, song_id)
             
             # 오늘 날짜의 기존 데이터 확인
@@ -230,12 +232,14 @@ def _save_crawling_data(results, platform, platform_type, song_ids=None):
                 ).delete()[0]
                 
                 # 새 데이터 생성
-                CrawlingData.objects.create(
+                crawling_data = CrawlingData.objects.create(
                     song_id=clean_data['song_id'],
                     views=clean_data['views'],
                     listeners=clean_data['listeners'],
                     platform=platform_type
                 )
+                
+                logger.info(f"💾 {platform} DB 저장 완료: song_id={song_id}, views={clean_data['views']}, listeners={clean_data['listeners']}")
                 
                 if deleted_count > 0:
                     updated_count += 1
@@ -253,7 +257,12 @@ def _save_crawling_data(results, platform, platform_type, song_ids=None):
             logger.error(f"❌ {platform} DB 저장 실패: song_id={song_id} - {e}")
     
     logger.info(f"✅ {platform} DB 저장 완료: {saved_count}개 생성, {updated_count}개 교체, {failed_count}개 실패, {skipped_count}개 스킵")
-    return {'saved_count': saved_count, 'failed_count': failed_count, 'skipped_count': skipped_count, 'updated_count': updated_count}
+    return {
+        'saved_count': saved_count, 
+        'failed_count': failed_count, 
+        'skipped_count': skipped_count, 
+        'updated_count': updated_count
+    }
 
 def save_genie_to_db(results, song_ids=None):
     """

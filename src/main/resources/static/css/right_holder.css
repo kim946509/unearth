@@ -124,22 +124,22 @@
 
 /* 권리자 상세페이지 테이블 컬럼 너비 조정 */
 .holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 권리자명 */
-    width: 10%;
+    width: 12%;
 }
 .holder-table th:nth-child(2), .holder-table td:nth-child(2) { /* 아티스트명 */
-    width: 10%;
+    width: 12%;
 }
 .holder-table th:nth-child(3), .holder-table td:nth-child(3) { /* 앨범명 */
-    width: 25%;
+    width: 20%;
 }
 .holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 트랙명 */
-    width: 10%;
+    width: 25%;
 }
 .holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 유튜브 URL */
     width: 10%;
 }
 .holder-table th:nth-child(6), .holder-table td:nth-child(6) { /* 데이터 보기 */
-    width: 20%;
+    width: 8%;
 }
 .move-btn {
     padding: 8px 24px;

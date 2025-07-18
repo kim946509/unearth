@@ -5,6 +5,7 @@ from .base import BaseModel, generate_uuid
 from .song_info import SongInfo
 from .crawling_period import CrawlingPeriod
 from .crawling_data import CrawlingData, PlatformType
+from .crawling_failure import CrawlingFailure
 
 __all__ = [
     'BaseModel',
@@ -12,5 +13,6 @@ __all__ = [
     'SongInfo',
     'CrawlingPeriod',
     'CrawlingData',
-    'PlatformType'
+    'PlatformType',
+    'CrawlingFailure'
 ] 
