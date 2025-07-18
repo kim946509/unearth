@@ -218,7 +218,7 @@ class YouTubeMusicSelectors:
     ]
     SONG_TITLE = 'yt-formatted-string.title a'
     ARTIST_COLUMN = '.secondary-flex-columns yt-formatted-string'
-    ARTIST_LINK = 'a'
+    ARTIST_LINK = 'span.style-scope.yt-formatted-string'  # 첫 번째 span 태그 (아티스트명)
     VIEW_COUNT_FLEX = 'yt-formatted-string.flex-column'
 
 # YouTube 관련 셀렉터

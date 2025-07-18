@@ -41,11 +41,7 @@ class FailureService:
             logger.info(f"실패 곡 저장 완료: {song_id} - {failure.failed_platforms}")
             
         except Exception as e:
-            if "doesn't exist" in str(e) or "Unknown column" in str(e) or "no such table" in str(e):
-                logger.error(f"❌ crawling_failure 테이블이 존재하지 않습니다! 다음 SQL을 실행하세요:")
-                logger.error(f"CREATE TABLE crawling_failure (id VARCHAR(36) PRIMARY KEY, song_id VARCHAR(255) UNIQUE, failed_at DATETIME, failed_platforms TEXT, created_at DATETIME, updated_at DATETIME);")
-            else:
-                logger.error(f"실패 곡 저장 중 오류 발생: {song_id} - {e}")
+            logger.error(f"실패 곡 저장 중 오류 발생: {song_id} - {e}")
     
     @staticmethod
     def remove_success(song_id: str):

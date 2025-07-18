@@ -560,49 +560,72 @@ class YouTubeMusicCrawler:
         return None
     
     def _extract_artist_name(self, item):
-        """아티스트명 추출"""
+        """아티스트명 추출 (첫 번째 span 태그)"""
         artist_column = item.select_one(YouTubeMusicSelectors.ARTIST_COLUMN)
         if artist_column:
-            artist_a = artist_column.select_one(YouTubeMusicSelectors.ARTIST_LINK)
-            if artist_a:
-                artist_name = artist_a.get_text(strip=True)
+            # 첫 번째 span 태그만 선택 (아티스트명)
+            artist_spans = artist_column.select(YouTubeMusicSelectors.ARTIST_LINK)
+            if artist_spans:
+                # 첫 번째 span이 아티스트명
+                artist_name = artist_spans[0].get_text(strip=True)
                 logger.debug(f"✅ 아티스트명 추출 성공: {artist_name}")
                 return artist_name
         return None
     
     def _extract_view_count(self, item):
-        """조회수 추출 (aria-label, title, textContent 모두 검사)"""
+        """조회수 추출 (두 번째 flex-column 요소 선택)"""
         try:
             flex_columns = item.select(YouTubeMusicSelectors.VIEW_COUNT_FLEX)
             logger.debug(f"🔍 발견된 flex-column 요소 수: {len(flex_columns)}")
             
+            # 모든 flex-column 요소의 정보 로깅
             for i, flex_col in enumerate(flex_columns):
-                # 1. aria-label 우선
-                view_text = flex_col.get('aria-label', '').strip()
-                # 2. 없으면 title
-                if not view_text:
-                    view_text = flex_col.get('title', '').strip()
-                # 3. 없으면 textContent
-                if not view_text:
-                    view_text = flex_col.get_text(strip=True)
-                logger.debug(f"🔍 flex-column {i+1}: view_text='{view_text}'")
-                
-                # 조회수 관련 키워드가 있는지 확인
-                view_keywords = ['회', '재생', 'views', 'view', '억', '만', '천', 'k', 'm', 'b']
-                if any(keyword in view_text.lower() for keyword in view_keywords):
-                    # 정규표현식으로 숫자+단위만 추출
-                    import re
-                    match = re.search(r'([\d,.]+(?:\.\d+)?)[ ]*([억만천mkb]*)', view_text.lower())
-                    if match:
-                        number = match.group(1)
-                        unit = match.group(2)
-                        view_count_str = f'{number}{unit}'
-                        logger.debug(f"✅ 조회수 추출 성공: '{view_text}' -> '{view_count_str}'")
-                        return view_count_str
-                    else:
-                        # 키워드는 있으나 패턴이 안 맞으면 원본 반환(후처리에서 걸러짐)
-                        return view_text
-            logger.warning("⚠️ flex-column에서 조회수 정보를 찾을 수 없음")
+                aria_label = flex_col.get('aria-label', '').strip()
+                title = flex_col.get('title', '').strip()
+                text_content = flex_col.get_text(strip=True)
+                logger.debug(f"🔍 flex-column {i+1}: aria-label='{aria_label}', title='{title}', text='{text_content}'")
+            
+            # 두 번째 요소가 있으면 그것을 사용 (조회수는 보통 두 번째에 위치)
+            if len(flex_columns) >= 2:
+                target_element = flex_columns[1]  # 두 번째 요소 (인덱스 1)
+                logger.debug(f"✅ 두 번째 flex-column 요소 선택 (인덱스 1)")
+            elif len(flex_columns) == 1:
+                target_element = flex_columns[0]  # 하나만 있으면 첫 번째 사용
+                logger.debug(f"✅ 첫 번째 flex-column 요소 선택 (인덱스 0)")
+            else:
+                logger.warning("⚠️ flex-column 요소를 찾을 수 없음")
+                return None
+            
+            # 선택된 요소에서 조회수 추출
+            # 1. aria-label 우선
+            view_text = target_element.get('aria-label', '').strip()
+            # 2. 없으면 title
+            if not view_text:
+                view_text = target_element.get('title', '').strip()
+            # 3. 없으면 textContent
+            if not view_text:
+                view_text = target_element.get_text(strip=True)
+            
+            logger.debug(f"🔍 선택된 요소: view_text='{view_text}'")
+            
+            # 조회수 관련 키워드가 있는지 확인
+            view_keywords = ['회', '재생', 'views', 'view', '억', '만', '천', 'k', 'm', 'b']
+            if any(keyword in view_text.lower() for keyword in view_keywords):
+                # 정규표현식으로 숫자+단위만 추출
+                import re
+                match = re.search(r'([\d,.]+(?:\.\d+)?)[ ]*([억만천mkb]*)', view_text.lower())
+                if match:
+                    number = match.group(1)
+                    unit = match.group(2)
+                    view_count_str = f'{number}{unit}'
+                    logger.debug(f"✅ 조회수 추출 성공: '{view_text}' -> '{view_count_str}'")
+                    return view_count_str
+                else:
+                    # 키워드는 있으나 패턴이 안 맞으면 원본 반환(후처리에서 걸러짐)
+                    logger.debug(f"✅ 조회수 추출 성공: '{view_text}' (패턴 미매칭)")
+                    return view_text
+            
+            logger.warning("⚠️ 선택된 요소에서 조회수 정보를 찾을 수 없음")
             return None
         except Exception as e:
             logger.error(f"❌ 조회수 추출 실패: {e}")
