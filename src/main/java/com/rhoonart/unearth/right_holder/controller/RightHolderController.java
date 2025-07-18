@@ -166,8 +166,8 @@ public class RightHolderController {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
         UserDto user = SessionUserUtil.requireAdminRole(session);
 
-        rightHolderService.toggleLoginStatus(rightHolderId, dto.isLoginEnabled());
-        String action = dto.isLoginEnabled() ? "활성화" : "비활성화";
+        rightHolderService.toggleLoginStatus(rightHolderId, dto.getIsLoginEnabledAsBoolean());
+        String action = dto.getIsLoginEnabledAsBoolean() ? "활성화" : "비활성화";
         return CommonResponse.success("로그인이 성공적으로 " + action + "되었습니다.");
     }
 }

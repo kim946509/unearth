@@ -369,7 +369,7 @@
     padding: 36px 32px 28px 32px;
     min-width: 340px;
     max-width: 420px;
-    margin: auto;
+    marin : 42vh auto;
     position: relative;
     box-shadow: 0 2px 16px rgba(0,0,0,0.13);
     display: flex;

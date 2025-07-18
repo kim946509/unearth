@@ -12,21 +12,29 @@
         <!-- 공통 에러 모달 -->
         <div id="errorModal" class="modal">
             <div class="modal-content">
-                <span class="modal-close" onclick="closeModal()">&times;</span>
                 <div class="modal-message" id="modalMessage"></div>
                 <button class="modal-btn" onclick="closeModal()">확인</button>
             </div>
         </div>
         
         <script>
+            // 전역 변수로 새로고침 필요 여부 관리
+            let needRefresh = false;
+            
             // 전역 모달 함수들
-            function showModal(message) {
+            function showModal(message, shouldRefresh = false) {
                 document.getElementById('modalMessage').innerText = message;
                 document.getElementById('errorModal').style.display = 'block';
+                needRefresh = shouldRefresh;
             }
             
             function closeModal() {
                 document.getElementById('errorModal').style.display = 'none';
+                // 새로고침이 필요한 경우 확인 버튼 클릭 시 새로고침
+                if (needRefresh) {
+                    location.reload();
+                    needRefresh = false;
+                }
             }
             
             // 모달 외부 클릭 시 닫기

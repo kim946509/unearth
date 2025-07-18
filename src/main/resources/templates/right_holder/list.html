@@ -171,7 +171,7 @@
                             th:class="${holder.isLoginEnabled ? 'login-disable-btn' : 'login-enable-btn'}"
                             th:data-holder-id="${holder.holderId}"
                             th:data-holder-name="${holder.holderName}"
-                            th:data-is-enabled="${holder.isLoginEnabled}"
+                            th:data-is-enabled="${holder.isLoginEnabled ? 'true' : 'false'}"
                             th:text="${holder.isLoginEnabled ? '비활성화' : '활성화'}"
                             onclick="toggleLoginStatus(this)">
                     </button>
@@ -300,8 +300,7 @@ confirmExtendBtn && confirmExtendBtn.addEventListener('click', function() {
     .then(response => response.json())
             .then(data => {
             if (data.code === 'SUCCESS') {
-                showModal('계약이 성공적으로 연장되었습니다.');
-                location.reload(); // 페이지 새로고침
+                showModal('계약이 성공적으로 연장되었습니다.', true);
             } else {
                 showModal(data.message || '계약 연장에 실패했습니다.');
             }
@@ -319,28 +318,35 @@ confirmExtendBtn && confirmExtendBtn.addEventListener('click', function() {
 function toggleLoginStatus(button) {
     const holderId = button.getAttribute('data-holder-id');
     const holderName = button.getAttribute('data-holder-name');
-    const isCurrentlyEnabled = button.getAttribute('data-is-enabled') === 'true';
+    const isEnabledValue = button.getAttribute('data-is-enabled');
+    const isCurrentlyEnabled = isEnabledValue === 'true';
     const newStatus = !isCurrentlyEnabled;
+    
+    // 디버깅용 로그
+    console.log('Debug - holderId:', holderId);
+    console.log('Debug - holderName:', holderName);
+    console.log('Debug - data-is-enabled raw value:', isEnabledValue);
+    console.log('Debug - isCurrentlyEnabled:', isCurrentlyEnabled);
+    console.log('Debug - newStatus:', newStatus);
     
     const action = newStatus ? '활성화' : '비활성화';
     const confirmMessage = `권리자 "${holderName}"의 로그인을 ${action}하시겠습니까?`;
     
     if (confirm(confirmMessage)) {
-        // API 호출
+        // API 호출 - 문자열로 전달
         fetch(`/right-holder/${holderId}/toggle-login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                isLoginEnabled: newStatus
+                isLoginEnabled: newStatus.toString()
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.code === 'SUCCESS') {
-                showModal(`로그인이 성공적으로 ${action}되었습니다.`);
-                location.reload(); // 페이지 새로고침
+                showModal(`로그인이 성공적으로 ${action}되었습니다.`, true);
             } else {
                 showModal(data.message || `로그인 ${action}에 실패했습니다.`);
             }
