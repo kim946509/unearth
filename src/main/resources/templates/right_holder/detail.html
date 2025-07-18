@@ -33,6 +33,14 @@
                     <input type="text" name="search" class="search-input" th:value="${search}" placeholder="앨범명, 트랙명, 아티스트명으로 검색" />
                 </div>
                 <div class="search-group">
+                    <label>데이터</label>
+                    <select name="hasCrawlingData" class="search-input">
+                        <option value="">전체</option>
+                        <option th:value="true" th:selected="${hasCrawlingData == true}">데이터 있음</option>
+                        <option th:value="false" th:selected="${hasCrawlingData == false}">데이터 없음</option>
+                    </select>
+                </div>
+                <div class="search-group">
                     <label>페이지당 개수</label>
                     <select name="size" class="search-input">
                         <option th:value="10" th:selected="${size == 10}">10</option>
@@ -75,7 +83,7 @@
                 </td>
                 <td>
                     <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">데이터 보기</a>
-                    <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">크롤링 데이터 없음</span>
+                    <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">데이터 없음</span>
                 </td>
             </tr>
             <tr th:if="${response.data.content.size() == 0}">
@@ -85,12 +93,12 @@
         </table>
 
         <div class="pagination" th:if="${response.data.totalPages > 0}">
-            <a th:if="${response.data.hasPrevious()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number - 1}, size=${size}, search=${param.search})}" class="page-btn">이전</a>
+            <a th:if="${response.data.hasPrevious()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number - 1}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" class="page-btn">이전</a>
             <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
-                <a th:if="${i != response.data.number}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${i}, size=${size}, search=${param.search})}" th:text="${i + 1}" class="page-btn"></a>
+                <a th:if="${i != response.data.number}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${i}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" th:text="${i + 1}" class="page-btn"></a>
                 <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
             </span>
-            <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search})}" class="page-btn">다음</a>
+            <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" class="page-btn">다음</a>
         </div>
         
         <!-- 비밀번호 변경 모달 -->

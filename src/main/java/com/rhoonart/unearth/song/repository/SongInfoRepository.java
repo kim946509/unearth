@@ -50,6 +50,40 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
                     OR s.albumKo LIKE CONCAT('%', :search, '%')
                     OR s.titleKo LIKE CONCAT('%', :search, '%')
                 )
+                AND (
+                    :hasCrawlingData IS NULL
+                    OR (
+                        :hasCrawlingData = true
+                        AND EXISTS (
+                            SELECT 1 FROM CrawlingData cd
+                            WHERE cd.song.id = s.id
+                        )
+                    )
+                    OR (
+                        :hasCrawlingData = false
+                        AND NOT EXISTS (
+                            SELECT 1 FROM CrawlingData cd
+                            WHERE cd.song.id = s.id
+                        )
+                    )
+                )
+                ORDER BY s.createdAt DESC
+            """)
+    Page<SongInfo> findByRightHolderIdWithSearchAndCrawlingFilter(
+            @Param("rightHolderId") String rightHolderId,
+            @Param("search") String search,
+            @Param("hasCrawlingData") Boolean hasCrawlingData,
+            Pageable pageable);
+
+    @Query("""
+                SELECT s FROM SongInfo s
+                WHERE s.rightHolder.id = :rightHolderId
+                AND (
+                    :search IS NULL OR :search = ''
+                    OR s.artistKo LIKE CONCAT('%', :search, '%')
+                    OR s.albumKo LIKE CONCAT('%', :search, '%')
+                    OR s.titleKo LIKE CONCAT('%', :search, '%')
+                )
                 ORDER BY s.createdAt DESC
             """)
     Page<SongInfo> findByRightHolderIdWithSearch(@Param("rightHolderId") String rightHolderId,

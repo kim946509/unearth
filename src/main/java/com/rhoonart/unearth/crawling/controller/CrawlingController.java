@@ -69,7 +69,6 @@ public class CrawlingController {
                 startDate = LocalDate.parse(startDateStr);
             } catch (DateTimeParseException e) {
                 // 잘못된 날짜 형식이면 null로 처리
-                startDate = null;
             }
         }
 
@@ -78,7 +77,6 @@ public class CrawlingController {
                 endDate = LocalDate.parse(endDateStr);
             } catch (DateTimeParseException e) {
                 // 잘못된 날짜 형식이면 null로 처리
-                endDate = null;
             }
         }
 
@@ -89,7 +87,6 @@ public class CrawlingController {
                 platform = PlatformType.valueOf(platformStr);
             } catch (IllegalArgumentException e) {
                 // 잘못된 플랫폼 값이면 null로 처리
-                platform = null;
             }
         }
 

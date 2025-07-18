@@ -84,18 +84,20 @@ public class RightHolderService {
     }
 
     public Page<RightHolderSongListResponseDto> findSongsByRightHolder(String rightHolderId, String search,
-            Pageable pageable) {
+            Boolean hasCrawlingData, Pageable pageable) {
         // 권리자 존재 여부 확인
         RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
 
-        // 권리자별 노래 조회
-        Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearch(rightHolderId, search, pageable);
+        // 권리자별 노래 조회 (크롤링 데이터 필터링 포함)
+        Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearchAndCrawlingFilter(
+                rightHolderId, search, hasCrawlingData, pageable);
 
         // DTO 변환
         return songPage.map(song -> {
-            // 크롤링 데이터 존재 여부 확인
-            boolean hasCrawlingData = crawlingDataRepository.existsBySongId(song.getId());
+            // 크롤링 데이터 존재 여부 확인 (필터링된 결과이므로 hasCrawlingData가 true인 경우는 이미 확인됨)
+            boolean songHasCrawlingData = hasCrawlingData != null && hasCrawlingData ? true
+                    : crawlingDataRepository.existsBySongId(song.getId());
 
             return RightHolderSongListResponseDto.builder()
                     .songId(song.getId())
@@ -104,7 +106,7 @@ public class RightHolderService {
                     .albumKo(song.getAlbumKo())
                     .titleKo(song.getTitleKo())
                     .youtubeUrl(song.getYoutubeUrl())
-                    .hasCrawlingData(hasCrawlingData)
+                    .hasCrawlingData(songHasCrawlingData)
                     .build();
         });
     }
