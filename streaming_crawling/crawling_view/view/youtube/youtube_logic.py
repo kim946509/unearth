@@ -153,7 +153,6 @@ class YouTubeCrawler:
                 if expand_button:
                     # 버튼 클릭
                     expand_button.click()
-                    logger.info("✅ expand 버튼 클릭 성공 - 정확한 조회수 표시")
                     
                     # 클릭 후 잠시 대기 (조회수 업데이트 시간)
                     time.sleep(1)

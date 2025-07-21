@@ -495,8 +495,12 @@ class YouTubeMusicCrawler:
                 logger.info(f"🔍 YouTube Music 검색 결과: 0개 곡 발견")
                 return None
             
-            for i, item in enumerate(song_items):
-                logger.info(f"🔍 검사 중인 곡 {i+1}/{len(song_items)}")
+            # 검사할 곡 수를 최대 20개로 제한
+            max_check_count = min(20, len(song_items))
+            logger.info(f"🔍 검사할 곡 수: {max_check_count}개 (전체 {len(song_items)}개 중)")
+            
+            for i, item in enumerate(song_items[:max_check_count]):
+                logger.info(f"🔍 검사 중인 곡 {i+1}/{max_check_count}")
                 try:
                     # 곡명 추출
                     song_title = self._extract_song_title(item)
@@ -560,17 +564,50 @@ class YouTubeMusicCrawler:
         return None
     
     def _extract_artist_name(self, item):
-        """아티스트명 추출 (첫 번째 span 태그)"""
+        """아티스트명 추출 (첫 번째 링크가 아티스트명)"""
         artist_column = item.select_one(YouTubeMusicSelectors.ARTIST_COLUMN)
         if artist_column:
-            # 첫 번째 span 태그만 선택 (아티스트명)
-            artist_spans = artist_column.select(YouTubeMusicSelectors.ARTIST_LINK)
-            if artist_spans:
-                # 첫 번째 span이 아티스트명
-                artist_name = artist_spans[0].get_text(strip=True)
-                logger.debug(f"✅ 아티스트명 추출 성공: {artist_name}")
-                return artist_name
+            # 첫 번째 <a> 태그가 아티스트명 (우선순위 1)
+            first_link = artist_column.select_one('a.yt-simple-endpoint')
+            if first_link:
+                artist_name = first_link.get_text(strip=True)
+                if artist_name and len(artist_name) > 1:
+                    logger.debug(f"✅ 첫 번째 링크에서 아티스트명 추출 성공: {artist_name}")
+                    return artist_name
+            
+            # 첫 번째 링크에서 실패했다면 다른 셀렉터들 시도
+            for selector in YouTubeMusicSelectors.ARTIST_LINK:
+                artist_elements = artist_column.select(selector)
+                logger.debug(f"🔍 셀렉터 '{selector}'로 발견된 요소 수: {len(artist_elements)}")
+                
+                for i, element in enumerate(artist_elements):
+                    text = element.get_text(strip=True)
+                    logger.debug(f"  요소 {i+1}: '{text}'")
+                    
+                    # "•" 문자, 시간 형식(MM:SS), 빈 텍스트가 아닌 경우에만 아티스트명으로 인정
+                    if (text and text != "•" and text != "·" and len(text) > 1 and 
+                        not self._is_time_format(text)):
+                        logger.debug(f"✅ 아티스트명 추출 성공: {text}")
+                        return text
+            
+            # 모든 셀렉터에서 찾지 못했다면 직접 텍스트 추출 시도
+            all_text = artist_column.get_text(strip=True)
+            logger.debug(f"🔍 전체 텍스트: '{all_text}'")
+            
+            # "•"로 분리해서 첫 번째 부분을 아티스트명으로 사용
+            if "•" in all_text:
+                artist_part = all_text.split("•")[0].strip()
+                if artist_part and len(artist_part) > 1 and not self._is_time_format(artist_part):
+                    logger.debug(f"✅ 분리된 아티스트명 추출 성공: {artist_part}")
+                    return artist_part
+                    
         return None
+    
+    def _is_time_format(self, text):
+        """시간 형식인지 확인 (MM:SS 형태)"""
+        import re
+        time_pattern = r'^\d{1,2}:\d{2}$'  # MM:SS 또는 M:SS 형태
+        return bool(re.match(time_pattern, text))
     
     def _extract_view_count(self, item):
         """조회수 추출 (두 번째 flex-column 요소 선택)"""
