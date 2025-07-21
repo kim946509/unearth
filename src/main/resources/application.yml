@@ -26,3 +26,6 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+log:
+  crawling-dir: streaming_crawling/logs

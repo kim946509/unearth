@@ -10,10 +10,20 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:if="${user.role != T(com.rhoonart.unearth.user.entity.Role).RIGHT_HOLDER}" th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
-    <section class="content">
+
+    <!-- 조건문 블록으로 분리 -->
+    <th:block th:if="${userRole == 'SUPER_ADMIN' or userRole == 'ADMIN'}">
+        <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
+    </th:block>
+
+    <!-- 권리자는 사이드바 없이 전체 너비 사용 -->
+    <section th:class="${user.role == 'RIGHT_HOLDER'} ? 'content full-width' : 'content'">
         <div class="page-header">
             <h2 th:text="${rightHolder.holderName}">권리자 상세</h2>
+            <!-- 권리자일 경우에만 비밀번호 변경 버튼 표시 -->
+            <th:block th:if="${userRole == 'RIGHT_HOLDER'}">
+                <button type="button" class="password-change-btn" id="openPasswordChangeModalBtn">비밀번호 변경</button>
+            </th:block>
         </div>
         
         <form class="search-form" method="get" th:action="@{'/right-holder/' + ${rightHolderId}}">
@@ -21,6 +31,14 @@
                 <div class="search-group">
                     <label>검색</label>
                     <input type="text" name="search" class="search-input" th:value="${search}" placeholder="앨범명, 트랙명, 아티스트명으로 검색" />
+                </div>
+                <div class="search-group">
+                    <label>데이터</label>
+                    <select name="hasCrawlingData" class="search-input">
+                        <option value="">전체</option>
+                        <option th:value="true" th:selected="${hasCrawlingData == true}">데이터 있음</option>
+                        <option th:value="false" th:selected="${hasCrawlingData == false}">데이터 없음</option>
+                    </select>
                 </div>
                 <div class="search-group">
                     <label>페이지당 개수</label>
@@ -37,7 +55,7 @@
         </form>
 
         <!-- 안내문구 영역 제거 및 팝업 처리 -->
-        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+        <div th:if="${response.code.name() != 'SUCCESS' and response.message != null and !#strings.isEmpty(response.message)}">
             <script th:inline="javascript">
                 alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
             </script>
@@ -64,8 +82,8 @@
                     <a th:href="${song.youtubeUrl}" target="_blank" class="youtube-link">보기</a>
                 </td>
                 <td>
-                    <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">크롤링 데이터 보기</a>
-                    <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">크롤링 데이터 없음</span>
+                    <a th:if="${song.hasCrawlingData}" th:href="@{'/crawling/data/' + ${song.songId}}" class="data-btn">데이터 보기</a>
+                    <span th:unless="${song.hasCrawlingData}" class="data-btn no-data">데이터 없음</span>
                 </td>
             </tr>
             <tr th:if="${response.data.content.size() == 0}">
@@ -75,14 +93,127 @@
         </table>
 
         <div class="pagination" th:if="${response.data.totalPages > 0}">
-            <a th:if="${response.data.hasPrevious()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number - 1}, size=${size}, search=${param.search})}" class="page-btn">이전</a>
+            <a th:if="${response.data.hasPrevious()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number - 1}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" class="page-btn">이전</a>
             <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
-                <a th:if="${i != response.data.number}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${i}, size=${size}, search=${param.search})}" th:text="${i + 1}" class="page-btn"></a>
+                <a th:if="${i != response.data.number}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${i}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" th:text="${i + 1}" class="page-btn"></a>
                 <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
             </span>
-            <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search})}" class="page-btn">다음</a>
+            <a th:if="${response.data.hasNext()}" th:href="@{'/right-holder/' + ${rightHolderId}(page=${response.data.number + 1}, size=${size}, search=${param.search}, hasCrawlingData=${param.hasCrawlingData})}" class="page-btn">다음</a>
+        </div>
+        
+        <!-- 비밀번호 변경 모달 -->
+        <div id="passwordChangeModal" class="modal">
+            <div class="modal-content">
+                <button type="button" id="closePasswordChangeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+                <h3 style="margin-bottom:18px;">비밀번호 변경</h3>
+                <form id="passwordChangeForm" class="modal-form">
+                    <div class="form-row">
+                        <label>현재 비밀번호 <span class="required-star">*</span></label>
+                        <input type="password" name="currentPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 <span class="required-star">*</span></label>
+                        <input type="password" name="newPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>새 비밀번호 확인 <span class="required-star">*</span></label>
+                        <input type="password" name="confirmPassword" required />
+                    </div>
+                    <div class="form-row">
+                        <label>사업자 등록번호 <span class="required-star">*</span></label>
+                        <input type="text" name="businessRegistrationNumber" maxlength="10" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                    </div>
+                    <div class="form-row" style="margin-top:18px;">
+                        <button type="submit" class="register-btn" style="width:100%;">변경</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </section>
 </div>
+ㄴ
+<script>
+// 비밀번호 변경 모달 열기/닫기
+const passwordChangeBtn = document.getElementById('openPasswordChangeModalBtn');
+const passwordChangeModal = document.getElementById('passwordChangeModal');
+const closePasswordChangeBtn = document.getElementById('closePasswordChangeModalBtn');
+
+if (passwordChangeBtn) {
+    passwordChangeBtn.addEventListener('click', () => { 
+        passwordChangeModal.classList.add('show'); 
+    });
+}
+
+if (closePasswordChangeBtn) {
+    closePasswordChangeBtn.addEventListener('click', () => { 
+        passwordChangeModal.classList.remove('show'); 
+    });
+}
+
+window.addEventListener('click', (e) => { 
+    if (e.target === passwordChangeModal) passwordChangeModal.classList.remove('show'); 
+});
+
+// 비밀번호 변경 폼 제출 처리
+const passwordChangeForm = document.getElementById('passwordChangeForm');
+if (passwordChangeForm) {
+    passwordChangeForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 필수값 체크
+        const currentPassword = this.elements['currentPassword'].value;
+        const newPassword = this.elements['newPassword'].value;
+        const confirmPassword = this.elements['confirmPassword'].value;
+        const businessRegistrationNumber = this.elements['businessRegistrationNumber'].value;
+        
+        if (!currentPassword || !newPassword || !confirmPassword || !businessRegistrationNumber) {
+            alert('모든 필드를 입력해주세요.');
+            return;
+        }
+        
+        // 새 비밀번호 일치 확인
+        if (newPassword !== confirmPassword) {
+            alert('새 비밀번호가 일치하지 않습니다.');
+            this.elements['confirmPassword'].focus();
+            return;
+        }
+        
+        // 비밀번호 길이 확인 (최소 8자)
+        if (newPassword.length < 8) {
+            alert('새 비밀번호는 최소 8자 이상이어야 합니다.');
+            this.elements['newPassword'].focus();
+            return;
+        }
+
+        // API 호출
+        fetch('/user/password/change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentPassword: currentPassword,
+                newPassword: newPassword,
+                confirmPassword: confirmPassword,
+                businessRegistrationNumber: businessRegistrationNumber
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.code === 'SUCCESS') {
+                alert('비밀번호가 성공적으로 변경되었습니다.');
+                passwordChangeModal.classList.remove('show');
+                passwordChangeForm.reset();
+            } else {
+                alert(data.message || '비밀번호 변경에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('비밀번호 변경 중 오류가 발생했습니다.');
+        });
+    });
+}
+</script>
 </body>
 </html> 

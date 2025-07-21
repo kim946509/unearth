@@ -8,6 +8,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,9 @@ import lombok.Builder;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "song_info")
+@Table(name = "song_info", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "artist_ko", "title_ko" })
+})
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,4 +56,18 @@ public class SongInfo extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "right_holder_id", nullable = false)
     private RightHolder rightHolder;
+
+    public void updateInfo(String artistKo, String artistEn, String albumKo, String albumEn,
+            String titleKo, String titleEn, String youtubeUrl, String melonSongId,
+            RightHolder rightHolder) {
+        this.artistKo = artistKo;
+        this.artistEn = artistEn;
+        this.albumKo = albumKo;
+        this.albumEn = albumEn;
+        this.titleKo = titleKo;
+        this.titleEn = titleEn;
+        this.youtubeUrl = youtubeUrl;
+        this.melonSongId = melonSongId;
+        this.rightHolder = rightHolder;
+    }
 }

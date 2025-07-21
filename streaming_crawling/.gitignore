@@ -76,3 +76,7 @@ csv_folder/
 # Temporary files
 *.tmp
 *.temp 
+
+__pycache__/
+**/__pycache__/
+*.py[cod]

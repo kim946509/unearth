@@ -5,10 +5,8 @@ import time
 import random
 import logging
 import re
-import pickle
 import os
 from datetime import datetime
-from pathlib import Path
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -30,130 +28,8 @@ class YouTubeMusicCrawler:
         self.youtube_music_id = os.getenv('YOUTUBE_MUSIC_ID', '')
         self.youtube_music_password = os.getenv('YOUTUBE_MUSIC_PASSWORD', '')
         self.is_logged_in = False
-        
-        # 쿠키 파일 경로 설정 (절대 경로 사용)
-        cookies_dir = Path("/app/cookies")
-        if not cookies_dir.exists():
-            cookies_dir.mkdir(parents=True, exist_ok=True)
-        self.cookies_file = cookies_dir / "youtube_music_cookies.pkl"
     
-    def _load_cookies(self):
-        """저장된 쿠키 로드"""
-        try:
-            if self.cookies_file.exists():
-                with open(self.cookies_file, 'rb') as f:
-                    cookies = pickle.load(f)
-                logger.info(f"🍪 저장된 쿠키 로드: {len(cookies)}개")
-                return cookies
-        except Exception as e:
-            logger.warning(f"쿠키 로드 실패: {e}")
-            # 쿠키 파일이 손상된 경우 삭제
-            try:
-                if self.cookies_file.exists():
-                    self.cookies_file.unlink()
-                    logger.info("손상된 쿠키 파일 삭제됨")
-            except Exception as e:
-                logger.warning(f"쿠키 파일 삭제 실패: {e}")
-        return None
-    
-    def _is_cookie_expired(self, cookies):
-        """쿠키 만료 여부 확인"""
-        try:
-            current_time = time.time()
-            cookie_creation_time = os.path.getmtime(self.cookies_file) if self.cookies_file.exists() else current_time
-            
-            for cookie in cookies:
-                # expiry 필드로 만료 확인
-                if 'expiry' in cookie:
-                    if cookie['expiry'] < current_time:
-                        logger.info(f"🍪 쿠키 만료됨 (expiry): {cookie.get('name', 'unknown')}")
-                        return True
-                
-                # maxAge 필드로 만료 확인
-                if 'maxAge' in cookie:
-                    max_age = cookie['maxAge']
-                    if max_age > 0:  # 양수인 경우만 체크
-                        cookie_age = current_time - cookie_creation_time
-                        if cookie_age > max_age:
-                            logger.info(f"🍪 쿠키 만료됨 (maxAge): {cookie.get('name', 'unknown')}")
-                            return True
-            
-            # 쿠키 파일이 24시간 이상 된 경우 만료 처리
-            if (current_time - cookie_creation_time) > 24 * 60 * 60:
-                logger.info("🍪 쿠키 파일이 24시간 이상 되어 만료 처리")
-                return True
-            
-            return False
-        except Exception as e:
-            logger.warning(f"쿠키 만료 확인 실패: {e}")
-            return True  # 에러 발생 시 안전하게 만료된 것으로 처리
-    
-    def _save_cookies(self):
-        """현재 쿠키 저장"""
-        try:
-            cookies = self.driver.get_cookies()
-            if not cookies:
-                logger.warning("저장할 쿠키가 없습니다")
-                return False
-                
-            # 쿠키 디렉토리 생성
-            self.cookies_file.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(self.cookies_file, 'wb') as f:
-                pickle.dump(cookies, f)
-            logger.info(f"🍪 쿠키 저장 완료: {len(cookies)}개")
-            return True
-        except Exception as e:
-            logger.error(f"쿠키 저장 실패: {e}")
-            return False
-    
-    def _apply_cookies(self, cookies):
-        """쿠키 적용"""
-        try:
-            # 먼저 YouTube Music 페이지로 이동
-            self.driver.get("https://music.youtube.com")
-            time.sleep(2)
-            
-            # 기존 쿠키 모두 삭제
-            self.driver.delete_all_cookies()
-            time.sleep(1)
-            
-            # 새 쿠키 적용
-            success_count = 0
-            for cookie in cookies:
-                try:
-                    # 쿠키 정보 로깅
-                    logger.debug(f"처리 중인 쿠키 정보:")
-                    for key, value in cookie.items():
-                        logger.debug(f"  - {key}: {value}")
-                    
-                    # domain 필드가 없는 경우에만 기본값 설정
-                    if 'domain' not in cookie:
-                        cookie['domain'] = '.youtube.com'
-                    
-                    # 쿠키를 있는 그대로 적용
-                    self.driver.add_cookie(cookie)
-                    success_count += 1
-                    logger.debug(f"✅ 쿠키 적용 성공: {cookie.get('name', 'unknown')}")
-                    
-                except Exception as e:
-                    logger.warning(f"개별 쿠키 적용 실패: {cookie.get('name', 'unknown')} - {e}")
-            
-            logger.info(f"🍪 쿠키 적용 완료 ({success_count}/{len(cookies)}개 성공)")
-            
-            # 페이지 새로고침
-            self.driver.refresh()
-            time.sleep(2)
-            
-            # 적용된 쿠키 확인
-            current_cookies = self.driver.get_cookies()
-            logger.info(f"현재 브라우저에 설정된 쿠키 수: {len(current_cookies)}")
-            
-            return success_count > 0
-            
-        except Exception as e:
-            logger.error(f"쿠키 적용 실패: {e}")
-            return False
+
     
     def _check_login_status(self):
         """로그인 상태 확인"""
@@ -235,39 +111,12 @@ class YouTubeMusicCrawler:
     
     def login(self):
         """
-        YouTube Music 로그인 (쿠키 우선 사용)
-        
-        로그인 순서:
-        1. 저장된 쿠키가 있으면 쿠키로 로그인 시도
-        2. 쿠키가 없거나 만료되었으면 일반 로그인 시도
-        3. 로그인 성공 시 새로운 쿠키 저장
+        YouTube Music 로그인 (일반 로그인만 사용)
         
         Returns:
             bool: 로그인 성공 여부
         """
         try:
-            # 1단계: 저장된 쿠키로 로그인 시도
-            cookies = self._load_cookies()
-            if cookies:
-                # 쿠키 만료 여부 확인
-                if self._is_cookie_expired(cookies):
-                    logger.warning("⚠️ 쿠키가 만료되었습니다. 일반 로그인을 시도합니다.")
-                else:
-                    logger.info("🍪 저장된 쿠키로 로그인 시도")
-                    if self._apply_cookies(cookies):
-                        # 로그인 상태 확인
-                        if self._check_login_status():
-                            self.is_logged_in = True
-                            logger.info("✅ 쿠키로 로그인 성공")
-                            return True
-                        else:
-                            logger.warning("⚠️ 쿠키가 유효하지 않습니다. 일반 로그인을 시도합니다.")
-                    else:
-                        logger.warning("⚠️ 쿠키 적용에 실패했습니다. 일반 로그인을 시도합니다.")
-            else:
-                logger.info("📝 저장된 쿠키가 없습니다. 일반 로그인을 시도합니다.")
-            
-            # 2단계: 일반 로그인 시도
             logger.info("🔐 일반 로그인 시도")
             return self._perform_manual_login()
             
@@ -341,7 +190,7 @@ class YouTubeMusicCrawler:
                 page_source = self.driver.page_source
                 if any(keyword in page_source for keyword in YouTubeMusicSelectors.AUTHENTICATION_KEYWORDS):
                     logger.warning("⚠️ 본인 인증(추가 인증) 화면이 감지되었습니다. 자동화가 중단될 수 있습니다.")
-                    time.sleep(60)
+                    time.sleep(30)
 
                 # 로그인 완료 대기 (모든 로그인 버튼 셀렉터에 대해 확인)
                 for selector in YouTubeMusicSelectors.LOGIN_BUTTON:
@@ -392,12 +241,13 @@ class YouTubeMusicCrawler:
                     return result
             
             # 국문 검색 실패시 영문으로 검색
-            logger.info("🔍 영문으로 검색 시도")
-            html = self._search_song(song_info['title_en'], song_info['artist_en'])
-            if html:
-                result = self._parse_song_info(html, song_info)
-                if result:
-                    return result
+            if song_info.get('title_en') and song_info.get('artist_en'):
+                logger.info("🔍 영문으로 검색 시도")
+                html = self._search_song(song_info['title_en'], song_info['artist_en'])
+                if html:
+                    result = self._parse_song_info(html, song_info)
+                    if result:
+                        return result
             
             logger.warning(f"❌ 모든 검색 시도 실패: {song_info}")
             return None
@@ -645,8 +495,12 @@ class YouTubeMusicCrawler:
                 logger.info(f"🔍 YouTube Music 검색 결과: 0개 곡 발견")
                 return None
             
-            for i, item in enumerate(song_items):
-                logger.info(f"🔍 검사 중인 곡 {i+1}/{len(song_items)}")
+            # 검사할 곡 수를 최대 20개로 제한
+            max_check_count = min(20, len(song_items))
+            logger.info(f"🔍 검사할 곡 수: {max_check_count}개 (전체 {len(song_items)}개 중)")
+            
+            for i, item in enumerate(song_items[:max_check_count]):
+                logger.info(f"🔍 검사 중인 곡 {i+1}/{max_check_count}")
                 try:
                     # 곡명 추출
                     song_title = self._extract_song_title(item)
@@ -663,8 +517,14 @@ class YouTubeMusicCrawler:
                     # 조회수 추출
                     view_count = self._extract_view_count(item)
 
-                    # matching.py의 compare_song_info 함수 사용
-                    match_result = compare_song_info_multilang(song_title, artist_name, song_info)
+                    # matching.py의 compare_song_info 함수 사용 (한글/영문 제목과 아티스트명 모두 사용)
+                    match_result = compare_song_info_multilang(
+                        song_title, artist_name, 
+                        song_info['title_ko'], 
+                        song_info.get('title_en', ''),
+                        song_info['artist_ko'], 
+                        song_info.get('artist_en', '')
+                    )
                     
                     logger.debug(f"매칭 결과: {match_result}")
                     
@@ -704,49 +564,105 @@ class YouTubeMusicCrawler:
         return None
     
     def _extract_artist_name(self, item):
-        """아티스트명 추출"""
+        """아티스트명 추출 (첫 번째 링크가 아티스트명)"""
         artist_column = item.select_one(YouTubeMusicSelectors.ARTIST_COLUMN)
         if artist_column:
-            artist_a = artist_column.select_one(YouTubeMusicSelectors.ARTIST_LINK)
-            if artist_a:
-                artist_name = artist_a.get_text(strip=True)
-                logger.debug(f"✅ 아티스트명 추출 성공: {artist_name}")
-                return artist_name
+            # 첫 번째 <a> 태그가 아티스트명 (우선순위 1)
+            first_link = artist_column.select_one('a.yt-simple-endpoint')
+            if first_link:
+                artist_name = first_link.get_text(strip=True)
+                if artist_name and len(artist_name) > 1:
+                    logger.debug(f"✅ 첫 번째 링크에서 아티스트명 추출 성공: {artist_name}")
+                    return artist_name
+            
+            # 첫 번째 링크에서 실패했다면 다른 셀렉터들 시도
+            for selector in YouTubeMusicSelectors.ARTIST_LINK:
+                artist_elements = artist_column.select(selector)
+                logger.debug(f"🔍 셀렉터 '{selector}'로 발견된 요소 수: {len(artist_elements)}")
+                
+                for i, element in enumerate(artist_elements):
+                    text = element.get_text(strip=True)
+                    logger.debug(f"  요소 {i+1}: '{text}'")
+                    
+                    # "•" 문자, 시간 형식(MM:SS), 빈 텍스트가 아닌 경우에만 아티스트명으로 인정
+                    if (text and text != "•" and text != "·" and len(text) > 1 and 
+                        not self._is_time_format(text)):
+                        logger.debug(f"✅ 아티스트명 추출 성공: {text}")
+                        return text
+            
+            # 모든 셀렉터에서 찾지 못했다면 직접 텍스트 추출 시도
+            all_text = artist_column.get_text(strip=True)
+            logger.debug(f"🔍 전체 텍스트: '{all_text}'")
+            
+            # "•"로 분리해서 첫 번째 부분을 아티스트명으로 사용
+            if "•" in all_text:
+                artist_part = all_text.split("•")[0].strip()
+                if artist_part and len(artist_part) > 1 and not self._is_time_format(artist_part):
+                    logger.debug(f"✅ 분리된 아티스트명 추출 성공: {artist_part}")
+                    return artist_part
+                    
         return None
     
+    def _is_time_format(self, text):
+        """시간 형식인지 확인 (MM:SS 형태)"""
+        import re
+        time_pattern = r'^\d{1,2}:\d{2}$'  # MM:SS 또는 M:SS 형태
+        return bool(re.match(time_pattern, text))
+    
     def _extract_view_count(self, item):
-        """조회수 추출 (aria-label, title, textContent 모두 검사)"""
+        """조회수 추출 (두 번째 flex-column 요소 선택)"""
         try:
             flex_columns = item.select(YouTubeMusicSelectors.VIEW_COUNT_FLEX)
             logger.debug(f"🔍 발견된 flex-column 요소 수: {len(flex_columns)}")
             
+            # 모든 flex-column 요소의 정보 로깅
             for i, flex_col in enumerate(flex_columns):
-                # 1. aria-label 우선
-                view_text = flex_col.get('aria-label', '').strip()
-                # 2. 없으면 title
-                if not view_text:
-                    view_text = flex_col.get('title', '').strip()
-                # 3. 없으면 textContent
-                if not view_text:
-                    view_text = flex_col.get_text(strip=True)
-                logger.debug(f"🔍 flex-column {i+1}: view_text='{view_text}'")
-                
-                # 조회수 관련 키워드가 있는지 확인
-                view_keywords = ['회', '재생', 'views', 'view', '억', '만', '천', 'k', 'm', 'b']
-                if any(keyword in view_text.lower() for keyword in view_keywords):
-                    # 정규표현식으로 숫자+단위만 추출
-                    import re
-                    match = re.search(r'([\d,.]+(?:\.\d+)?)[ ]*([억만천mkb]*)', view_text.lower())
-                    if match:
-                        number = match.group(1)
-                        unit = match.group(2)
-                        view_count_str = f'{number}{unit}'
-                        logger.debug(f"✅ 조회수 추출 성공: '{view_text}' -> '{view_count_str}'")
-                        return view_count_str
-                    else:
-                        # 키워드는 있으나 패턴이 안 맞으면 원본 반환(후처리에서 걸러짐)
-                        return view_text
-            logger.warning("⚠️ flex-column에서 조회수 정보를 찾을 수 없음")
+                aria_label = flex_col.get('aria-label', '').strip()
+                title = flex_col.get('title', '').strip()
+                text_content = flex_col.get_text(strip=True)
+                logger.debug(f"🔍 flex-column {i+1}: aria-label='{aria_label}', title='{title}', text='{text_content}'")
+            
+            # 두 번째 요소가 있으면 그것을 사용 (조회수는 보통 두 번째에 위치)
+            if len(flex_columns) >= 2:
+                target_element = flex_columns[1]  # 두 번째 요소 (인덱스 1)
+                logger.debug(f"✅ 두 번째 flex-column 요소 선택 (인덱스 1)")
+            elif len(flex_columns) == 1:
+                target_element = flex_columns[0]  # 하나만 있으면 첫 번째 사용
+                logger.debug(f"✅ 첫 번째 flex-column 요소 선택 (인덱스 0)")
+            else:
+                logger.warning("⚠️ flex-column 요소를 찾을 수 없음")
+                return None
+            
+            # 선택된 요소에서 조회수 추출
+            # 1. aria-label 우선
+            view_text = target_element.get('aria-label', '').strip()
+            # 2. 없으면 title
+            if not view_text:
+                view_text = target_element.get('title', '').strip()
+            # 3. 없으면 textContent
+            if not view_text:
+                view_text = target_element.get_text(strip=True)
+            
+            logger.debug(f"🔍 선택된 요소: view_text='{view_text}'")
+            
+            # 조회수 관련 키워드가 있는지 확인
+            view_keywords = ['회', '재생', 'views', 'view', '억', '만', '천', 'k', 'm', 'b']
+            if any(keyword in view_text.lower() for keyword in view_keywords):
+                # 정규표현식으로 숫자+단위만 추출
+                import re
+                match = re.search(r'([\d,.]+(?:\.\d+)?)[ ]*([억만천mkb]*)', view_text.lower())
+                if match:
+                    number = match.group(1)
+                    unit = match.group(2)
+                    view_count_str = f'{number}{unit}'
+                    logger.debug(f"✅ 조회수 추출 성공: '{view_text}' -> '{view_count_str}'")
+                    return view_count_str
+                else:
+                    # 키워드는 있으나 패턴이 안 맞으면 원본 반환(후처리에서 걸러짐)
+                    logger.debug(f"✅ 조회수 추출 성공: '{view_text}' (패턴 미매칭)")
+                    return view_text
+            
+            logger.warning("⚠️ 선택된 요소에서 조회수 정보를 찾을 수 없음")
             return None
         except Exception as e:
             logger.error(f"❌ 조회수 추출 실패: {e}")

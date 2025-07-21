@@ -22,10 +22,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import jakarta.servlet.http.HttpSession;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
+import com.rhoonart.unearth.right_holder.dto.ContractExtendRequestDto;
+import com.rhoonart.unearth.right_holder.dto.LoginToggleRequestDto;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import com.rhoonart.unearth.common.exception.BaseException;
@@ -88,16 +93,29 @@ public class RightHolderController {
         return "redirect:/right-holder/list";
     }
 
+    @PostMapping("/{rightHolderId}/update")
+    public String updateSubmit(@PathVariable String rightHolderId,
+            @Valid @ModelAttribute RightHolderUpdateRequestDto dto,
+            HttpSession session,
+            Model model) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+        rightHolderService.update(rightHolderId, dto);
+        // 수정 성공 시 목록으로 이동
+        return "redirect:/right-holder/list";
+    }
+
     @GetMapping("/{rightHolderId}")
     public String rightHolderDetailPage(
             @PathVariable String rightHolderId,
             @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "hasCrawlingData", required = false) Boolean hasCrawlingData,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             HttpSession session,
             Model model) {
         // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
-        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId)) {
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
             throw new BaseException(ResponseCode.FORBIDDEN, "접근 권한이 없습니다.");
         }
 
@@ -109,20 +127,47 @@ public class RightHolderController {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<RightHolderSongListResponseDto> songPage = rightHolderService.findSongsByRightHolder(rightHolderId, search,
-                pageable);
+                hasCrawlingData, pageable);
 
         CommonResponse<Page<RightHolderSongListResponseDto>> response = CommonResponse.success(songPage);
         model.addAttribute("response", response);
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("search", search);
+        model.addAttribute("hasCrawlingData", hasCrawlingData);
         model.addAttribute("rightHolderId", rightHolderId);
         model.addAttribute("user", user);
-
+        model.addAttribute("userRole", user.getRole().name());
         // 권리자 정보 추가
         var rightHolder = rightHolderService.findById(rightHolderId);
         model.addAttribute("rightHolder", rightHolder);
-
         return "right_holder/detail";
+    }
+
+    @PostMapping("/{rightHolderId}/extend")
+    @ResponseBody
+    public CommonResponse<String> extendContract(
+            @PathVariable String rightHolderId,
+            @Valid @RequestBody ContractExtendRequestDto dto,
+            HttpSession session) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+
+        rightHolderService.extendContract(rightHolderId, dto.getNewEndDate());
+        return CommonResponse.success("계약이 성공적으로 연장되었습니다.");
+    }
+
+    @PostMapping("/{rightHolderId}/toggle-login")
+    @ResponseBody
+    public CommonResponse<String> toggleLoginStatus(
+            @PathVariable String rightHolderId,
+            @Valid @RequestBody LoginToggleRequestDto dto,
+            HttpSession session) {
+        // SUPER_ADMIN 또는 ADMIN 권한 체크
+        UserDto user = SessionUserUtil.requireAdminRole(session);
+
+        rightHolderService.toggleLoginStatus(rightHolderId, dto.getIsLoginEnabledAsBoolean());
+        String action = dto.getIsLoginEnabledAsBoolean() ? "활성화" : "비활성화";
+        return CommonResponse.success("로그인이 성공적으로 " + action + "되었습니다.");
     }
 }

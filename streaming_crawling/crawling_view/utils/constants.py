@@ -142,13 +142,15 @@ class YouTubeMusicSelectors:
         'ytmusic-account-button'
     ]
     
-    # 본인 인증 관련 키워드
+    # 본인 인증 관련 키워드 (더 구체적이고 정확한 키워드로 수정)
     AUTHENTICATION_KEYWORDS = [
-        # 한글 키워드
-        "보안", "코드", "인증", "확인", "전화", "기기", "추가 확인", "본인", "인증번호", "보안코드",
-        # 영어 키워드
-        "security", "code", "verification", "verify", "phone", "device", "additional verification",
-        "authentication", "verification code", "security code", "confirm", "identity"
+        # 구체적인 본인 인증 관련 키워드
+        "2단계 인증", "2단계 확인", "추가 보안 확인", "본인 인증", "인증 코드 입력",
+        "two-factor authentication", "2-step verification", "verification code",
+        "security code", "phone verification", "device verification",
+        # Google 계정 보안 관련 키워드
+        "계정 보안", "보안 확인", "추가 확인 필요", "계정 인증",
+        "account security", "security check", "additional verification required"
     ]
     
     SONG_TAB = [
@@ -215,8 +217,15 @@ class YouTubeMusicSelectors:
         'ytmusic-responsive-list-item-renderer:has(ytmusic-menu-renderer)'
     ]
     SONG_TITLE = 'yt-formatted-string.title a'
-    ARTIST_COLUMN = '.secondary-flex-columns'
-    ARTIST_LINK = 'a'
+    ARTIST_COLUMN = '.secondary-flex-columns yt-formatted-string'
+    # 아티스트명 추출을 위한 다양한 셀렉터 (우선순위 순)
+    ARTIST_LINK = [
+        'a.yt-simple-endpoint',  # 첫 번째 링크가 아티스트명 (최우선)
+        'yt-formatted-string a',  # yt-formatted-string 내부 링크
+        'a',  # 모든 링크
+        'span.style-scope.yt-formatted-string',  # 기본 span 태그 (fallback)
+        '.yt-formatted-string'   # 일반 yt-formatted-string (fallback)
+    ]
     VIEW_COUNT_FLEX = 'yt-formatted-string.flex-column'
 
 # YouTube 관련 셀렉터
@@ -248,6 +257,16 @@ class YouTubeSelectors:
         'span.date',
         'div#info-strings',
         'yt-formatted-string#info-strings'
+    ]
+    
+    # 조회수 expand 버튼 셀렉터 (정확한 조회수 표시용)
+    EXPAND_BUTTON_SELECTORS = [
+        'tp-yt-paper-button#expand.button.style-scope.ytd-text-inline-expander',
+        '#expand.button.style-scope.ytd-text-inline-expander',
+        'tp-yt-paper-button#expand',
+        '#expand',
+        'button#expand',
+        'paper-button#expand'
     ]
 
 # 플랫폼 관련 상수
@@ -325,6 +344,6 @@ class FilePaths:
     LOG_DIR = "logs"
     
     # CSV 파일 컬럼
-    GENIE_COLUMNS = ['song_id','artist_name','song_title','total_person_count', 'views', 'crawl_date']
-    YOUTUBE_MUSIC_COLUMNS = ['song_id','artist_name','song_title','views', 'crawl_date']
-    YOUTUBE_COLUMNS = ['song_id','artist_name','song_title','views', 'youtube_url', 'upload_date', 'crawl_date'] 
+    GENIE_COLUMNS = ['song_id','artist_ko','title_ko','total_person_count', 'views', 'crawl_date']
+    YOUTUBE_MUSIC_COLUMNS = ['song_id','artist_ko','title_ko','views', 'crawl_date']
+    YOUTUBE_COLUMNS = ['song_id','artist_ko','title_ko','views', 'youtube_url', 'upload_date', 'crawl_date'] 

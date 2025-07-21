@@ -49,7 +49,7 @@ def run_melon_crawling(song_list, save_csv=True, save_db=True):
                 logger.warning(f"❌ 크롤링 실패: melon_song_id={melon_song_id}")
             
             # API 호출 간격 조절 (서버 부하 방지)
-            time.sleep(random.uniform(0.5, 1.5))
+            time.sleep(random.uniform(0.8,1.2))
         
         logger.info(f"🍈 Melon 크롤링 완료 - 성공: {len(crawled_data)}곡")
         

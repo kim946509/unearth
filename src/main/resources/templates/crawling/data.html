@@ -10,7 +10,6 @@
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
-    <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
     <section class="content">
         <div class="page-header">
             <h2 th:text="${songInfo.artistKo} + ' - ' + ${songInfo.titleKo}">크롤링 데이터</h2>
@@ -38,32 +37,28 @@
                         <option value="GENIE" th:selected="${platform == 'GENIE'}">지니</option>
                     </select>
                 </div>
-                <div class="filter-group">
-                    <label>간격 (일)</label>
-                    <select name="intervalDays" class="filter-input">
-                        <option value="1" th:selected="${intervalDays == 1}">1일</option>
-                        <option value="3" th:selected="${intervalDays == 3}">3일</option>
-                        <option value="7" th:selected="${intervalDays == 7}">7일</option>
-                        <option value="14" th:selected="${intervalDays == 14}">14일</option>
-                    </select>
-                </div>
+
                 <div class="filter-group">
                     <label>페이지 크기</label>
                     <select name="size" class="filter-input">
                         <option value="10" th:selected="${pageSize == 10}">10개</option>
-                        <option value="30" th:selected="${pageSize == 20}">30개</option>
+                        <option value="20" th:selected="${pageSize == 20}">20개</option>
                         <option value="50" th:selected="${pageSize == 50}">50개</option>
-                        <option value="50" th:selected="${pageSize == 100}">100개</option>
+                        <option value="100" th:selected="${pageSize == 100}">100개</option>
                     </select>
                 </div>
                 <div class="filter-group filter-btn-group">
                     <button type="submit" class="filter-btn">조회</button>
+                    </div>
+                <div class="filter-group">
+                    <button type="button" class="filter-btn" style="background-color: #28a745; margin-left: 10px;" 
+                            onclick="openCsvDownloadModal()">📊 CSV 다운로드</button>
                 </div>
             </div>
         </form>
 
         <!-- 안내문구 영역 제거 및 팝업 처리 -->
-        <div th:if="${response.code != T(com.rhoonart.unearth.common.ResponseCode).SUCCESS and response.message != null and !#strings.isEmpty(response.message)}">
+        <div th:if="${response.code.name() != 'SUCCESS' and response.message != null and !#strings.isEmpty(response.message)}">
             <script th:inline="javascript">
                 alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
             </script>
@@ -73,61 +68,196 @@
             <p>크롤링 데이터가 없습니다.</p>
         </div>
 
-        <div th:if="${response.data.size() > 0}" class="crawling-data-container">
-            <table class="crawling-table">
+        <!-- 크롤링 데이터 테이블 -->
+        <div class="table-container">
+            <table class="data-table">
                 <thead>
-                <tr>
-                    <th>날짜</th>
-                    <th>플랫폼</th>
-                    <th>조회수</th>
-                    <th>조회수 증가</th>
-                    <th>청취자 수</th>
-                    <th>청취자 수 증가</th>
-                </tr>
+                    <tr>
+                        <th>날짜</th>
+                        <th>플랫폼</th>
+                        <th>조회수</th>
+                        <th>조회수 증가</th>
+                        <th>청취자 수</th>
+                        <th>청취자 수 증가</th>
+                        <th>영상 정보</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="data : ${response.data}">
-                    <td th:text="${#temporals.format(data.date, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${data.platform}"></td>
-                    <td th:text="${data.views == -1 ? '-' : (data.views == -999 ? '⚠️' : #numbers.formatInteger(data.views, 0, 'COMMA'))}" 
-                        th:class="${data.views == -1 ? 'text-muted' : (data.views == -999 ? 'text-warning' : '')}"></td>
-                    <td th:text="${data.viewsIncrease == -1 ? '-' : (data.viewsIncrease == -999 ? '⚠️' : (data.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.viewsIncrease, 0, 'COMMA'))}"
-                        th:class="${data.viewsIncrease == -1 ? 'text-muted' : (data.viewsIncrease == -999 ? 'text-warning' : (data.viewsIncrease > 0 ? 'text-success' : (data.viewsIncrease < 0 ? 'text-danger' : 'text-muted')))}"></td>
-                    <td th:text="${data.listeners == -1 ? '-' : (data.listeners == -999 ? '⚠️' : #numbers.formatInteger(data.listeners, 0, 'COMMA'))}"
-                        th:class="${data.listeners == -1 ? 'text-muted' : (data.listeners == -999 ? 'text-warning' : '')}"></td>
-                    <td th:text="${data.listenersIncrease == -1 ? '-' : (data.listenersIncrease == -999 ? '⚠️' : (data.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.listenersIncrease, 0, 'COMMA'))}"
-                        th:class="${data.listenersIncrease == -1 ? 'text-muted' : (data.listenersIncrease == -999 ? 'text-warning' : (data.listenersIncrease > 0 ? 'text-success' : (data.listenersIncrease < 0 ? 'text-danger' : 'text-muted')))}"></td>
-                </tr>
+                    <!-- 날짜별로 그룹화된 데이터 표시 -->
+                    <th:block th:each="groupedData : ${crawlingData.groupedDataList}">
+                        <tr th:each="platformData, platformIter : ${groupedData.platformDataList}">
+                            <!-- 날짜 셀 (첫 번째 플랫폼에서만 표시) -->
+                            <td th:if="${platformIter.first}" 
+                                th:rowspan="${groupedData.platformDataList.size()}"
+                                th:text="${#temporals.format(groupedData.date, 'yyyy-MM-dd')}"
+                                class="date-cell">
+                            </td>
+                            
+                            <!-- 플랫폼 정보 -->
+                            <td th:text="${platformData.platform}" class="platform-cell"></td>
+                            
+                            <!-- 조회수 -->
+                            <td class="views-cell" 
+                                th:text="${platformData.views == -1 ? '-' : (platformData.views == -999 ? '⚠️' : #numbers.formatInteger(platformData.views, 0, 'COMMA'))}"
+                                th:class="${platformData.views == -1 ? 'text-muted' : (platformData.views == -999 ? 'text-warning' : '')}">
+                            </td>
+                            
+                            <!-- 조회수 증가 -->
+                            <td class="views-increase-cell"
+                                th:text="${platformData.viewsIncrease == -1 ? '-' : (platformData.viewsIncrease == -999 ? '⚠️' : (platformData.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(platformData.viewsIncrease, 0, 'COMMA'))}"
+                                th:class="${platformData.viewsIncrease == -1 ? 'text-muted' : (platformData.viewsIncrease == -999 ? 'text-warning' : (platformData.viewsIncrease > 0 ? 'text-success' : (platformData.viewsIncrease < 0 ? 'text-danger' : 'text-muted')))}">
+                            </td>
+                            
+                            <!-- 청취자 수 -->
+                            <td class="listeners-cell"
+                                th:text="${platformData.listeners == -1 ? '-' : (platformData.listeners == -999 ? '⚠️' : #numbers.formatInteger(platformData.listeners, 0, 'COMMA'))}"
+                                th:class="${platformData.listeners == -1 ? 'text-muted' : (platformData.listeners == -999 ? 'text-warning' : '')}">
+                            </td>
+                            
+                            <!-- 청취자 수 증가 -->
+                            <td class="listeners-increase-cell"
+                                th:text="${platformData.listenersIncrease == -1 ? '-' : (platformData.listenersIncrease == -999 ? '⚠️' : (platformData.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(platformData.listenersIncrease, 0, 'COMMA'))}"
+                                th:class="${platformData.listenersIncrease == -1 ? 'text-muted' : (platformData.listenersIncrease == -999 ? 'text-warning' : (platformData.listenersIncrease > 0 ? 'text-success' : (platformData.listenersIncrease < 0 ? 'text-danger' : 'text-muted')))}">
+                            </td>
+                            
+                            <!-- 영상 정보 셀 (첫 번째 플랫폼에서만 표시) -->
+                            <td th:if="${platformIter.first}" 
+                                th:rowspan="${groupedData.platformDataList.size()}"
+                                class="video-info-cell">
+                                <div th:if="${!groupedData.videoInfos.isEmpty()}">
+                                    <div th:each="videoInfo : ${groupedData.videoInfos}" class="video-info-item">
+                                        <div class="video-info-row">
+                                            <span class="video-label">채널명:</span>
+                                            <span class="video-value" th:text="${videoInfo.channel}"></span>
+                                        </div>
+                                        <div class="video-info-row">
+                                            <span class="video-label">제목:</span>
+                                            <span class="video-value">
+                                                <a th:href="${videoInfo.youtubeUrl}" target="_blank" 
+                                                   th:text="${videoInfo.youtubeTitle}"></a>
+                                            </span>
+                                        </div>
+                                        <div class="video-info-row">
+                                            <span class="video-label">순서:</span>
+                                            <span class="video-value" th:text="${videoInfo.songOrder}"></span>
+                                        </div>
+                                        <div class="video-info-row" th:if="${videoInfo.uploadAt != null}">
+                                            <span class="video-label">업로드날짜:</span>
+                                            <span class="video-value" th:text="${#temporals.format(videoInfo.uploadAt, 'yyyy-MM-dd HH:mm')}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:unless="${!groupedData.videoInfos.isEmpty()}" class="no-video-info">-</div>
+                            </td>
+                        </tr>
+                    </th:block>
                 </tbody>
             </table>
         </div>
 
-        <!-- 페이징 -->
-        <div th:if="${totalPages > 1}" class="pagination">
-            <!-- 이전 페이지 -->
+        <!-- 페이지네이션 -->
+        <div class="pagination" th:if="${totalPages > 0}">
             <a th:if="${currentPage > 1}" 
-               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage - 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${currentPage - 1}, size=${pageSize})}" 
                class="page-btn">이전</a>
-            
-            <!-- 페이지 번호들 -->
             <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
                 <a th:if="${pageNum != currentPage}" 
-                   th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${pageNum} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
-                   class="page-btn" th:text="${pageNum}"></a>
-                <span th:if="${pageNum == currentPage}" class="page-btn current" th:text="${pageNum}"></span>
+                   th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${pageNum}, size=${pageSize})}" 
+                   th:text="${pageNum}" 
+                   class="page-btn"></a>
+                <span th:if="${pageNum == currentPage}" 
+                      th:text="${pageNum}" 
+                      class="page-btn current"></span>
             </span>
-            
-            <!-- 다음 페이지 -->
             <a th:if="${currentPage < totalPages}" 
-               th:href="@{'/crawling/data/' + ${songId} + '?page=' + ${currentPage + 1} + '&size=' + ${pageSize} + '&startDate=' + ${startDate} + '&endDate=' + ${endDate} + '&platform=' + ${platform} + '&intervalDays=' + ${intervalDays}}" 
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${currentPage + 1}, size=${pageSize})}" 
                class="page-btn">다음</a>
-        </div>
-
-        <!-- 결과 정보 -->
-        <div th:if="${totalElements > 0}" class="result-info">
-            <p>총 <span th:text="${totalElements}">0</span>개의 데이터 중 <span th:text="${(currentPage - 1) * pageSize + 1}">1</span>-<span th:text="${currentPage * pageSize > totalElements ? totalElements : currentPage * pageSize}">20</span>번째 데이터를 표시합니다.</p>
         </div>
     </section>
 </div>
+
+<!-- CSV 다운로드 모달 -->
+<div id="csvDownloadModal" class="modal" style="display: none;" th:data-song-id="${songId}">
+    <div class="modal-content csv-modal-content">
+        <div class="csv-modal-header">
+            <h3>CSV 다운로드 설정</h3>
+            <span class="modal-close" onclick="closeCsvDownloadModal()">&times;</span>
+        </div>
+        <div class="csv-modal-body">
+            <form id="csvDownloadForm">
+                <div class="csv-form-group">
+                    <label>시작일</label>
+                    <input type="date" id="csvStartDate" class="csv-form-input" th:value="${startDate}" />
+                    <small>빈값으로 두면 전체 기간부터 다운로드됩니다</small>
+                </div>
+                <div class="csv-form-group">
+                    <label>종료일</label>
+                    <input type="date" id="csvEndDate" class="csv-form-input" th:value="${endDate}" />
+                    <small>빈값으로 두면 전체 기간까지 다운로드됩니다</small>
+                </div>
+            </form>
+        </div>
+        <div class="csv-modal-footer">
+            <button type="button" class="csv-btn csv-btn-secondary" onclick="closeCsvDownloadModal()">취소</button>
+            <button type="button" class="csv-btn csv-btn-primary" onclick="downloadCsv()">다운로드</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openCsvDownloadModal() {
+    // 현재 필터 값으로 모달 초기화
+    document.getElementById('csvStartDate').value = document.querySelector('input[name="startDate"]').value || '';
+    document.getElementById('csvEndDate').value = document.querySelector('input[name="endDate"]').value || '';
+    
+    document.getElementById('csvDownloadModal').style.display = 'block';
+}
+
+function closeCsvDownloadModal() {
+    document.getElementById('csvDownloadModal').style.display = 'none';
+}
+
+function downloadCsv() {
+    const startDate = document.getElementById('csvStartDate').value;
+    const endDate = document.getElementById('csvEndDate').value;
+    
+    // 모달에서 songId 가져오기
+    const modal = document.getElementById('csvDownloadModal');
+    const songId = modal.getAttribute('data-song-id');
+    
+    if (!songId) {
+        alert('음원 ID를 찾을 수 없습니다.');
+        return;
+    }
+    
+    // URL 생성
+    let url = `/crawling/data/${songId}/csv`;
+    const params = new URLSearchParams();
+    
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    console.log('다운로드 URL:', url); // 디버깅용
+    
+    // 다운로드 실행
+    window.location.href = url;
+    
+    // 모달 닫기
+    closeCsvDownloadModal();
+}
+
+// 모달 바깥 클릭시 닫기
+window.onclick = function(event) {
+    const modal = document.getElementById('csvDownloadModal');
+    if (event.target == modal) {
+        closeCsvDownloadModal();
+    }
+}
+</script>
+
 </body>
 </html> 

@@ -51,6 +51,7 @@ services:
       - SECRET_KEY=${DJANGO_SECRET_KEY}
       - DEBUG=False
       - ALLOWED_HOSTS=localhost,127.0.0.1
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
 
       # 크롤링 관련 환경변수
       - MELON_API_URL=${MELON_API_URL}

@@ -1,7 +1,6 @@
 package com.rhoonart.unearth.common.exception;
 
 import com.rhoonart.unearth.common.CommonResponse;
-import com.rhoonart.unearth.user.exception.ForbiddenException;
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.user.exception.UnauthorizedException;
 import org.springframework.http.HttpStatus;
@@ -38,20 +37,11 @@ public class GlobalExceptionHandler {
         return "redirect:/user/login";
     }
 
-    @ExceptionHandler(ForbiddenException.class)
-    public ModelAndView handleForbiddenException(ForbiddenException ex) {
-        // 권한 없는 경우 팝업 에러로 처리
-        ModelAndView mav = new ModelAndView("common/error_popup");
-        mav.addObject("errorMessage", ex.getMessage());
-        return mav;
-    }
-
     @ExceptionHandler(BaseException.class)
-    public ModelAndView handleBaseException(BaseException ex) {
-        // 팝업 에러로 처리
-        ModelAndView mav = new ModelAndView("common/error_popup");
-        mav.addObject("errorMessage", ex.getMessage());
-        return mav;
+    @ResponseBody
+    public CommonResponse<Void> handleBaseException(BaseException ex) {
+        // 모든 BaseException 계열 예외를 JSON 응답으로 처리
+        return CommonResponse.fail(ex.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

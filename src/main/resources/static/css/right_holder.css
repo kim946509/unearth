@@ -75,12 +75,16 @@
     border-collapse: collapse;
     margin-bottom: 32px;
     background: #fff;
+    table-layout: fixed; /* 고정 테이블 레이아웃 */
 }
 .holder-table th, .holder-table td {
     border-bottom: 1px solid #ddd;
     padding: 14px 10px;
     text-align: left;
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .holder-table th {
     background: #111;
@@ -90,6 +94,52 @@
 }
 .holder-table td {
     color: #222;
+}
+
+/* 권리자 리스트 테이블 컬럼 너비 조정 */
+.holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 구분 */
+    width: 7%;
+}
+.holder-table th:nth-child(2), .holder-table td:nth-child(2) { /* 권리자명 */
+    width: 12%;
+}
+.holder-table th:nth-child(3), .holder-table td:nth-child(3) { /* 계약 기간 */
+    width: 18%;
+}
+.holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 남은 일수 */
+    width: 8%;
+}
+.holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 계약 연장 */
+    width: 8%;
+}
+.holder-table th:nth-child(6), .holder-table td:nth-child(6) { /* 등록 곡 수 */
+    width: 10%;
+}
+.holder-table th:nth-child(7), .holder-table td:nth-child(7) { /* 권리자 페이지 */
+    width: 20%;
+}
+.holder-table th:nth-child(8), .holder-table td:nth-child(8) { /* 로그인 상태 */
+    width: 17%;
+}
+
+/* 권리자 상세페이지 테이블 컬럼 너비 조정 */
+.holder-table th:nth-child(1), .holder-table td:nth-child(1) { /* 권리자명 */
+    width: 12%;
+}
+.holder-table th:nth-child(2), .holder-table td:nth-child(2) { /* 아티스트명 */
+    width: 12%;
+}
+.holder-table th:nth-child(3), .holder-table td:nth-child(3) { /* 앨범명 */
+    width: 20%;
+}
+.holder-table th:nth-child(4), .holder-table td:nth-child(4) { /* 트랙명 */
+    width: 25%;
+}
+.holder-table th:nth-child(5), .holder-table td:nth-child(5) { /* 유튜브 URL */
+    width: 10%;
+}
+.holder-table th:nth-child(6), .holder-table td:nth-child(6) { /* 데이터 보기 */
+    width: 8%;
 }
 .move-btn {
     padding: 8px 24px;
@@ -102,6 +152,91 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    margin-right: 8px;
+}
+
+.edit-btn {
+    padding: 8px 16px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.extend-btn {
+    padding: 6px 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.extend-btn:hover {
+    background: #218838;
+}
+
+/* 계약 남은 일수 스타일 */
+.contract-normal {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.contract-warning {
+    color: #ffc107;
+    font-weight: 600;
+}
+
+.contract-expired {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* 로그인 상태 버튼 스타일 */
+.login-enable-btn {
+    padding: 6px 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.login-enable-btn:hover {
+    background: #218838;
+}
+
+.login-disable-btn {
+    padding: 6px 12px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+}
+
+.login-disable-btn:hover {
+    background: #c82333;
 }
 .pagination {
     display: flex;
@@ -234,7 +369,7 @@
     padding: 36px 32px 28px 32px;
     min-width: 340px;
     max-width: 420px;
-    margin: auto;
+    margin : 20vh auto;
     position: relative;
     box-shadow: 0 2px 16px rgba(0,0,0,0.13);
     display: flex;
@@ -259,20 +394,21 @@
 #closeModalBtn:hover {
     color: #e74c3c;
 }
-#registerForm .form-row {
+.modal-form .form-row {
     display: flex;
     flex-direction: column;
     gap: 7px;
     margin-bottom: 8px;
 }
-#registerForm label {
+.modal-form label {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 2px;
 }
-#registerForm input[type="text"],
-#registerForm input[type="date"],
-#registerForm select {
+.modal-form input,
+.modal-form input[type="text"],
+.modal-form input[type="date"],
+.modal-form select {
     padding: 11px 13px;
     border: 2px solid #111;
     border-radius: 8px;
@@ -281,11 +417,11 @@
     background: #fff;
     transition: border 0.2s;
 }
-#registerForm input:focus,
-#registerForm select:focus {
+.modal-form input:focus,
+.modal-form select:focus {
     border: 2px solid #2d7cf2;
 }
-#registerForm .register-btn {
+.modal-form .register-btn {
     width: 100%;
     padding: 14px 0;
     background: #111;
@@ -298,12 +434,18 @@
     margin-top: 10px;
 }
 
+
+
 /* 권리자 상세 페이지 스타일 */
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
+}
+
+.page-header .password-change-btn {
+    margin-left: auto;
 }
 
 .page-header h2 {
@@ -329,9 +471,25 @@
     border-color: #ccc;
 }
 
+.password-change-btn {
+    padding: 10px 20px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.password-change-btn:hover {
+    background: #333;
+}
+
 .youtube-link {
     padding: 6px 12px;
-    background: #ff0000;
+    background: #000000;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -340,10 +498,14 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .youtube-link:hover {
-    background: #cc0000;
+    background: #333;
 }
 
 .data-btn {
@@ -357,6 +519,10 @@
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .data-btn:hover {
@@ -484,6 +650,54 @@
     background: #f8f9fa;
 }
 
+/* 날짜 셀 스타일 */
+.date-cell {
+    background-color: #f8f9fa !important;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* 영상 정보 스타일 */
+.video-info {
+    text-align: left;
+    padding: 8px;
+    min-width: 200px;
+}
+
+.video-title {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.video-title:hover {
+    text-decoration: underline;
+}
+
+.video-channel {
+    color: #6c757d;
+    font-size: 0.9em;
+    margin-top: 4px;
+}
+
+.video-order {
+    background-color: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    margin-left: 8px;
+    color: #495057;
+}
+
+.video-upload {
+    color: #6c757d;
+    font-size: 0.8em;
+    margin-top: 4px;
+}
+
 /* 증가량 표시 스타일 */
 .increase-positive {
     color: #28a745;
@@ -542,6 +756,44 @@
     margin: 0;
 }
 
+/* 크롤링 데이터 페이지네이션 스타일 */
+.crawling-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    gap: 5px;
+}
+
+.crawling-page-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.crawling-page-btn:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+}
+
+.crawling-page-btn.current {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.crawling-page-btn.disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
 @media (max-width: 600px) {
     .modal-content {
         min-width: 0;
@@ -549,3 +801,349 @@
         padding: 18px 6vw 18px 6vw;
     }
 } 
+
+/* 크롤링 데이터 테이블 스타일 */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    table-layout: fixed; /* 고정 테이블 레이아웃 */
+}
+
+.data-table th {
+    background: #f8f9fa;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    font-size: 14px;
+}
+
+.data-table td {
+    padding: 12px 8px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 크롤링 데이터 테이블 컬럼 너비 설정 */
+.data-table th:nth-child(1), .data-table td:nth-child(1) { /* 날짜 */
+    width: 12%;
+}
+.data-table th:nth-child(2), .data-table td:nth-child(2) { /* 플랫폼 */
+    width: 12%;
+}
+.data-table th:nth-child(3), .data-table td:nth-child(3) { /* 조회수 */
+    width: 12%;
+}
+.data-table th:nth-child(4), .data-table td:nth-child(4) { /* 조회수 증가 */
+    width: 12%;
+}
+.data-table th:nth-child(5), .data-table td:nth-child(5) { /* 청취자 수 */
+    width: 12%;
+}
+.data-table th:nth-child(6), .data-table td:nth-child(6) { /* 청취자 수 증가 */
+    width: 10%;
+}
+.data-table th:nth-child(7), .data-table td:nth-child(7) { /* 영상 정보 */
+    width: 30%;
+}
+
+/* 날짜 셀 스타일 */
+.date-cell {
+    background-color: #e3f2fd;
+    font-weight: 600;
+    color: #1976d2;
+    border-right: 2px solid #dee2e6;
+}
+
+/* 영상 정보 셀 스타일 */
+.video-info-cell {
+    text-align: left;
+    border-right: 2px solid #dee2e6;
+    white-space: normal; /* 영상 정보는 줄바꿈 허용 */
+    word-wrap: break-word;
+}
+
+.video-info-item {
+    margin-bottom: 6px;
+    padding: 6px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #007bff;
+    word-wrap: break-word;
+}
+
+.video-info-item:last-child {
+    margin-bottom: 0;
+}
+
+.video-channel {
+    font-weight: 600;
+    color: #495057;
+    font-size: 11px;
+    margin-bottom: 3px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.video-title a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    display: block;
+}
+
+.video-title a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.video-order {
+    color: #6c757d;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.video-upload {
+    color: #6c757d;
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+/* 새로운 영상 정보 스타일 */
+.video-info-row {
+    display: flex;
+    margin-bottom: 3px;
+    align-items: flex-start;
+}
+
+.video-info-row:last-child {
+    margin-bottom: 0;
+}
+
+.video-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 10px;
+    min-width: 60px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.video-value {
+    color: #212529;
+    font-size: 10px;
+    word-break: break-word;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.video-value a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    word-wrap: break-word;
+}
+
+.video-value a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.no-video-info {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* 플랫폼 셀 스타일 */
+.platform-cell {
+    font-weight: 600;
+    color: #495057;
+    background-color: #f8f9fa;
+}
+
+/* 데이터 셀 스타일 */
+.views-cell, .listeners-cell, .views-increase-cell, .listeners-increase-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
+
+.error-icon {
+    color: #dc3545;
+    font-size: 16px;
+}
+
+.no-data {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* 증가량 양수/음수 색상 */
+.views-increase-cell span:not(.error-icon):not(.no-data),
+.listeners-increase-cell span:not(.error-icon):not(.no-data) {
+    font-weight: 600;
+}
+
+.views-increase-cell span:not(.error-icon):not(.no-data)[data-value^="-"] {
+    color: #dc3545;
+}
+
+.views-increase-cell span:not(.error-icon):not(.no-data):not([data-value^="-"]) {
+    color: #28a745;
+}
+
+.listeners-increase-cell span:not(.error-icon):not(.no-data)[data-value^="-"] {
+    color: #dc3545;
+}
+
+.listeners-increase-cell span:not(.error-icon):not(.no-data):not([data-value^="-"]) {
+    color: #28a745;
+} 
+
+/* 페이지네이션 스타일 - 권리자 리스트와 동일 */
+.pagination {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 32px;
+}
+
+.page-btn {
+    padding: 7px 15px;
+    border-radius: 6px;
+    border: none;
+    background: #eee;
+    color: #111;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 0 2px;
+}
+
+.page-btn.current {
+    background: #111;
+    color: #fff;
+    font-weight: bold;
+} 
+
+/* CSV 다운로드 모달 전용 스타일 */
+.csv-modal-content {
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.csv-modal-header {
+    background-color: #f8f9fa;
+    padding: 20px 24px;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.csv-modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.csv-modal-body {
+    padding: 24px;
+}
+
+.csv-modal-footer {
+    background-color: #f8f9fa;
+    padding: 16px 24px;
+    border-top: 1px solid #dee2e6;
+    border-radius: 0 0 12px 12px;
+    text-align: right;
+}
+
+.csv-form-group {
+    margin-bottom: 20px;
+}
+
+.csv-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.csv-form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+
+.csv-form-input:focus {
+    border: 2px solid #007bff;
+}
+
+.csv-form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #6c757d;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.csv-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: all 0.2s;
+}
+
+.csv-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.csv-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.csv-btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.csv-btn-primary:hover {
+    background-color: #0056b3;
+}

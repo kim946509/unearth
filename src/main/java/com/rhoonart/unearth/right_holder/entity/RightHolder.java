@@ -46,6 +46,19 @@ public class RightHolder extends BaseEntity {
     @Column(name = "contract_end", nullable = false)
     private LocalDate contractEnd;
 
-    @Column(name = "business_number", nullable = false)
+    @Column(name = "business_number", nullable = false, unique = true)
     private String businessNumber;
+
+    public void updateInfo(HolderType holderType, String holderName, LocalDate contractStart, LocalDate contractEnd,
+            String businessNumber) {
+        this.holderType = holderType;
+        this.holderName = holderName;
+        this.contractStart = contractStart;
+        this.contractEnd = contractEnd;
+        this.businessNumber = businessNumber;
+    }
+
+    public void updateContractEnd(LocalDate newContractEnd) {
+        this.contractEnd = newContractEnd;
+    }
 }

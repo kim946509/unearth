@@ -1,30 +1,42 @@
 package com.rhoonart.unearth.crawling.controller;
 
 import com.rhoonart.unearth.common.util.SessionUserUtil;
+import com.rhoonart.unearth.crawling.dto.CrawlingCsvDownloadDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingExecuteRequestDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataWithSongInfoDto;
 import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.service.CrawlingService;
+import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.common.CommonResponse;
 import com.rhoonart.unearth.user.exception.ForbiddenException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
+@Slf4j
 @Controller
 @RequestMapping("/crawling")
 @RequiredArgsConstructor
 public class CrawlingController {
 
     private final CrawlingService crawlingService;
+    private final RightHolderService rightHolderService;
 
     @PostMapping("/execute")
     @ResponseBody
@@ -35,13 +47,21 @@ public class CrawlingController {
         return CommonResponse.success("크롤링이 성공적으로 실행되었습니다.");
     }
 
+    @PostMapping("/execute-only")
+    @ResponseBody
+    public CommonResponse<String> executeCrawlingOnly(
+            HttpSession session, @RequestParam String songId) {
+        SessionUserUtil.requireAdminRole(session);
+        crawlingService.executeCrawlingOnly(songId);
+        return CommonResponse.success("크롤링이 성공적으로 실행되었습니다.");
+    }
+
     @GetMapping("/data/{songId}")
     public String viewCrawlingData(
             @PathVariable String songId,
             @RequestParam(value = "startDate", required = false) String startDateStr,
             @RequestParam(value = "endDate", required = false) String endDateStr,
             @RequestParam(value = "platform", required = false) String platformStr,
-            @RequestParam(value = "intervalDays", required = false) Integer intervalDays,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
             HttpSession session,
@@ -54,13 +74,29 @@ public class CrawlingController {
         String rightHolderId = songInfo.getRightHolder().getId();
 
         // 권한 확인
-        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId)) {
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
             throw new ForbiddenException("해당 권리자의 크롤링 데이터에 접근할 권한이 없습니다.");
         }
 
-        // 날짜 파싱
-        LocalDate startDate = startDateStr != null ? LocalDate.parse(startDateStr) : LocalDate.now().minusDays(30);
-        LocalDate endDate = endDateStr != null ? LocalDate.parse(endDateStr) : LocalDate.now();
+        // 날짜 파싱 (전체 기간으로 설정)
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+
+        if (startDateStr != null && !startDateStr.trim().isEmpty()) {
+            try {
+                startDate = LocalDate.parse(startDateStr);
+            } catch (DateTimeParseException e) {
+                // 잘못된 날짜 형식이면 null로 처리
+            }
+        }
+
+        if (endDateStr != null && !endDateStr.trim().isEmpty()) {
+            try {
+                endDate = LocalDate.parse(endDateStr);
+            } catch (DateTimeParseException e) {
+                // 잘못된 날짜 형식이면 null로 처리
+            }
+        }
 
         // 플랫폼 파싱 (빈 문자열이면 null로 처리)
         PlatformType platform = null;
@@ -69,12 +105,8 @@ public class CrawlingController {
                 platform = PlatformType.valueOf(platformStr);
             } catch (IllegalArgumentException e) {
                 // 잘못된 플랫폼 값이면 null로 처리
-                platform = null;
             }
         }
-
-        // 간격 파싱 (null이면 1로 설정)
-        Integer interval = intervalDays != null ? intervalDays : 1;
 
         // 페이지 크기 제한: 10, 20, 50, 100만 허용
         if (size != 10 && size != 20 && size != 50 && size != 100)
@@ -85,15 +117,15 @@ public class CrawlingController {
         int pageSize = size;
 
         CrawlingDataWithSongInfoDto crawlingDataWithSongInfo = crawlingService.getCrawlingDataWithFilters(
-                songId, startDate, endDate, platform, interval, pageNumber, pageSize);
+                songId, startDate, endDate, platform, pageNumber, pageSize);
 
         model.addAttribute("response", CommonResponse.success(crawlingDataWithSongInfo.getCrawlingDataList()));
+        model.addAttribute("crawlingData", crawlingDataWithSongInfo); // 그룹화된 데이터 포함
         model.addAttribute("songId", songId);
         model.addAttribute("rightHolderId", crawlingDataWithSongInfo.getSongInfo().getRightHolder().getId());
         model.addAttribute("startDate", startDateStr);
         model.addAttribute("endDate", endDateStr);
         model.addAttribute("platform", platformStr);
-        model.addAttribute("intervalDays", interval);
         model.addAttribute("currentPage", pageNumber);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", crawlingDataWithSongInfo.getTotalPages());
@@ -101,5 +133,66 @@ public class CrawlingController {
         model.addAttribute("songInfo", crawlingDataWithSongInfo.getSongInfo());
 
         return "crawling/data";
+    }
+
+    @GetMapping("/data/{songId}/csv")
+    public ResponseEntity<String> downloadCrawlingDataCsv(
+            @PathVariable String songId,
+            @RequestParam(value = "startDate", required = false) String startDateStr,
+            @RequestParam(value = "endDate", required = false) String endDateStr,
+            HttpSession session) {
+        // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
+        SessionUserUtil.requireLogin(session);
+
+        // 음원 정보를 통해 권리자 ID 확인
+        SongInfo songInfo = crawlingService.getSongInfoById(songId);
+        String rightHolderId = songInfo.getRightHolder().getId();
+
+        // 권한 확인
+        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
+            throw new ForbiddenException("해당 권리자의 크롤링 데이터에 접근할 권한이 없습니다.");
+        }
+
+        // Service에서 CSV 데이터 및 파일명 생성
+        CrawlingCsvDownloadDto csvDownloadDto = crawlingService.generateCrawlingDataCsvForDownload(songId, startDateStr,
+                endDateStr);
+
+        // 디버깅 로그
+        log.info("생성된 파일명: {}", csvDownloadDto.getFilename());
+
+        // 한글 파일명 인코딩
+        String encodedFilename = URLEncoder.encode(csvDownloadDto.getFilename(), StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20");
+
+        log.info("인코딩된 파일명: {}", encodedFilename);
+
+        // HTTP 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("text/csv; charset=UTF-8"));
+        headers.set("Content-Disposition", "attachment; filename*=UTF-8''" + encodedFilename);
+
+        log.info("Content-Disposition 헤더: attachment; filename*=UTF-8''{}", encodedFilename);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body("\uFEFF" + csvDownloadDto.getCsvData()); // UTF-8 BOM 추가 (Excel에서 한글 깨짐 방지)
+    }
+
+    @GetMapping("/failures")
+    public String viewCrawlingFailures(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            Model model,
+            HttpSession session) {
+        SessionUserUtil.requireAdminRole(session);
+        Page<com.rhoonart.unearth.crawling.dto.CrawlingFailureDto> failures = crawlingService.getCrawlingFailures(page,
+                size);
+        model.addAttribute("failures", failures);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        // 권리자 드롭다운용 목록
+        var rightHolders = rightHolderService.findAllForDropdown();
+        model.addAttribute("rightHolders", rightHolders);
+        return "crawling/failures";
     }
 }

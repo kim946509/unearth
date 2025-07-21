@@ -39,12 +39,13 @@ class GenieCrawler:
                     return result
             
             # 국문 검색 실패시 영문으로 검색
-            logger.info("🔍 영문으로 검색 시도")
-            html = self._search_song(song_info['title_en'], song_info['artist_en'])
-            if html:
-                result = self._parse_song_info(html, song_info)
-                if result:
-                    return result
+            if song_info.get('artist_en') and song_info.get('title_en'):
+                logger.info("🔍 영문으로 검색 시도")
+                html = self._search_song(song_info['title_en'], song_info['artist_en'])
+                if html:
+                    result = self._parse_song_info(html, song_info)
+                    if result:
+                        return result
             
             logger.warning(f"❌ 모든 검색 시도 실패: {song_info}")
             return None
@@ -222,8 +223,14 @@ class GenieCrawler:
                     logger.warning("❌ 아티스트명 추출 실패, 검색한 값 사용")
                     artist_name = target_song_info['artist_ko'] # 국문 아티스트명 사용
                 
-                # 곡명과 아티스트명 검증 (엄격한 매칭)
-                comparison_result = compare_song_info_multilang(song_title, artist_name, target_song_info)
+                # 곡명과 아티스트명 검증 (한글/영문 제목과 아티스트명 모두 사용)
+                comparison_result = compare_song_info_multilang(
+                    song_title, artist_name, 
+                    target_song_info['title_ko'], 
+                    target_song_info.get('title_en', ''),
+                    target_song_info['artist_ko'], 
+                    target_song_info.get('artist_en', '')
+                )
                 
                 if not comparison_result['both_match']:
                     logger.warning(f"❌ 매칭 실패: {comparison_result}")

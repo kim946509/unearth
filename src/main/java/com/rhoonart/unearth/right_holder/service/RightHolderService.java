@@ -2,6 +2,7 @@ package com.rhoonart.unearth.right_holder.service;
 
 import com.rhoonart.unearth.right_holder.dto.RightHolderListResponseDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
+import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderSongListResponseDto;
 import com.rhoonart.unearth.right_holder.entity.HolderType;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
@@ -31,7 +32,6 @@ import java.util.stream.Collectors;
 public class RightHolderService {
     private final RightHolderRepository rightHolderRepository;
     private final SongInfoRepository songInfoRepository;
-    private final CrawlingPeriodRepository crawlingPeriodRepository;
     private final CrawlingDataRepository crawlingDataRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -39,13 +39,21 @@ public class RightHolderService {
     public Page<RightHolderListResponseDto> findRightHolders(HolderType holderType, String holderName,
             LocalDate contractDate, Pageable pageable) {
         Page<RightHolder> page = rightHolderRepository.search(holderType, holderName, contractDate, pageable);
-        return page.map(rh -> RightHolderListResponseDto.of(
-                rh.getId(),
-                rh.getHolderType(),
-                rh.getHolderName(),
-                rh.getContractStart(),
-                rh.getContractEnd(),
-                songInfoRepository.countByRightHolder(rh)));
+        return page.map(rh -> {
+            // 계약 종료일까지 남은 일수 계산
+            long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), rh.getContractEnd());
+
+            return RightHolderListResponseDto.of(
+                    rh.getId(),
+                    rh.getHolderType(),
+                    rh.getHolderName(),
+                    rh.getContractStart(),
+                    rh.getContractEnd(),
+                    rh.getBusinessNumber(),
+                    songInfoRepository.countByRightHolder(rh),
+                    daysLeft,
+                    rh.getUser().isLoginEnabled());
+        });
     }
 
     public List<String> findAllForDropdown() {
@@ -83,18 +91,20 @@ public class RightHolderService {
     }
 
     public Page<RightHolderSongListResponseDto> findSongsByRightHolder(String rightHolderId, String search,
-            Pageable pageable) {
+            Boolean hasCrawlingData, Pageable pageable) {
         // 권리자 존재 여부 확인
         RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
 
-        // 권리자별 노래 조회
-        Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearch(rightHolderId, search, pageable);
+        // 권리자별 노래 조회 (크롤링 데이터 필터링 포함)
+        Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearchAndCrawlingFilter(
+                rightHolderId, search, hasCrawlingData, pageable);
 
         // DTO 변환
         return songPage.map(song -> {
-            // 크롤링 데이터 존재 여부 확인
-            boolean hasCrawlingData = crawlingDataRepository.existsBySongId(song.getId());
+            // 크롤링 데이터 존재 여부 확인 (필터링된 결과이므로 hasCrawlingData가 true인 경우는 이미 확인됨)
+            boolean songHasCrawlingData = hasCrawlingData != null && hasCrawlingData ? true
+                    : crawlingDataRepository.existsBySongId(song.getId());
 
             return RightHolderSongListResponseDto.builder()
                     .songId(song.getId())
@@ -103,7 +113,7 @@ public class RightHolderService {
                     .albumKo(song.getAlbumKo())
                     .titleKo(song.getTitleKo())
                     .youtubeUrl(song.getYoutubeUrl())
-                    .hasCrawlingData(hasCrawlingData)
+                    .hasCrawlingData(songHasCrawlingData)
                     .build();
         });
     }
@@ -111,5 +121,88 @@ public class RightHolderService {
     public RightHolder findById(String rightHolderId) {
         return rightHolderRepository.findById(rightHolderId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+    }
+
+    public RightHolder findByUserId(String userId) {
+        return rightHolderRepository.findByUserId(userId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+    }
+
+    @Transactional
+    public void update(String rightHolderId, RightHolderUpdateRequestDto dto) {
+        // 1. 권리자 존재 여부 확인
+        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // 2. holderName 중복 체크 (자신 제외)
+        if (!rightHolder.getHolderName().equals(dto.getHolderName()) &&
+                rightHolderRepository.existsByHolderName(dto.getHolderName())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 권리사 이름입니다.");
+        }
+
+        // 3. businessNumber 중복 체크 (자신 제외)
+        if (!rightHolder.getBusinessNumber().equals(dto.getBusinessNumber()) &&
+                rightHolderRepository.existsByBusinessNumber(dto.getBusinessNumber())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 사업자 번호입니다.");
+        }
+
+        // 4. username 중복 체크 (권리자명이 변경되는 경우)
+        if (!rightHolder.getHolderName().equals(dto.getHolderName())) {
+            if (userRepository.existsByUsername(dto.getHolderName())) {
+                throw new BaseException(ResponseCode.INVALID_INPUT, "이미 사용 중인 아이디입니다.");
+            }
+        }
+
+        // 5. 권리자 정보 업데이트
+        rightHolder.updateInfo(
+                HolderType.valueOf(dto.getHolderType()),
+                dto.getHolderName(),
+                dto.getContractStart(),
+                dto.getContractEnd(),
+                dto.getBusinessNumber());
+
+        // 6. User의 username도 함께 업데이트
+        User user = rightHolder.getUser();
+        user.updateUsername(dto.getHolderName());
+        userRepository.save(user);
+
+        rightHolderRepository.save(rightHolder);
+    }
+
+    @Transactional
+    public void extendContract(String rightHolderId, String newEndDate) {
+        // 권리자 존재 여부 확인
+        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // 새로운 계약 종료일 파싱
+        LocalDate newEndDateParsed;
+        try {
+            newEndDateParsed = LocalDate.parse(newEndDate);
+        } catch (Exception e) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "올바르지 않은 날짜 형식입니다.");
+        }
+
+        // 현재 계약 종료일보다 늦은 날짜인지 확인
+        if (newEndDateParsed.isBefore(rightHolder.getContractEnd())
+                || newEndDateParsed.isEqual(rightHolder.getContractEnd())) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "새로운 계약 종료일은 현재 계약 종료일보다 늦어야 합니다.");
+        }
+
+        // 계약 종료일 업데이트
+        rightHolder.updateContractEnd(newEndDateParsed);
+        rightHolderRepository.save(rightHolder);
+    }
+
+    @Transactional
+    public void toggleLoginStatus(String rightHolderId, boolean isLoginEnabled) {
+        // 권리자 존재 여부 확인
+        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
+                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+
+        // User의 로그인 상태 업데이트
+        User user = rightHolder.getUser();
+        user.updateLoginEnabled(isLoginEnabled);
+        userRepository.save(user);
     }
 }

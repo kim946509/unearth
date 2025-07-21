@@ -117,8 +117,8 @@ def save_genie_csv(results, company_name="rhoonart"):
         # DataFrame 생성
         df = pd.DataFrame([{
             'song_id': f"genie_{result.get('artist_name', '')}_{song_title}".lower().replace(' ', '_'),
-            'song_title': song_title,
-            'artist_name': result.get('artist_name'),
+            'title_ko': song_title,
+            'artist_ko': result.get('artist_name'),
             'total_person_count': total_person_count,
             'views': views,
             'crawl_date': result.get('crawl_date')
@@ -171,8 +171,8 @@ def save_youtube_music_csv(results, company_name="rhoonart"):
         # DataFrame 생성
         df = pd.DataFrame([{
             'song_id': f"ytmusic_{result.get('artist_name', '')}_{song_title}".lower().replace(' ', '_'),
-            'song_title': song_title,
-            'artist_name': result.get('artist_name'),
+            'title_ko': song_title,
+            'artist_ko': result.get('artist_name'),
             'views': result.get('views', 0),
             'crawl_date': result.get('crawl_date')
         }])
@@ -224,8 +224,8 @@ def save_youtube_csv(results, company_name="rhoonart"):
         # DataFrame 생성
         df = pd.DataFrame([{
             'song_id': f"youtube_{result.get('artist_name', '')}_{song_title}".lower().replace(' ', '_'),
-            'song_title': song_title,
-            'artist_name': result.get('artist_name'),
+            'title_ko': song_title,
+            'artist_ko': result.get('artist_name'),
             'views': result.get('views', 0),
             'crawl_date': result.get('crawl_date')
         }])
@@ -277,8 +277,8 @@ def save_melon_csv(results, company_name="rhoonart"):
         # DataFrame 생성
         df = pd.DataFrame([{
             'song_id': f"melon_{result.get('artist_name', '')}_{song_title}".lower().replace(' ', '_'),
-            'song_title': song_title,
-            'artist_name': result.get('artist_name'),
+            'title_ko': song_title,
+            'artist_ko': result.get('artist_name'),
             'views': result.get('views', 0),
             'listeners': result.get('listeners', 0),
             'melon_song_id': result.get('melon_song_id', ''),

@@ -3,6 +3,7 @@
     padding: 6px 12px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 44px;
 }
 .header-logo {
@@ -17,6 +18,7 @@ body {
     font-size: 16px;
     line-height: 1.6;
     margin: 0;
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,9 +35,7 @@ button, input, select, textarea {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
-    background: none;
-    border: none;
-    outline: none;
+
 }
 
 ul, ol {
@@ -83,4 +83,90 @@ img {
     color: #111;
     font-weight: bold;
     cursor: pointer;
-} 
+}
+
+
+.header-logo {
+    height: 40px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.password-change-btn {
+    padding: 10px 20px;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.password-change-btn:hover {
+    background: #858585;
+    color: #000000;
+    text-decoration: none;
+}
+
+.required-star {
+    color: #e74c3c;
+    font-size: 17px;
+    margin-left: 2px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+.modal-content {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 40vh auto;
+}
+.modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: -10px;
+}
+.modal-close:hover {
+    color: #000;
+}
+.modal-message {
+    margin: 20px 0;
+    color: rgb(43, 43, 43);
+    font-weight: 500;
+}
+.modal-btn {
+    background: #111;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}

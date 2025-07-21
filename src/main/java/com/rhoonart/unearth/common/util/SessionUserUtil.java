@@ -1,5 +1,6 @@
 package com.rhoonart.unearth.common.util;
 
+import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.user.dto.UserDto;
 import com.rhoonart.unearth.user.entity.Role;
 import com.rhoonart.unearth.user.exception.ForbiddenException;
@@ -7,6 +8,7 @@ import com.rhoonart.unearth.user.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Arrays;
+import org.springframework.stereotype.Service;
 
 public class SessionUserUtil {
     private static final String LOGIN_USER_KEY = "LOGIN_USER";
@@ -118,11 +120,13 @@ public class SessionUserUtil {
     /**
      * 특정 권리자의 데이터에 접근할 권한이 있는지 확인합니다.
      * 
-     * @param session       HttpSession
-     * @param rightHolderId 권리자 ID
+     * @param session            HttpSession
+     * @param rightHolderId      권리자 ID
+     * @param rightHolderService 권리자 서비스 (권리자 본인 체크용)
      * @return 접근 권한 여부
      */
-    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId) {
+    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId,
+            RightHolderService rightHolderService) {
         UserDto user = getLoginUser(session);
         if (user == null) {
             return false;
@@ -134,6 +138,18 @@ public class SessionUserUtil {
         }
 
         // 권리자는 본인 데이터만 접근 가능
-        return user.getRole() == Role.RIGHT_HOLDER && user.getId().equals(rightHolderId);
+        if (user.getRole() == Role.RIGHT_HOLDER) {
+            try {
+                // 현재 로그인한 사용자의 권리자 정보 조회
+                var userRightHolder = rightHolderService.findByUserId(user.getId());
+                // 요청한 권리자 ID와 일치하는지 확인
+                return userRightHolder.getId().equals(rightHolderId);
+            } catch (Exception e) {
+                // 권리자 정보를 찾을 수 없는 경우 접근 불가
+                return false;
+            }
+        }
+
+        return false;
     }
 }

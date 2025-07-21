@@ -8,6 +8,56 @@
         <div class="header">
             <img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" />
         </div>
+        
+        <!-- 공통 에러 모달 -->
+        <div id="errorModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-message" id="modalMessage"></div>
+                <button class="modal-btn" onclick="closeModal()">확인</button>
+            </div>
+        </div>
+        
+        <script>
+            // 전역 변수로 새로고침 필요 여부 관리
+            let needRefresh = false;
+            
+            // 전역 모달 함수들
+            function showModal(message, shouldRefresh = false) {
+                document.getElementById('modalMessage').innerText = message;
+                document.getElementById('errorModal').style.display = 'block';
+                needRefresh = shouldRefresh;
+            }
+            
+            function closeModal() {
+                document.getElementById('errorModal').style.display = 'none';
+                // 새로고침이 필요한 경우 확인 버튼 클릭 시 새로고침
+                if (needRefresh) {
+                    location.reload();
+                    needRefresh = false;
+                }
+            }
+            
+            // 모달 외부 클릭 시 닫기
+            window.onclick = function(event) {
+                const modal = document.getElementById('errorModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+            
+            // 전역 에러 처리 함수
+            function handleApiError(response) {
+                if (!response.ok) {
+                    response.json().then(data => {
+                        showModal(data.message || '오류가 발생했습니다.');
+                    }).catch(() => {
+                        showModal('오류가 발생했습니다.');
+                    });
+                    return true; // 에러 처리됨
+                }
+                return false; // 에러 없음
+            }
+        </script>
     </div>
 </body>
 </html> 

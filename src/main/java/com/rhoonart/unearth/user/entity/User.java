@@ -35,6 +35,24 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    @Column(name = "is_login_enabled", nullable = false)
+    @Column(name = "is_login_enabled", nullable = true)
     private boolean isLoginEnabled;
+
+    public void updateUsername(String newUsername) {
+        this.username = newUsername;
+    }
+
+    /**
+     * 비밀번호 변경
+     */
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    /**
+     * 로그인 활성화 상태 변경
+     */
+    public void updateLoginEnabled(boolean isLoginEnabled) {
+        this.isLoginEnabled = isLoginEnabled;
+    }
 }

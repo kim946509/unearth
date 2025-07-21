@@ -116,13 +116,15 @@ class MelonCrawler:
         Returns:
             int: 변환된 숫자
                 - 정상값: 양수
-                - 0: 실제로 0인 경우
+                - 0: 실제로 0인 경우 또는 빈 값
                 - -1: 해당 플랫폼에서 제공하지 않는 데이터
                 - -999: 크롤링 실패/오류
         """
         try:
-            if not value:
-                return -999  # 데이터가 없음 (크롤링 실패)
+            # 빈 값이면 0으로 처리
+            if not value or value == "":
+                logger.info(f"ℹ️ 빈 값 발견, 0으로 처리: {value}")
+                return 0
             
             # 쉼표 제거 후 숫자 변환
             clean_value = str(value).replace(',', '')

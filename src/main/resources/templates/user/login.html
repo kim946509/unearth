@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-    <div th:replace="common/header :: header"></div>
+    <div th:replace="~{common/header :: header}"></div>
     <div class="login-container">
         <form id="loginForm" class="login-form" autocomplete="off">
             <div>
@@ -42,13 +42,19 @@
             const result = await response.json();
             if (result.code === 'SUCCESS') {
                 const role = result.data && result.data.userDto && result.data.userDto.role;
+                const rightHolderId = result.data && result.data.rightHolderId;
+                
                 if (role === 'SUPER_ADMIN' || role === 'ADMIN') {
                     window.location.href = '/right-holder/list';
+                } else if (role === 'RIGHT_HOLDER' && rightHolderId) {
+                    // 권리자인 경우 해당 권리자 상세 페이지로 이동
+                    window.location.href = '/right-holder/' + rightHolderId;
                 } else {
                     window.location.href = '/home';
                 }
             } else {
-                document.getElementById('errorMessage').innerText = result.message || '로그인에 실패했습니다.';
+                // 에러 모달 표시 (헤더에서 제공하는 전역 함수 사용)
+                showModal(result.message || '로그인에 실패했습니다.');
             }
         });
     </script>

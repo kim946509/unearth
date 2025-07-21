@@ -4,11 +4,12 @@
     <link rel="stylesheet" href="/css/base.css">
 </head>
 <body>
-<div th:fragment="sidebar">
+<div th:fragment="sidebar" style="background-color: #f7f7f7">
     <aside class="sidebar">
         <div class="sidebar-title">UNEARTH 관리</div>
         <a th:href="@{/right-holder/list}" th:classappend="${activeMenu == 'rightHolderList'} ? ' active'" class="sidebar-menu">권리자 등록</a>
         <a th:href="@{/song/list}" th:classappend="${activeMenu == 'songRegister'} ? ' active'" class="sidebar-menu">음원 등록</a>
+        <a th:href="@{/crawling/failures}" th:classappend="${activeMenu == 'crawlingFailures'} ? ' active'" class="sidebar-menu">크롤링 실패 목록</a>
     </aside>
 </div>
 </body>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>일괄등록 결과</title>
+</head>
+<body>
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${error}" class="bulk-register-error">
+        <strong>❌ 일괄등록 실패</strong><br>
+        <div style="margin-top: 10px;">
+            <span th:text="${error}"></span>
+        </div>
+        
+        <!-- 권리자 관련 오류인 경우 추가 안내 -->
+        <div th:if="${error != null and error.contains('권리자를 찾을 수 없습니다')}" class="solution-guide">
+            <strong>💡 해결 방법:</strong>
+            <ul>
+                <li>먼저 해당 권리자를 '권리자 관리'에서 등록해주세요.</li>
+                <li>CSV 파일의 권리자명이 정확히 입력되었는지 확인해주세요.</li>
+                <li>권리자명에 공백이나 특수문자가 포함되어 있지 않은지 확인해주세요.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 성공 결과 표시 -->
+    <div th:if="${success and bulkRegisterResult}" id="bulkRegisterResultContent">
+        <!-- 전체 통계 -->
+        <div class="result-stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number success" th:text="${bulkRegisterResult.totalCount}">0</div>
+                    <div class="stat-label">전체 처리</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number success" th:text="${bulkRegisterResult.successCount}">0</div>
+                    <div class="stat-label">성공</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number warning" th:text="${bulkRegisterResult.duplicateCount}">0</div>
+                    <div class="stat-label">중복</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number danger" th:text="${bulkRegisterResult.failureCount}">0</div>
+                    <div class="stat-label">실패</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 성공한 곡 목록 -->
+        <div th:if="${!bulkRegisterResult.successList.isEmpty()}" class="result-section success">
+            <h4>✅ 성공한 곡들 ([[${bulkRegisterResult.successCount}]]개)</h4>
+            <div class="result-list success">
+                <div th:each="song : ${bulkRegisterResult.successList}" class="result-item">
+                    <div class="result-song-info">
+                        <span class="result-song-name" th:text="${song.artistKo + ' - ' + song.titleKo}"></span>
+                        <span th:if="${song.rightHolderName}" class="result-right-holder" 
+                              th:text="'(' + ${song.rightHolderName} + ')'"></span>
+                    </div>
+                    <span class="result-status success">✅ 등록됨</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 중복된 곡 목록 -->
+        <div th:if="${!bulkRegisterResult.duplicateList.isEmpty()}" class="result-section warning">
+            <h4>⚠️ 중복된 곡들 ([[${bulkRegisterResult.duplicateCount}]]개)</h4>
+            <div class="result-list warning">
+                <div th:each="song : ${bulkRegisterResult.duplicateList}" class="result-item">
+                    <div class="result-song-info">
+                        <span class="result-song-name" th:text="${song.artistKo + ' - ' + song.titleKo}"></span>
+                        <span th:if="${song.rightHolderName}" class="result-right-holder" 
+                              th:text="'(' + ${song.rightHolderName} + ')'"></span>
+                    </div>
+                    <span class="result-status warning">⚠️ 이미 존재</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 실패한 곡 목록 -->
+        <div th:if="${!bulkRegisterResult.failureList.isEmpty()}" class="result-section danger">
+            <h4>❌ 실패한 곡들 ([[${bulkRegisterResult.failureCount}]]개)</h4>
+            <div class="result-list danger">
+                <div th:each="failure : ${bulkRegisterResult.failureList}" class="result-item failure">
+                    <div class="result-song-info">
+                        <span class="result-song-name" th:text="${failure.artistKo + ' - ' + failure.titleKo}"></span>
+                        <span th:if="${failure.rightHolderName}" class="result-right-holder" 
+                              th:text="'(' + ${failure.rightHolderName} + ')'"></span>
+                    </div>
+                    <span class="result-status danger">❌ 실패</span>
+                    <div class="result-reason" th:text="${failure.reason}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 안내 메시지 -->
+        <div class="result-info">
+            <h5>💡 안내</h5>
+            <ul>
+                <li>성공한 곡들은 정상적으로 등록되었습니다.</li>
+                <li>중복된 곡들은 이미 등록되어 있어 건너뛰었습니다.</li>
+                <li>실패한 곡들은 오류 사유를 확인 후 다시 시도해주세요.</li>
+                <li>결과 모달을 닫으면 페이지가 새로고침됩니다.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 
