@@ -168,7 +168,7 @@ def run_crawling(target_date=None):
         
         # 배치 크롤링 실패 처리 (모든 곡에 대해, 즉시 실행)
         for song in active_songs:
-            FailureService.check_db_failures_and_handle(song.id, target_date)
+            FailureService.check_and_handle_failures(song.id, target_date)
         
         # 로그 라이터 종료 및 최종 요약 생성
         log_writer.end_crawling()
@@ -309,7 +309,7 @@ def run_platform_crawling(platform, target_date=None):
         
         # 실패 처리 (배치 크롤링에서는 DB에서 직접 -999 값 조회)
         for song in platform_songs:
-            FailureService.check_db_failures_and_handle(song.id, target_date)
+            FailureService.check_and_handle_failures(song.id, target_date)
         
         summary = {
             'status': 'success',

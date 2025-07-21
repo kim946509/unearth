@@ -110,12 +110,9 @@ public class CrawlingService {
 
         // 디버깅: CrawlingPeriod 데이터 확인
         long periodCount = crawlingPeriodRepository.countBySongId(songId);
-        log.info("음원 {}의 CrawlingPeriod 개수: {}", songId, periodCount);
 
         if (periodCount > 0) {
             List<CrawlingPeriod> allPeriods = crawlingPeriodRepository.findAllBySongId(songId);
-            log.info("음원 {}의 CrawlingPeriod 목록: {}", songId,
-                    allPeriods.stream().map(p -> p.getStartDate() + ":" + p.getYoutubeTitle()).toList());
         }
 
         // 1. Pageable 생성 (페이지는 0부터 시작하므로 -1)
@@ -163,18 +160,18 @@ public class CrawlingService {
 
                     // 조회수 증가량 계산
                     if (currentData.getViews() == -999 || previousData.getViews() == -999) {
-                        viewsIncrease = -999; // 오류 상황
+                        viewsIncrease = -1; // 오류 데이터가 섞여있어 제공되지 않음
                     } else if (currentData.getViews() == -1 || previousData.getViews() == -1) {
-                        viewsIncrease = -1; // 데이터 제공되지 않음
+                        viewsIncrease = -1; // 기본적으로 데이터 제공되지 않음
                     } else {
                         viewsIncrease = currentData.getViews() - previousData.getViews();
                     }
 
                     // 청취자수 증가량 계산
                     if (currentData.getListeners() == -999 || previousData.getListeners() == -999) {
-                        listenersIncrease = -999; // 오류 상황
+                        listenersIncrease = -1; // 오류 데이터가 섞여있어 제공되지 않음
                     } else if (currentData.getListeners() == -1 || previousData.getListeners() == -1) {
-                        listenersIncrease = -1; // 데이터 제공되지 않음
+                        listenersIncrease = -1; // 기본적으로 데이터 제공되지 않음
                     } else {
                         listenersIncrease = currentData.getListeners() - previousData.getListeners();
                     }
@@ -201,7 +198,6 @@ public class CrawlingService {
             groupedDataList.add(groupedData);
         }
 
-        // 5. 기존 형식으로 변환 (호환성을 위해)
         List<CrawlingDataResponseDto> resultList = new ArrayList<>();
         for (CrawlingDataResponseDto.DateGroupedData groupedData : groupedDataList) {
             for (CrawlingDataResponseDto.DateGroupedData.PlatformData platformData : groupedData

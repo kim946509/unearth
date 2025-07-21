@@ -69,33 +69,10 @@ class FailureService:
             else:
                 logger.error(f"실패 곡 제거 중 오류 발생: {song_id} - {e}")
     
-    @staticmethod
-    def check_and_handle_failures(song_id: str, platform_results: dict):
-        """
-        크롤링 결과를 확인하고 실패 처리
-        
-        Args:
-            song_id: 음원 ID
-            platform_results: 플랫폼별 크롤링 결과 {platform: success_boolean}
-        """
-        if not song_id or not platform_results:
-            return
-            
-        # 실패한 플랫폼 찾기
-        failed_platforms = [
-            platform for platform, success in platform_results.items() 
-            if not success
-        ]
-        
-        if failed_platforms:
-            # 실패가 있으면 실패 목록에 추가
-            FailureService.add_failure(song_id, failed_platforms)
-        else:
-            # 모든 플랫폼 성공이면 실패 목록에서 제거
-            FailureService.remove_success(song_id)
+
     
     @staticmethod
-    def check_db_failures_and_handle(song_id: str, target_date=None):
+    def check_and_handle_failures(song_id: str, target_date=None):
         """
         DB에서 직접 -999 값을 조회하여 실패 처리
         
@@ -161,28 +138,7 @@ class FailureService:
         except Exception as e:
             logger.error(f"❌ 실패 검사 중 오류 발생: {song_id} - {e}")
     
-    @staticmethod
-    def check_db_failures_and_handle_with_delay(song_id: str, target_date=None, delay_seconds=2):
-        """
-        DB에서 직접 -999 값을 조회하여 실패 처리 (지연 후 실행)
-        
-        Args:
-            song_id: 음원 ID
-            target_date: 크롤링 날짜 (None이면 오늘)
-            delay_seconds: DB 저장 후 대기 시간 (초)
-        """
-        import time
-        import threading
-        
-        def delayed_check():
-            time.sleep(delay_seconds)
-            FailureService.check_db_failures_and_handle(song_id, target_date)
-        
-        # 별도 스레드에서 지연 후 실행
-        thread = threading.Thread(target=delayed_check)
-        thread.daemon = True
-        thread.start()
-        logger.info(f"⏰ {delay_seconds}초 후 실패 검사 예약: {song_id}")
+
     
     @staticmethod
     def get_failed_songs():

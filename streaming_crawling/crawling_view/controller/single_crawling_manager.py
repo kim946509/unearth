@@ -173,9 +173,8 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     summary = summary_logger.generate_summary()
     summary_logger.print_summary()
     
-    # 실패 처리 (단건 크롤링에서는 DB에서 직접 -999 값 조회, 즉시 실행)
-    if save_db and db_result:
-        # DB에서 직접 -999 값 조회하여 실패 처리 (즉시 실행)
-        FailureService.check_db_failures_and_handle_immediate(song_dict['song_id'])
+    # 실패 처리 - DB에 저장된 -999 값을 확인하여 실패 처리
+    if save_db:
+        FailureService.check_and_handle_failures(song_dict['song_id'])
     
     return summary 
