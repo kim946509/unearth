@@ -281,6 +281,14 @@ public class CrawlingService {
     }
 
     /**
+     * 크롤링 실패한 곡의 총 개수를 조회합니다.
+     */
+    @Transactional(readOnly = true)
+    public long getCrawlingFailureCount() {
+        return crawlingFailureRepository.count();
+    }
+
+    /**
      * 크롤링 데이터를 CSV 형태로 생성합니다.
      * 
      * @param songId    음원 ID
