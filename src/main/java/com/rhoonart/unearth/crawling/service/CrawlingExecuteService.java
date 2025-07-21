@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * 크롤링 실행 서비스
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

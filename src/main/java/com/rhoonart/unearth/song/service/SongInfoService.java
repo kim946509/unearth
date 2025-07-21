@@ -127,4 +127,15 @@ public class SongInfoService {
 
         songInfoRepository.save(song);
     }
+
+    /**
+     * 음원 ID로 음원 정보를 조회합니다.
+     *
+     * @param songId 음원 ID
+     * @return SongInfo
+     */
+    public Optional<SongInfo> getSongInfoById(String songId) {
+        return songInfoRepository.findById(songId);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.rhoonart.unearth.right_holder.service;
 
+import com.rhoonart.unearth.common.util.DataAuthorityService;
 import com.rhoonart.unearth.right_holder.dto.RightHolderListResponseDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
@@ -11,6 +12,7 @@ import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
 import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
+import com.rhoonart.unearth.user.dto.UserDto;
 import com.rhoonart.unearth.user.entity.User;
 import com.rhoonart.unearth.user.entity.Role;
 import com.rhoonart.unearth.user.repository.UserRepository;
@@ -35,6 +37,7 @@ public class RightHolderService {
     private final CrawlingDataRepository crawlingDataRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DataAuthorityService dataAuthorityService;
 
     public Page<RightHolderListResponseDto> findRightHolders(HolderType holderType, String holderName,
             LocalDate contractDate, Pageable pageable) {
@@ -90,11 +93,12 @@ public class RightHolderService {
         rightHolderRepository.save(rightHolder);
     }
 
-    public Page<RightHolderSongListResponseDto> findSongsByRightHolder(String rightHolderId, String search,
-            Boolean hasCrawlingData, Pageable pageable) {
-        // 권리자 존재 여부 확인
-        RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+    public Page<RightHolderSongListResponseDto> findSongsByRightHolder(UserDto userDto, String rightHolderId, String search,
+                                                                       Boolean hasCrawlingData, Pageable pageable) {
+        // 사용자 권한 확인
+        if(!dataAuthorityService.isAccessRightHolderData(userDto, rightHolderId)){
+            throw new BaseException(ResponseCode.FORBIDDEN, "권리자 데이터에 접근할 수 없습니다.");
+        }
 
         // 권리자별 노래 조회 (크롤링 데이터 필터링 포함)
         Page<SongInfo> songPage = songInfoRepository.findByRightHolderIdWithSearchAndCrawlingFilter(

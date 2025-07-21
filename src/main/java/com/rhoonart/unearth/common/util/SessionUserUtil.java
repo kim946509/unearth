@@ -8,7 +8,6 @@ import com.rhoonart.unearth.user.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Arrays;
-import org.springframework.stereotype.Service;
 
 public class SessionUserUtil {
     private static final String LOGIN_USER_KEY = "LOGIN_USER";
@@ -120,36 +119,50 @@ public class SessionUserUtil {
     /**
      * 특정 권리자의 데이터에 접근할 권한이 있는지 확인합니다.
      * 
-     * @param session            HttpSession
-     * @param rightHolderId      권리자 ID
-     * @param rightHolderService 권리자 서비스 (권리자 본인 체크용)
+     * @param session       HttpSession
+     * @param rightHolderId 권리자 ID
      * @return 접근 권한 여부
      */
-    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId,
-            RightHolderService rightHolderService) {
+    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId) {
         UserDto user = getLoginUser(session);
         if (user == null) {
             return false;
         }
-
-        // 관리자는 모든 권리자 데이터에 접근 가능
-        if (isAdmin(session)) {
+        if (user.isAdmin()) {
             return true;
         }
-
-        // 권리자는 본인 데이터만 접근 가능
-        if (user.getRole() == Role.RIGHT_HOLDER) {
-            try {
-                // 현재 로그인한 사용자의 권리자 정보 조회
-                var userRightHolder = rightHolderService.findByUserId(user.getId());
-                // 요청한 권리자 ID와 일치하는지 확인
-                return userRightHolder.getId().equals(rightHolderId);
-            } catch (Exception e) {
-                // 권리자 정보를 찾을 수 없는 경우 접근 불가
-                return false;
-            }
+        if (user.isRightHolder()) {
+            return rightHolderId.equals(user.getRightHolderId());
         }
+        return false;
+    }
 
+    /**
+     * 권리자 데이터 접근 권한 체크
+     */
+    public static boolean canAccessRightHolder(UserDto user, String rightHolderId) {
+        if (user == null || rightHolderId == null)
+            return false;
+        if (user.isAdmin())
+            return true;
+        if (user.isRightHolder()) {
+            return rightHolderId.equals(user.getRightHolderId());
+        }
+        return false;
+    }
+
+    /**
+     * 곡 데이터 접근 권한 체크
+     */
+    public static boolean canAccessSong(UserDto user, String songId,
+            com.rhoonart.unearth.song.repository.SongInfoRepository songInfoRepository) {
+        if (user == null || songId == null)
+            return false;
+        if (user.isAdmin())
+            return true;
+        if (user.isRightHolder()) {
+            return songInfoRepository.existsByIdAndRightHolder_Id(songId, user.getRightHolderId());
+        }
         return false;
     }
 }
