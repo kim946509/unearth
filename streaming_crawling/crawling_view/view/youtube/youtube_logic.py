@@ -77,6 +77,9 @@ class YouTubeCrawler:
             if not self._wait_for_title_load():
                 raise Exception("제목 selector를 찾지 못함")
             
+            # expand 버튼 클릭하여 정확한 조회수 표시
+            self._click_expand_button()
+            
             time.sleep(2)  # 추가 대기 시간
 
             # HTML 파싱
@@ -129,6 +132,38 @@ class YouTubeCrawler:
             except:
                 continue
         
+        return False
+    
+    def _click_expand_button(self):
+        """
+        조회수 expand 버튼 클릭하여 정확한 조회수 표시
+        
+        Returns:
+            bool: 클릭 성공 여부
+        """
+        expand_selectors = YouTubeSelectors.EXPAND_BUTTON_SELECTORS
+        
+        for selector in expand_selectors:
+            try:
+                # expand 버튼 찾기
+                expand_button = self.wait.until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, selector))
+                )
+                
+                if expand_button:
+                    # 버튼 클릭
+                    expand_button.click()
+                    logger.info("✅ expand 버튼 클릭 성공 - 정확한 조회수 표시")
+                    
+                    # 클릭 후 잠시 대기 (조회수 업데이트 시간)
+                    time.sleep(1)
+                    return True
+                    
+            except Exception as e:
+                logger.debug(f"expand 버튼 클릭 시도 실패 ({selector}): {e}")
+                continue
+        
+        logger.warning("⚠️ expand 버튼을 찾을 수 없습니다. 기본 조회수를 사용합니다.")
         return False
     
     def _extract_title(self, soup):

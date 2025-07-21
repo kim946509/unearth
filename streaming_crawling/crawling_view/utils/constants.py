@@ -251,6 +251,16 @@ class YouTubeSelectors:
         'div#info-strings',
         'yt-formatted-string#info-strings'
     ]
+    
+    # 조회수 expand 버튼 셀렉터 (정확한 조회수 표시용)
+    EXPAND_BUTTON_SELECTORS = [
+        'tp-yt-paper-button#expand.button.style-scope.ytd-text-inline-expander',
+        '#expand.button.style-scope.ytd-text-inline-expander',
+        'tp-yt-paper-button#expand',
+        '#expand',
+        'button#expand',
+        'paper-button#expand'
+    ]
 
 # 플랫폼 관련 상수
 class Platforms:
