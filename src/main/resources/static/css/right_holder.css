@@ -1046,3 +1046,106 @@
     color: #fff;
     font-weight: bold;
 } 
+
+/* CSV 다운로드 모달 전용 스타일 */
+.csv-modal-content {
+    width: 500px;
+    max-width: 90%;
+    padding: 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.csv-modal-header {
+    background-color: #f8f9fa;
+    padding: 20px 24px;
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.csv-modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.csv-modal-body {
+    padding: 24px;
+}
+
+.csv-modal-footer {
+    background-color: #f8f9fa;
+    padding: 16px 24px;
+    border-top: 1px solid #dee2e6;
+    border-radius: 0 0 12px 12px;
+    text-align: right;
+}
+
+.csv-form-group {
+    margin-bottom: 20px;
+}
+
+.csv-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.csv-form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+
+.csv-form-input:focus {
+    border: 2px solid #007bff;
+}
+
+.csv-form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #6c757d;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.csv-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    transition: all 0.2s;
+}
+
+.csv-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.csv-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.csv-btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.csv-btn-primary:hover {
+    background-color: #0056b3;
+}

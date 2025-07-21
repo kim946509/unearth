@@ -49,6 +49,8 @@
                 </div>
                 <div class="filter-group filter-btn-group">
                     <button type="submit" class="filter-btn">조회</button>
+                    <button type="button" class="filter-btn" style="background-color: #28a745; margin-left: 10px;" 
+                            onclick="openCsvDownloadModal()">📊 CSV 다운로드</button>
                 </div>
             </div>
         </form>
@@ -171,5 +173,89 @@
         </div>
     </section>
 </div>
+
+<!-- CSV 다운로드 모달 -->
+<div id="csvDownloadModal" class="modal" style="display: none;" th:data-song-id="${songId}">
+    <div class="modal-content csv-modal-content">
+        <div class="csv-modal-header">
+            <h3>CSV 다운로드 설정</h3>
+            <span class="modal-close" onclick="closeCsvDownloadModal()">&times;</span>
+        </div>
+        <div class="csv-modal-body">
+            <form id="csvDownloadForm">
+                <div class="csv-form-group">
+                    <label>시작일</label>
+                    <input type="date" id="csvStartDate" class="csv-form-input" th:value="${startDate}" />
+                    <small>빈값으로 두면 전체 기간부터 다운로드됩니다</small>
+                </div>
+                <div class="csv-form-group">
+                    <label>종료일</label>
+                    <input type="date" id="csvEndDate" class="csv-form-input" th:value="${endDate}" />
+                    <small>빈값으로 두면 전체 기간까지 다운로드됩니다</small>
+                </div>
+            </form>
+        </div>
+        <div class="csv-modal-footer">
+            <button type="button" class="csv-btn csv-btn-secondary" onclick="closeCsvDownloadModal()">취소</button>
+            <button type="button" class="csv-btn csv-btn-primary" onclick="downloadCsv()">다운로드</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openCsvDownloadModal() {
+    // 현재 필터 값으로 모달 초기화
+    document.getElementById('csvStartDate').value = document.querySelector('input[name="startDate"]').value || '';
+    document.getElementById('csvEndDate').value = document.querySelector('input[name="endDate"]').value || '';
+    
+    document.getElementById('csvDownloadModal').style.display = 'block';
+}
+
+function closeCsvDownloadModal() {
+    document.getElementById('csvDownloadModal').style.display = 'none';
+}
+
+function downloadCsv() {
+    const startDate = document.getElementById('csvStartDate').value;
+    const endDate = document.getElementById('csvEndDate').value;
+    
+    // 모달에서 songId 가져오기
+    const modal = document.getElementById('csvDownloadModal');
+    const songId = modal.getAttribute('data-song-id');
+    
+    if (!songId) {
+        alert('음원 ID를 찾을 수 없습니다.');
+        return;
+    }
+    
+    // URL 생성
+    let url = `/crawling/data/${songId}/csv`;
+    const params = new URLSearchParams();
+    
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    
+    if (params.toString()) {
+        url += '?' + params.toString();
+    }
+    
+    console.log('다운로드 URL:', url); // 디버깅용
+    
+    // 다운로드 실행
+    window.location.href = url;
+    
+    // 모달 닫기
+    closeCsvDownloadModal();
+}
+
+// 모달 바깥 클릭시 닫기
+window.onclick = function(event) {
+    const modal = document.getElementById('csvDownloadModal');
+    if (event.target == modal) {
+        closeCsvDownloadModal();
+    }
+}
+</script>
+
 </body>
 </html> 
