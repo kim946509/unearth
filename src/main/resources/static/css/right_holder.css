@@ -369,7 +369,7 @@
     padding: 36px 32px 28px 32px;
     min-width: 340px;
     max-width: 420px;
-    margin : 42vh auto;
+    margin : 20vh auto;
     position: relative;
     box-shadow: 0 2px 16px rgba(0,0,0,0.13);
     display: flex;
@@ -1049,8 +1049,6 @@
 
 /* CSV 다운로드 모달 전용 스타일 */
 .csv-modal-content {
-    width: 500px;
-    max-width: 90%;
     padding: 0;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
