@@ -564,33 +564,23 @@ class YouTubeMusicCrawler:
         return None
     
     def _extract_artist_name(self, item):
-        """아티스트명 추출 (첫 번째 링크가 아티스트명)"""
+        """아티스트명 추출 (첫 번째 텍스트 요소를 아티스트명으로 사용)"""
         artist_column = item.select_one(YouTubeMusicSelectors.ARTIST_COLUMN)
         if artist_column:
-            # 첫 번째 <a> 태그가 아티스트명 (우선순위 1)
-            first_link = artist_column.select_one('a.yt-simple-endpoint')
-            if first_link:
-                artist_name = first_link.get_text(strip=True)
-                if artist_name and len(artist_name) > 1:
-                    logger.debug(f"✅ 첫 번째 링크에서 아티스트명 추출 성공: {artist_name}")
-                    return artist_name
+            # 모든 텍스트 요소(a, span, yt-formatted-string 등)에서 첫 번째 유효한 텍스트 찾기
+            all_elements = artist_column.select('a, span, yt-formatted-string')
             
-            # 첫 번째 링크에서 실패했다면 다른 셀렉터들 시도
-            for selector in YouTubeMusicSelectors.ARTIST_LINK:
-                artist_elements = artist_column.select(selector)
-                logger.debug(f"🔍 셀렉터 '{selector}'로 발견된 요소 수: {len(artist_elements)}")
+            for element in all_elements:
+                text = element.get_text(strip=True)
+                logger.debug(f"🔍 요소 텍스트: '{text}'")
                 
-                for i, element in enumerate(artist_elements):
-                    text = element.get_text(strip=True)
-                    logger.debug(f"  요소 {i+1}: '{text}'")
-                    
-                    # "•" 문자, 시간 형식(MM:SS), 빈 텍스트가 아닌 경우에만 아티스트명으로 인정
-                    if (text and text != "•" and text != "·" and len(text) > 1 and 
-                        not self._is_time_format(text)):
-                        logger.debug(f"✅ 아티스트명 추출 성공: {text}")
-                        return text
+                # "•" 문자, 시간 형식(MM:SS), 빈 텍스트가 아닌 경우에만 아티스트명으로 인정
+                if (text and text != "•" and text != "·" and len(text) > 1 and 
+                    not self._is_time_format(text)):
+                    logger.debug(f"✅ 아티스트명 추출 성공: {text}")
+                    return text
             
-            # 모든 셀렉터에서 찾지 못했다면 직접 텍스트 추출 시도
+            # 개별 요소에서 찾지 못했다면 전체 텍스트에서 첫 번째 부분 추출
             all_text = artist_column.get_text(strip=True)
             logger.debug(f"🔍 전체 텍스트: '{all_text}'")
             
