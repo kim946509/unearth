@@ -1165,3 +1165,58 @@
     border-left: 2px solid #ddd;
     vertical-align: middle;
 }
+
+/* 공통 버튼 스타일 */
+.base-button-style {
+    padding: 8px 20px;
+    background: #1976d2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    margin: 0 2px;
+}
+.base-button-style:hover {
+    background: #1251a3;
+}
+
+/* 기존 버튼 스타일 제거 (move-btn, edit-btn, extend-btn, login-enable-btn, login-disable-btn 등) */
+.move-btn, .edit-btn, .extend-btn, .login-enable-btn, .login-disable-btn {
+    all: unset;
+    /* base-button-style로 대체 */
+}
+
+.base-top-control {
+    height: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    font-size: 16px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.base-top-control::placeholder {
+    color: #aaa;
+    font-size: 16px;
+}
+
+.base-top-control[type="date"] {
+    padding-right: 8px;
+}
+
+.base-top-control option {
+    font-size: 16px;
+}

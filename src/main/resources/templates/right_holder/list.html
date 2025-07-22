@@ -16,7 +16,7 @@
             <div class="search-row">
                 <div class="search-group">
                     <label>구분</label>
-                    <select name="holderType" class="search-input">
+                    <select name="holderType" class="search-input base-top-control">
                         <option value="" th:selected="${holderType == null}">전체</option>
                         <option value="개인" th:selected="${holderType == '개인'}">개인</option>
                         <option value="사업자" th:selected="${holderType == '사업자'}">사업자</option>
@@ -24,25 +24,25 @@
                 </div>
                 <div class="search-group">
                     <label>권리자명</label>
-                    <input type="text" name="holderName" class="search-input" th:value="${holderName}" placeholder="권리자명 입력" />
+                    <input type="text" name="holderName" class="search-input base-top-control" th:value="${holderName}" placeholder="권리자명 입력" />
                 </div>
                 <div class="search-group">
                     <label>계약 기간</label>
-                    <input type="date" name="contractDate" class="search-input" th:value="${contractDate}" />
+                    <input type="date" name="contractDate" class="search-input base-top-control" th:value="${contractDate}" />
                 </div>
                 <div class="search-group">
                     <label>페이지당 개수</label>
-                    <select name="size" class="search-input">
+                    <select name="size" class="search-input base-top-control">
                         <option th:value="10" th:selected="${size == 10}">10</option>
                         <option th:value="30" th:selected="${size == 30}">30</option>
                         <option th:value="50" th:selected="${size == 50}">50</option>
                     </select>
                 </div>
                 <div class="search-group search-btn-group">
-                    <button type="submit" class="search-btn">검색</button>
+                    <button type="submit" class="search-btn base-top-control">검색</button>
                 </div>
                 <div class="search-group register-btn-group">
-                    <button type="button" class="register-btn" id="openRegisterModalBtn">권리자 등록하기</button>
+                    <button type="button" class="register-btn base-top-control" id="openRegisterModalBtn">권리자 등록하기</button>
                 </div>
             </div>
         </form>
@@ -148,7 +148,7 @@
                     </span>
                 </td>
                 <td>
-                    <button type="button" class="extend-btn" 
+                    <button type="button" class="base-button-style"
                             th:data-holder-id="${holder.holderId}"
                             th:data-holder-name="${holder.holderName}"
                             th:data-contract-end="${holder.contractEnd}"
@@ -156,8 +156,8 @@
                 </td>
                 <td th:text="${#numbers.formatInteger(holder.songCount, 0, 'COMMA')}"></td>
                 <td>
-                    <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="move-btn">이동</a>
-                    <button type="button" class="edit-btn" 
+                    <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="base-button-style">이동</a>
+                    <button type="button" class="base-button-style"
                             th:data-holder-id="${holder.holderId}"
                             th:data-holder-type="${holder.holderType}"
                             th:data-holder-name="${holder.holderName}"
@@ -167,8 +167,7 @@
                             onclick="openEditModalFromData(this)">수정</button>
                 </td>
                 <td>
-                    <button type="button" 
-                            th:class="${holder.isLoginEnabled ? 'login-disable-btn' : 'login-enable-btn'}"
+                    <button type="button" class="base-button-style"
                             th:data-holder-id="${holder.holderId}"
                             th:data-holder-name="${holder.holderName}"
                             th:data-is-enabled="${holder.isLoginEnabled ? 'true' : 'false'}"
