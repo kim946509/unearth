@@ -32,7 +32,6 @@ public class CrawlingDataService {
 
     private final SongInfoRepository songInfoRepository;
     private final CrawlingDataRepository crawlingDataRepository;
-    private final CrawlingPeriodRepository crawlingPeriodRepository;
     private final CrawlingPeriodService crawlingPeriodService;
     private final DataAuthorityService dataAuthorityService;
 
