@@ -120,4 +120,11 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
             @Param("isCrawlingActive") Boolean isCrawlingActive,
             @Param("currentDate") java.time.LocalDate currentDate,
             Pageable pageable);
+
+    Optional<SongInfo> findByIdAndRightHolderId(String songId, String rightHolderId);
+
+    /**
+     * 특정 권리자가 해당 곡을 소유하고 있는지 확인
+     */
+    boolean existsByIdAndRightHolder_Id(String songId, String rightHolderId);
 }

@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/crawling")
 @RequiredArgsConstructor
-public class CrawlingSchedulerController {
+public class CrawlingTestController {
 
     private final CrawlingSchedulerService crawlingSchedulerService;
 
     /**
      * 수동으로 전체 크롤링 실행
+     * 테스트 목적으로 사용
      */
     @PostMapping("/execute-full")
     public ResponseEntity<CommonResponse<String>> executeFullCrawling() {

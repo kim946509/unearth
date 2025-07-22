@@ -218,14 +218,6 @@ class YouTubeMusicSelectors:
     ]
     SONG_TITLE = 'yt-formatted-string.title a'
     ARTIST_COLUMN = '.secondary-flex-columns yt-formatted-string'
-    # 아티스트명 추출을 위한 다양한 셀렉터 (우선순위 순)
-    ARTIST_LINK = [
-        'a.yt-simple-endpoint',  # 첫 번째 링크가 아티스트명 (최우선)
-        'yt-formatted-string a',  # yt-formatted-string 내부 링크
-        'a',  # 모든 링크
-        'span.style-scope.yt-formatted-string',  # 기본 span 태그 (fallback)
-        '.yt-formatted-string'   # 일반 yt-formatted-string (fallback)
-    ]
     VIEW_COUNT_FLEX = 'yt-formatted-string.flex-column'
 
 # YouTube 관련 셀렉터

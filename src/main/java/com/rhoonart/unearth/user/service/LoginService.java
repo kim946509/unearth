@@ -44,22 +44,19 @@ public class LoginService {
     }
 
     private LoginResponseDto toLoginSuccess(User user) {
-        UserDto userDto = UserDto.of(
-                user.getId(),
-                user.getUsername(),
-                user.getRole());
-
-        // 권리자인 경우 권리자 ID 조회
         String rightHolderId = null;
         if (user.getRole() == Role.RIGHT_HOLDER) {
             try {
                 rightHolderId = rightHolderService.findByUserId(user.getId()).getId();
             } catch (Exception e) {
-                // 권리자 정보를 찾을 수 없는 경우 null로 설정
                 rightHolderId = null;
             }
         }
-
+        UserDto userDto = UserDto.of(
+                user.getId(),
+                user.getUsername(),
+                user.getRole(),
+                rightHolderId);
         return LoginResponseDto.of(userDto, rightHolderId);
     }
 }

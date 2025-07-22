@@ -21,6 +21,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session
+                        .maximumSessions(1) // 동시 세션 수 제한
+                        .maxSessionsPreventsLogin(false)) // 기존 세션이 무효화 됨됨
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/login").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()

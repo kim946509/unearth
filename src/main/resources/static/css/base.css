@@ -85,6 +85,21 @@ img {
     cursor: pointer;
 }
 
+/* 크롤링 실패 개수 배지 */
+.failure-count-badge {
+    display: inline-block;
+    background: #dc3545;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 8px;
+    min-width: 16px;
+    text-align: center;
+    line-height: 1.2;
+}
+
 
 .header-logo {
     height: 40px;

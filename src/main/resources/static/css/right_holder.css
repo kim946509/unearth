@@ -1147,3 +1147,21 @@
 .csv-btn-primary:hover {
     background-color: #0056b3;
 }
+
+/* 날짜별 구분선 스타일 */
+.date-separator {
+    border-top: 2px solid #e4e4e4  !important;
+}
+
+.date-cell {
+    border-right: 2px solid #ddd;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.video-info-cell {
+    border-left: 2px solid #ddd;
+    vertical-align: middle;
+}

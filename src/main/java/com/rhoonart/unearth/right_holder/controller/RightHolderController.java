@@ -114,19 +114,14 @@ public class RightHolderController {
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             HttpSession session,
             Model model) {
-        // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
-        if (!SessionUserUtil.hasAccessToRightHolder(session, rightHolderId, rightHolderService)) {
-            throw new BaseException(ResponseCode.FORBIDDEN, "접근 권한이 없습니다.");
-        }
-
-        UserDto user = SessionUserUtil.getLoginUser(session);
+        UserDto user = SessionUserUtil.requireLogin(session);
 
         // size 제한: 10, 30, 50만 허용
         if (size != 10 && size != 30 && size != 50)
             size = 10;
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<RightHolderSongListResponseDto> songPage = rightHolderService.findSongsByRightHolder(rightHolderId, search,
+        Page<RightHolderSongListResponseDto> songPage = rightHolderService.findSongsByRightHolder(user,rightHolderId, search,
                 hasCrawlingData, pageable);
 
         CommonResponse<Page<RightHolderSongListResponseDto>> response = CommonResponse.success(songPage);

@@ -17,12 +17,6 @@ import java.util.Optional;
 @Repository
 public interface CrawlingDataRepository extends JpaRepository<CrawlingData, String> {
 
-        @Query("""
-                            SELECT cd FROM CrawlingData cd
-                            WHERE cd.song.id = :songId
-                            ORDER BY cd.createdAt DESC
-                        """)
-        List<CrawlingData> findBySongIdOrderByCreatedAtDesc(@Param("songId") String songId);
 
         @Query("""
                             SELECT cd FROM CrawlingData cd
