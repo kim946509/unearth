@@ -58,15 +58,9 @@ public class CrawlingDataController {
         model.addAttribute("response", CommonResponse.success(null));
         model.addAttribute("crawlingData", crawlingDataWithSongInfo); // 그룹화된 데이터 포함
         model.addAttribute("songId", songId);
-        model.addAttribute("rightHolderId", crawlingDataWithSongInfo.getSongInfo().getRightHolder().getId());
         model.addAttribute("startDate", startDateStr);
         model.addAttribute("endDate", endDateStr);
         model.addAttribute("platform", platformStr);
-        model.addAttribute("currentPage", crawlingDataWithSongInfo.getPageInfo().getCurrentPage());
-        model.addAttribute("pageSize", crawlingDataWithSongInfo.getPageInfo().getPageSize());
-        model.addAttribute("totalPages", crawlingDataWithSongInfo.getPageInfo().getTotalPages());
-        model.addAttribute("totalElements", crawlingDataWithSongInfo.getPageInfo().getTotalElements());
-        model.addAttribute("songInfo", crawlingDataWithSongInfo.getSongInfo());
 
         return "crawling/data";
     }

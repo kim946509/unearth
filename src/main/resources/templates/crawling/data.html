@@ -12,8 +12,8 @@
 <div class="main-container">
     <section class="content">
         <div class="page-header">
-            <h2 th:text="${songInfo.artistKo} + ' - ' + ${songInfo.titleKo}">크롤링 데이터</h2>
-            <a th:href="@{'/right-holder/' + ${rightHolderId}}" class="back-btn">← 노래 목록으로 돌아가기</a>
+            <h2 th:text="${crawlingData.songInfo.artistKo} + ' - ' + ${crawlingData.songInfo.titleKo}">크롤링 데이터</h2>
+            <a th:href="@{'/right-holder/' + ${crawlingData.songInfo.rightHolder.id}}" class="back-btn">← 노래 목록으로 돌아가기</a>
         </div>
 
         <!-- 필터링 폼 -->
@@ -21,38 +21,47 @@
             <div class="filter-row">
                 <div class="filter-group">
                     <label>시작일</label>
-                    <input type="date" name="startDate" class="filter-input" th:value="${startDate}" />
+                    <label>
+                        <input type="date" name="startDate" class="filter-input" th:value="${startDate}" />
+                    </label>
                 </div>
                 <div class="filter-group">
                     <label>종료일</label>
-                    <input type="date" name="endDate" class="filter-input" th:value="${endDate}" />
+                    <label>
+                        <input type="date" name="endDate" class="filter-input" th:value="${endDate}" />
+                    </label>
                 </div>
                 <div class="filter-group">
                     <label>플랫폼</label>
-                    <select name="platform" class="filter-input">
-                        <option value="">전체</option>
-                        <option value="MELON" th:selected="${platform == 'MELON'}">멜론</option>
-                        <option value="YOUTUBE_MUSIC" th:selected="${platform == 'YOUTUBE_MUSIC'}">유튜브 뮤직</option>
-                        <option value="YOUTUBE" th:selected="${platform == 'YOUTUBE'}">유튜브</option>
-                        <option value="GENIE" th:selected="${platform == 'GENIE'}">지니</option>
-                    </select>
+                    <label>
+                        <select name="platform" class="filter-input">
+                            <option value="">전체</option>
+                            <option value="MELON" th:selected="${platform == 'MELON'}">멜론</option>
+                            <option value="YOUTUBE_MUSIC" th:selected="${platform == 'YOUTUBE_MUSIC'}">유튜브 뮤직</option>
+                            <option value="YOUTUBE" th:selected="${platform == 'YOUTUBE'}">유튜브</option>
+                            <option value="GENIE" th:selected="${platform == 'GENIE'}">지니</option>
+                        </select>
+                    </label>
                 </div>
 
                 <div class="filter-group">
                     <label>페이지 크기</label>
-                    <select name="size" class="filter-input">
-                        <option value="10" th:selected="${pageSize == 10}">10개</option>
-                        <option value="20" th:selected="${pageSize == 20}">20개</option>
-                        <option value="50" th:selected="${pageSize == 50}">50개</option>
-                        <option value="100" th:selected="${pageSize == 100}">100개</option>
-                    </select>
+                    <label>
+                        <select name="size" class="filter-input">
+                            <option value="10" th:selected="${crawlingData.pageInfo.pageSize == 10}">10개</option>
+                            <option value="20" th:selected="${crawlingData.pageInfo.pageSize == 20}">20개</option>
+                            <option value="50" th:selected="${crawlingData.pageInfo.pageSize == 50}">50개</option>
+                            <option value="100" th:selected="${crawlingData.pageInfo.pageSize == 100}">100개</option>
+                        </select>
+                    </label>
                 </div>
                 <div class="filter-group filter-btn-group">
                     <button type="submit" class="filter-btn">조회</button>
                     </div>
                 <div class="filter-group">
                     <button type="button" class="filter-btn" style="background-color: #28a745; margin-left: 10px;" 
-                            onclick="openCsvDownloadModal()">📊 CSV 다운로드</button>
+                            onclick="openCsvDownloadModal()">📊 CSV 다운로드
+                    </button>
                 </div>
             </div>
         </form>
@@ -144,7 +153,7 @@
                                             <span class="video-value" th:text="${videoInfo.songOrder}"></span>
                                         </div>
                                         <div class="video-info-row" th:if="${videoInfo.uploadAt != null}">
-                                            <span class="video-label">업로드날짜:</span>
+                                            <span class="video-label">업로드 날짜:</span>
                                             <span class="video-value" th:text="${#temporals.format(videoInfo.uploadAt, 'yyyy-MM-dd HH:mm')}"></span>
                                         </div>
                                     </div>
@@ -189,12 +198,12 @@
             <form id="csvDownloadForm">
                 <div class="csv-form-group">
                     <label>시작일</label>
-                    <input type="date" id="csvStartDate" class="csv-form-input" th:value="${startDate}" />
+                    <label for="csvStartDate"></label><input type="date" id="csvStartDate" class="csv-form-input" th:value="${startDate}" />
                     <small>빈값으로 두면 전체 기간부터 다운로드됩니다</small>
                 </div>
                 <div class="csv-form-group">
                     <label>종료일</label>
-                    <input type="date" id="csvEndDate" class="csv-form-input" th:value="${endDate}" />
+                    <label for="csvEndDate"></label><input type="date" id="csvEndDate" class="csv-form-input" th:value="${endDate}" />
                     <small>빈값으로 두면 전체 기간까지 다운로드됩니다</small>
                 </div>
             </form>
@@ -242,22 +251,12 @@ function downloadCsv() {
     if (params.toString()) {
         url += '?' + params.toString();
     }
-    
-    console.log('다운로드 URL:', url); // 디버깅용
-    
+
     // 다운로드 실행
     window.location.href = url;
     
     // 모달 닫기
     closeCsvDownloadModal();
-}
-
-// 모달 바깥 클릭시 닫기
-window.onclick = function(event) {
-    const modal = document.getElementById('csvDownloadModal');
-    if (event.target == modal) {
-        closeCsvDownloadModal();
-    }
 }
 </script>
 

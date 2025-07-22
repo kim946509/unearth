@@ -41,7 +41,7 @@ public class CrawlingCsvService {
                                                                      String endDateStr) {
 
         // 권한 체크
-        if(dataAuthorityService.isAccessSongData(userDto,songId)){
+        if(!dataAuthorityService.isAccessSongData(userDto,songId)){
             throw new ForbiddenException();
         }
 
