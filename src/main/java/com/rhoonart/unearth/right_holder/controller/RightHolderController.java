@@ -105,39 +105,6 @@ public class RightHolderController {
         return "redirect:/right-holder/list";
     }
 
-    @GetMapping("/{rightHolderId}")
-    public String rightHolderDetailPage(
-            @PathVariable String rightHolderId,
-            @RequestParam(value = "search", required = false) String search,
-            @RequestParam(value = "hasCrawlingData", required = false) Boolean hasCrawlingData,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-            HttpSession session,
-            Model model) {
-        UserDto user = SessionUserUtil.requireLogin(session);
-
-        // size 제한: 10, 30, 50만 허용
-        if (size != 10 && size != 30 && size != 50)
-            size = 10;
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<RightHolderSongListResponseDto> songPage = rightHolderService.findSongsByRightHolder(user,rightHolderId, search,
-                hasCrawlingData, pageable);
-
-        CommonResponse<Page<RightHolderSongListResponseDto>> response = CommonResponse.success(songPage);
-        model.addAttribute("response", response);
-        model.addAttribute("page", page);
-        model.addAttribute("size", size);
-        model.addAttribute("search", search);
-        model.addAttribute("hasCrawlingData", hasCrawlingData);
-        model.addAttribute("rightHolderId", rightHolderId);
-        model.addAttribute("user", user);
-        model.addAttribute("userRole", user.getRole().name());
-        // 권리자 정보 추가
-        var rightHolder = rightHolderService.findById(rightHolderId);
-        model.addAttribute("rightHolder", rightHolder);
-        return "right_holder/detail";
-    }
 
     @PostMapping("/{rightHolderId}/extend")
     @ResponseBody
