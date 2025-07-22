@@ -11,6 +11,7 @@ import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class CrawlingCsvService {
      */
     @Transactional(readOnly = true)
     public CrawlingCsvDownloadDto generateCrawlingDataCsvForDownload(String songId, String startDateStr,
-                                                                     String endDateStr) {
+            String endDateStr) {
         // 날짜 파싱
         LocalDate startDate = parseDateParameter(startDateStr);
         LocalDate endDate = parseDateParameter(endDateStr);
@@ -52,7 +53,6 @@ public class CrawlingCsvService {
         return new CrawlingCsvDownloadDto(csvData, filename);
     }
 
-
     /**
      * 크롤링 데이터를 CSV 형태로 생성합니다.
      *
@@ -63,7 +63,7 @@ public class CrawlingCsvService {
      * @return CSV 문자열
      */
     private String generateCrawlingDataCsv(String songId, LocalDate startDate, LocalDate endDate,
-                                          PlatformType platform) {
+            PlatformType platform) {
         // 음원 정보 조회
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -80,9 +80,9 @@ public class CrawlingCsvService {
         StringBuilder csvBuilder = new StringBuilder();
         csvBuilder.append("날짜,아티스트명,노래제목,플랫폼,조회수,조회수증가,청취자수,청취자수증가,영상정보(채널명/제목/url/순서)\n");
 
-        // 날짜 정렬 (오래된 날짜부터)
+        // 날짜 정렬 (최신 날짜부터)
         List<LocalDate> sortedDates = dataByDate.keySet().stream()
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
 
         // 이전 날짜의 데이터를 저장할 맵 (플랫폼별)
@@ -95,7 +95,8 @@ public class CrawlingCsvService {
             String videoInfo = "";
             boolean isStartDate = crawlingPeriodService.isStartDate(songId, currentDate);
             if (isStartDate) {
-                List<CrawlingDataResponseDto.VideoInfo> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
+                List<CrawlingDataResponseDto.VideoInfo> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId,
+                        currentDate);
                 if (!videoInfos.isEmpty()) {
                     videoInfo = videoInfos.stream()
                             .map(v -> String.format("%s / %s / %s / %d",
@@ -118,26 +119,28 @@ public class CrawlingCsvService {
                 CrawlingData previousData = previousDayData.get(currentData.getPlatform());
                 if (previousData != null) {
                     // 조회수 증가량 계산
-                    if (currentData.getViews() != -999 &&  currentData.getViews() != -1 && previousData.getViews() != -999 && previousData.getViews() != -1) {
+                    if (currentData.getViews() != -999 && currentData.getViews() != -1
+                            && previousData.getViews() != -999 && previousData.getViews() != -1) {
                         viewsIncrease = currentData.getViews() - previousData.getViews();
                     }
 
                     // 청취자수 증가량 계산
-                    if (currentData.getListeners() != -999 &&  currentData.getListeners() != -1 && previousData.getListeners() != -999 && previousData.getListeners() != -1) {
+                    if (currentData.getListeners() != -999 && currentData.getListeners() != -1
+                            && previousData.getListeners() != -999 && previousData.getListeners() != -1) {
                         listenersIncrease = currentData.getListeners() - previousData.getListeners();
                     }
                 }
 
                 // CSV 행 생성
-                csvBuilder.append(String.format("%s,%s,%s,%s,%d,%d,%d,%d,\"%s\"\n",
+                csvBuilder.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s,\"%s\"\n",
                         currentDate.toString(),
                         escapeCsvField(songInfo.getArtistKo()),
                         escapeCsvField(songInfo.getTitleKo()),
                         currentData.getPlatform().name(),
-                        currentData.getViews(),
-                        viewsIncrease,
-                        currentData.getListeners(),
-                        listenersIncrease,
+                        formatNumericValue(currentData.getViews()),
+                        formatNumericValue(viewsIncrease),
+                        formatNumericValue(currentData.getListeners()),
+                        formatNumericValue(listenersIncrease),
                         escapeCsvField(videoInfo)));
 
                 // 다음 날 계산을 위해 현재 데이터 저장
@@ -147,7 +150,6 @@ public class CrawlingCsvService {
 
         return csvBuilder.toString();
     }
-
 
     /**
      * 날짜 파라미터 파싱
@@ -190,5 +192,19 @@ public class CrawlingCsvService {
         return filename.replaceAll("[\\\\/:*?\"<>|]", "_")
                 .replaceAll("\\s+", "") // 공백을 제거
                 .trim();
+    }
+
+    /**
+     * 숫자 값을 CSV 형식으로 변환
+     * -1: 공란, -999: "Fail", 그 외: 숫자 그대로
+     */
+    private String formatNumericValue(long value) {
+        if (value == -1) {
+            return ""; // 공란
+        } else if (value == -999) {
+            return "Fail"; // 오류
+        } else {
+            return String.valueOf(value); // 숫자 그대로
+        }
     }
 }
