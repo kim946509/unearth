@@ -4,17 +4,18 @@ import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.util.DataAuthorityService;
 import com.rhoonart.unearth.common.util.ValidateInput;
-import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
+import com.rhoonart.unearth.crawling.dto.CrawlingDataDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataWithSongInfoDto;
+import com.rhoonart.unearth.crawling.dto.VideoInfoDto;
+import com.rhoonart.unearth.crawling.dto.PageInfoDto;
+import com.rhoonart.unearth.crawling.dto.DateGroupedCrawlingDataDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingData;
 import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
-import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.user.dto.UserDto;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,8 @@ public class CrawlingDataService {
     private final CrawlingPeriodService crawlingPeriodService;
     private final DataAuthorityService dataAuthorityService;
 
-    public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(UserDto userDto, String songId, String startDateStr, String endDateStr, String platformTypeStr, int page, int size) {
+    public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(UserDto userDto, String songId, String startDateStr,
+            String endDateStr, String platformTypeStr, int page, int size) {
         // 음원 존재 여부 확인
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -48,8 +50,13 @@ public class CrawlingDataService {
         // 입력 값 검증 및 파싱
         LocalDate startDate = ValidateInput.parseDate(startDateStr);
         LocalDate endDate = ValidateInput.parseDate(endDateStr);
-        PlatformType platform = PlatformType.fromString(platformTypeStr);
-        size= ValidateInput.restrictPageSize(size);
+
+        PlatformType platform = null;
+        if (platformTypeStr != null && !platformTypeStr.isEmpty()) {
+            platform = PlatformType.fromString(platformTypeStr);
+        }
+
+        size = ValidateInput.restrictPageSize(size);
         page = ValidateInput.calculatePageNumber(page);
 
         // 1. Pageable 생성 (실제로 데이터 상 페이지는 0부터 시작하므로 -1)
@@ -63,23 +70,27 @@ public class CrawlingDataService {
         Map<LocalDate, List<CrawlingData>> dataByDate = pagedResult.getContent().stream()
                 .collect(Collectors.groupingBy(data -> data.getCreatedAt().toLocalDate()));
 
-        // 4. 날짜별로 그룹화된 데이터 생성
-        List<CrawlingDataResponseDto.DateGroupedData> groupedDataList = new ArrayList<>();
+        // 4. 날짜별로 그룹화된 데이터 리스트 생성
+        List<DateGroupedCrawlingDataDto> groupedDataList = new ArrayList<>();
 
-        for (Map.Entry<LocalDate, List<CrawlingData>> entry : dataByDate.entrySet()) {
-            LocalDate currentDate = entry.getKey();
-            List<CrawlingData> currentDataList = entry.getValue();
+        // 날짜 순서대로 정렬 (최신순)
+        List<LocalDate> sortedDates = dataByDate.keySet().stream()
+                .sorted((date1, date2) -> date2.compareTo(date1)) // 최신순
+                .collect(Collectors.toList());
+
+        for (LocalDate currentDate : sortedDates) {
+            List<CrawlingData> currentDataList = dataByDate.get(currentDate);
 
             // 영상 정보 조회 (startDate인 날에만)
-            List<CrawlingDataResponseDto.VideoInfo> videoInfos = new ArrayList<>();
+            List<VideoInfoDto> videoInfoList = new ArrayList<>();
             boolean isStartDate = crawlingPeriodService.isStartDate(songId, currentDate);
 
             if (isStartDate) {
-                videoInfos = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
+                videoInfoList = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
             }
 
-            // 플랫폼별 데이터 생성
-            List<CrawlingDataResponseDto.DateGroupedData.PlatformData> platformDataList = new ArrayList<>();
+            // 해당 날짜의 플랫폼별 데이터 생성
+            List<CrawlingDataDto> currentDateDataList = new ArrayList<>();
 
             for (CrawlingData currentData : currentDataList) {
                 // 이전날 데이터를 DB에서 직접 조회
@@ -94,63 +105,47 @@ public class CrawlingDataService {
                     CrawlingData previousData = previousDataOpt.get();
 
                     // 조회수 증가량 계산
-                    if (currentData.getViews() != -999 &&  currentData.getViews() != -1 && previousData.getViews() != -999 && previousData.getViews() != -1) {
-                        viewsIncrease = currentData.getViews() - previousData.getViews();
-                    }
+                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getViews(),
+                            previousData.getViews());
 
                     // 청취자수 증가량 계산
-                    if (currentData.getListeners() != -999 &&  currentData.getListeners() != -1 && previousData.getListeners() != -999 && previousData.getListeners() != -1) {
-                        listenersIncrease = currentData.getListeners() - previousData.getListeners();
-                    }
+                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getListeners(),
+                            previousData.getListeners());
+
                 }
 
-                CrawlingDataResponseDto.DateGroupedData.PlatformData platformData = CrawlingDataResponseDto.DateGroupedData.PlatformData
-                        .builder()
-                        .platform(currentData.getPlatform())
-                        .views(currentData.getViews())
-                        .listeners(currentData.getListeners())
-                        .viewsIncrease(viewsIncrease)
-                        .listenersIncrease(listenersIncrease)
-                        .build();
+                // 그룹화된 데이터용 CrawlingDataDto 생성
+                CrawlingDataDto crawlingDataDto = CrawlingDataDto.ofBasicData(
+                        currentDate,
+                        currentData.getPlatform(),
+                        currentData.getViews(),
+                        currentData.getListeners(),
+                        viewsIncrease,
+                        listenersIncrease);
 
-                platformDataList.add(platformData);
+                currentDateDataList.add(crawlingDataDto);
             }
 
-            CrawlingDataResponseDto.DateGroupedData groupedData = CrawlingDataResponseDto.DateGroupedData.builder()
+            // 날짜별 그룹화된 데이터 생성
+            DateGroupedCrawlingDataDto groupedData = DateGroupedCrawlingDataDto.builder()
                     .date(currentDate)
-                    .videoInfos(videoInfos)
-                    .platformDataList(platformDataList)
+                    .dataList(currentDateDataList)
+                    .videoInfos(videoInfoList) // 영상 정보는 날짜별로 한 번만
                     .build();
 
             groupedDataList.add(groupedData);
         }
 
-        List<CrawlingDataResponseDto> resultList = new ArrayList<>();
-        for (CrawlingDataResponseDto.DateGroupedData groupedData : groupedDataList) {
-            for (CrawlingDataResponseDto.DateGroupedData.PlatformData platformData : groupedData
-                    .getPlatformDataList()) {
-                CrawlingDataResponseDto dto = CrawlingDataResponseDto.builder()
-                        .date(groupedData.getDate())
-                        .platform(platformData.getPlatform())
-                        .views(platformData.getViews())
-                        .listeners(platformData.getListeners())
-                        .viewsIncrease(platformData.getViewsIncrease())
-                        .listenersIncrease(platformData.getListenersIncrease())
-                        .videoInfos(groupedData.getVideoInfos())
-                        .build();
-
-                resultList.add(dto);
-            }
-        }
-
-        return CrawlingDataWithSongInfoDto.builder()
-                .songInfo(songInfo)
-                .crawlingDataList(resultList)
-                .groupedDataList(groupedDataList)
+        // 5. 페이지네이션 정보 생성
+        PageInfoDto pageInfo = PageInfoDto.builder()
                 .totalPages(pagedResult.getTotalPages())
                 .totalElements(pagedResult.getTotalElements())
                 .currentPage(page)
                 .pageSize(size)
                 .build();
+
+        // 6. 최종 응답 생성
+        return CrawlingDataWithSongInfoDto.of(songInfo, groupedDataList)
+                .withPageInfo(pageInfo);
     }
 }

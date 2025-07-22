@@ -64,7 +64,7 @@
             </script>
         </div>
 
-        <div th:if="${response.data.size() == 0}" class="no-data-message">
+        <div th:if="${crawlingData.groupedDataList.size() == 0}" class="no-data-message">
             <p>크롤링 데이터가 없습니다.</p>
         </div>
 
@@ -84,47 +84,49 @@
                 </thead>
                 <tbody>
                     <!-- 날짜별로 그룹화된 데이터 표시 -->
-                    <th:block th:each="groupedData : ${crawlingData.groupedDataList}">
-                        <tr th:each="platformData, platformIter : ${groupedData.platformDataList}">
-                            <!-- 날짜 셀 (첫 번째 플랫폼에서만 표시) -->
-                            <td th:if="${platformIter.first}" 
-                                th:rowspan="${groupedData.platformDataList.size()}"
-                                th:text="${#temporals.format(groupedData.date, 'yyyy-MM-dd')}"
+                    <th:block th:each="groupedData, groupIter : ${crawlingData.groupedDataList}">
+                        <tr th:each="data, dataIter : ${groupedData.dataList}" 
+                            th:class="${groupIter.index > 0 && dataIter.first ? 'date-separator' : ''}">
+                            
+                            <!-- 날짜 셀 (해당 날짜의 첫 번째 행에서만 표시, rowspan 적용) -->
+                            <td th:if="${dataIter.first}" 
+                                th:rowspan="${groupedData.dataListSize}"
+                                th:text="${#temporals.format(groupedData.date, 'yyyy-MM-dd')}" 
                                 class="date-cell">
                             </td>
                             
                             <!-- 플랫폼 정보 -->
-                            <td th:text="${platformData.platform}" class="platform-cell"></td>
+                            <td th:text="${data.platform}" class="platform-cell"></td>
                             
                             <!-- 조회수 -->
                             <td class="views-cell" 
-                                th:text="${platformData.views == -1 ? '-' : (platformData.views == -999 ? '⚠️' : #numbers.formatInteger(platformData.views, 0, 'COMMA'))}"
-                                th:class="${platformData.views == -1 ? 'text-muted' : (platformData.views == -999 ? 'text-warning' : '')}">
+                                th:text="${data.views == -1 ? '' : (data.views == -999 ? 'Fail' : #numbers.formatInteger(data.views, 0, 'COMMA'))}"
+                                th:class="${data.views == -1 ? 'text-muted' : (data.views == -999 ? 'text-warning' : '')}">
                             </td>
                             
                             <!-- 조회수 증가 -->
                             <td class="views-increase-cell"
-                                th:text="${platformData.viewsIncrease == -1 ? '-' : (platformData.viewsIncrease == -999 ? '⚠️' : (platformData.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(platformData.viewsIncrease, 0, 'COMMA'))}"
-                                th:class="${platformData.viewsIncrease == -1 ? 'text-muted' : (platformData.viewsIncrease == -999 ? 'text-warning' : (platformData.viewsIncrease > 0 ? 'text-success' : (platformData.viewsIncrease < 0 ? 'text-danger' : 'text-muted')))}">
+                                th:text="${data.viewsIncrease == -1 ? '' : (data.viewsIncrease == -999 ? 'Fail' : (data.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.viewsIncrease, 0, 'COMMA'))}"
+                                th:class="${data.viewsIncrease == -1 ? 'text-muted' : (data.viewsIncrease == -999 ? 'text-warning' : (data.viewsIncrease > 0 ? 'text-success' : (data.viewsIncrease < 0 ? 'text-danger' : 'text-muted')))}">
                             </td>
                             
                             <!-- 청취자 수 -->
                             <td class="listeners-cell"
-                                th:text="${platformData.listeners == -1 ? '-' : (platformData.listeners == -999 ? '⚠️' : #numbers.formatInteger(platformData.listeners, 0, 'COMMA'))}"
-                                th:class="${platformData.listeners == -1 ? 'text-muted' : (platformData.listeners == -999 ? 'text-warning' : '')}">
+                                th:text="${data.listeners == -1 ? '' : (data.listeners == -999 ? 'Fail' : #numbers.formatInteger(data.listeners, 0, 'COMMA'))}"
+                                th:class="${data.listeners == -1 ? 'text-muted' : (data.listeners == -999 ? 'text-warning' : '')}">
                             </td>
                             
                             <!-- 청취자 수 증가 -->
                             <td class="listeners-increase-cell"
-                                th:text="${platformData.listenersIncrease == -1 ? '-' : (platformData.listenersIncrease == -999 ? '⚠️' : (platformData.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(platformData.listenersIncrease, 0, 'COMMA'))}"
-                                th:class="${platformData.listenersIncrease == -1 ? 'text-muted' : (platformData.listenersIncrease == -999 ? 'text-warning' : (platformData.listenersIncrease > 0 ? 'text-success' : (platformData.listenersIncrease < 0 ? 'text-danger' : 'text-muted')))}">
+                                th:text="${data.listenersIncrease == -1 ? '' : (data.listenersIncrease == -999 ? 'Fail' : (data.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.listenersIncrease, 0, 'COMMA'))}"
+                                th:class="${data.listenersIncrease == -1 ? 'text-muted' : (data.listenersIncrease == -999 ? 'text-warning' : (data.listenersIncrease > 0 ? 'text-success' : (data.listenersIncrease < 0 ? 'text-danger' : 'text-muted')))}">
                             </td>
                             
-                            <!-- 영상 정보 셀 (첫 번째 플랫폼에서만 표시) -->
-                            <td th:if="${platformIter.first}" 
-                                th:rowspan="${groupedData.platformDataList.size()}"
+                            <!-- 영상 정보 셀 (해당 날짜의 첫 번째 행에서만 표시, rowspan 적용) -->
+                            <td th:if="${dataIter.first}" 
+                                th:rowspan="${groupedData.dataListSize}"
                                 class="video-info-cell">
-                                <div th:if="${!groupedData.videoInfos.isEmpty()}">
+                                <div th:if="${groupedData.hasVideoInfo()}">
                                     <div th:each="videoInfo : ${groupedData.videoInfos}" class="video-info-item">
                                         <div class="video-info-row">
                                             <span class="video-label">채널명:</span>
@@ -147,7 +149,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div th:unless="${!groupedData.videoInfos.isEmpty()}" class="no-video-info">-</div>
+                                <div th:unless="${groupedData.hasVideoInfo()}" class="no-video-info">-</div>
                             </td>
                         </tr>
                     </th:block>
@@ -155,22 +157,22 @@
             </table>
         </div>
 
-        <!-- 페이지네이션 -->
-        <div class="pagination" th:if="${totalPages > 0}">
-            <a th:if="${currentPage > 1}" 
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${currentPage - 1}, size=${pageSize})}" 
+        <!-- 페이지네이션 (pageInfo로 접근 방식 변경) -->
+        <div class="pagination" th:if="${crawlingData.pageInfo.totalPages > 0}">
+            <a th:if="${crawlingData.pageInfo.currentPage > 1}" 
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage - 1}, size=${crawlingData.pageInfo.pageSize})}" 
                class="page-btn">이전</a>
-            <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-                <a th:if="${pageNum != currentPage}" 
-                   th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${pageNum}, size=${pageSize})}" 
+            <span th:each="pageNum : ${#numbers.sequence(1, crawlingData.pageInfo.totalPages)}">
+                <a th:if="${pageNum != crawlingData.pageInfo.currentPage}" 
+                   th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${pageNum}, size=${crawlingData.pageInfo.pageSize})}" 
                    th:text="${pageNum}" 
                    class="page-btn"></a>
-                <span th:if="${pageNum == currentPage}" 
+                <span th:if="${pageNum == crawlingData.pageInfo.currentPage}" 
                       th:text="${pageNum}" 
                       class="page-btn current"></span>
             </span>
-            <a th:if="${currentPage < totalPages}" 
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${currentPage + 1}, size=${pageSize})}" 
+            <a th:if="${crawlingData.pageInfo.currentPage < crawlingData.pageInfo.totalPages}" 
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage + 1}, size=${crawlingData.pageInfo.pageSize})}" 
                class="page-btn">다음</a>
         </div>
     </section>

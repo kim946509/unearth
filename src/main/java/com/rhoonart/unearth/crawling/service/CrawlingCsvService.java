@@ -4,7 +4,7 @@ import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.util.DataAuthorityService;
 import com.rhoonart.unearth.crawling.dto.CrawlingCsvDownloadDto;
-import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
+import com.rhoonart.unearth.crawling.dto.VideoInfoDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingData;
 import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
@@ -111,7 +111,7 @@ public class CrawlingCsvService {
             String videoInfo = "";
             boolean isStartDate = crawlingPeriodService.isStartDate(songId, currentDate);
             if (isStartDate) {
-                List<CrawlingDataResponseDto.VideoInfo> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId,
+                List<VideoInfoDto> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId,
                         currentDate);
                 if (!videoInfos.isEmpty()) {
                     videoInfo = videoInfos.stream()

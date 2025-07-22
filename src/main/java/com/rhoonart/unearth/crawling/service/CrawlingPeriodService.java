@@ -2,8 +2,7 @@ package com.rhoonart.unearth.crawling.service;
 
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
-import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
-import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto.VideoInfo;
+import com.rhoonart.unearth.crawling.dto.VideoInfoDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingExecuteRequestDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingPeriod;
 import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
@@ -26,12 +25,14 @@ public class CrawlingPeriodService {
 
     private final CrawlingPeriodRepository crawlingPeriodRepository;
     private final SongInfoService songInfoService;
+
     /**
      * 영상 등록시 크롤링 기간을 생성하고 저장합니다.
+     * 
      * @param dto
      * @return
      */
-    public CrawlingPeriod createAndSaveCrawlingPeriod(CrawlingExecuteRequestDto dto){
+    public CrawlingPeriod createAndSaveCrawlingPeriod(CrawlingExecuteRequestDto dto) {
         // 1. 음원 조회
         SongInfo song = songInfoService.getSongInfoById(dto.getSongId()).orElseThrow(CannotFindSongException::new);
 
@@ -65,11 +66,11 @@ public class CrawlingPeriodService {
     /**
      * 특정 날짜의 영상 정보를 조회합니다.
      */
-    public List<VideoInfo> getVideoInfosForDate(String songId, LocalDate date) {
+    public List<VideoInfoDto> getVideoInfosForDate(String songId, LocalDate date) {
         List<CrawlingPeriod> periods = crawlingPeriodRepository.findBySongIdAndStartDate(songId, date);
 
         return periods.stream()
-                .map(period -> CrawlingDataResponseDto.VideoInfo.builder()
+                .map(period -> VideoInfoDto.builder()
                         .channel(period.getChannel())
                         .youtubeTitle(period.getYoutubeTitle())
                         .youtubeUrl(period.getYoutubeUrl())
