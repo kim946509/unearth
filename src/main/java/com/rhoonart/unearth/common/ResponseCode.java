@@ -9,7 +9,8 @@ public enum ResponseCode {
     AUTH_FAIL("아이디 또는 비밀번호가 일치하지 않습니다."),
     FORBIDDEN("접근 권한이 없습니다."),
     NOT_FOUND("요청하신 정보를 찾을 수 없습니다."),
-    SERVER_ERROR("서버에 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    SERVER_ERROR("서버에 오류가 발생했습니다. 잠시 후 다시 시도해주세요."),
+    BAD_REQUEST("잘못된 요청입니다. 요청 형식을 확인해주세요."),;
 
     private final String message;
 

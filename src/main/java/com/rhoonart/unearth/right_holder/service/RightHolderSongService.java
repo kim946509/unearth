@@ -35,8 +35,8 @@ public class RightHolderSongService {
         // DTO 변환
         return songPage.map(song -> {
             // 크롤링 데이터 존재 여부 확인 (필터링된 결과이므로 hasCrawlingData가 true인 경우는 이미 확인됨)
-            boolean songHasCrawlingData = hasCrawlingData != null && hasCrawlingData ? true
-                    : crawlingDataRepository.existsBySongId(song.getId());
+            boolean songHasCrawlingData =
+                    hasCrawlingData != null && hasCrawlingData || crawlingDataRepository.existsBySongId(song.getId());
 
             return RightHolderSongListResponseDto.builder()
                     .songId(song.getId())

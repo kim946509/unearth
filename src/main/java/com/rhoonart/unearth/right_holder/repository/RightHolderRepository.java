@@ -44,4 +44,5 @@ public interface RightHolderRepository
   Optional<RightHolder> findByUserId(String userId);
 
   boolean existsByBusinessNumber(String businessNumber);
+
 }
