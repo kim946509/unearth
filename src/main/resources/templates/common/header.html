@@ -9,17 +9,34 @@
             <img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" />
         </div>
         
-        <!-- 공통 에러 모달 -->
+        <!-- 공통 에러 모달 (곡 등록 모달 스타일 차용) -->
         <div id="errorModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content error-modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">알림</span>
+                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                </div>
                 <div class="modal-message" id="modalMessage"></div>
-                <button class="modal-btn" onclick="closeModal()">확인</button>
+                <div class="modal-footer">
+                    <button class="modal-btn" onclick="closeModal()">확인</button>
+                </div>
             </div>
         </div>
         
-        <script>
+        <script th:inline="javascript">
             // 전역 변수로 새로고침 필요 여부 관리
             let needRefresh = false;
+            
+            // 플래시 속성에서 전달된 에러 메시지 확인
+            const errorMessage = /*[[${errorMessage}]]*/ null;
+            const errorCode = /*[[${errorCode}]]*/ null;
+            
+            // 페이지 로드 시 에러 메시지가 있으면 모달 표시
+            document.addEventListener('DOMContentLoaded', function() {
+                if (errorMessage) {
+                    showModal(errorMessage);
+                }
+            });
             
             // 전역 모달 함수들
             function showModal(message, shouldRefresh = false) {
@@ -45,7 +62,7 @@
                 }
             }
             
-            // 전역 에러 처리 함수
+            // 전역 에러 처리 함수 (AJAX 요청용)
             function handleApiError(response) {
                 if (!response.ok) {
                     response.json().then(data => {

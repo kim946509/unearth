@@ -1,12 +1,16 @@
 package com.rhoonart.unearth.user.exception;
 
-public class BadRequestException extends RuntimeException {
+import com.rhoonart.unearth.common.ResponseCode;
+import com.rhoonart.unearth.common.exception.BaseException;
+
+public class BadRequestException extends BaseException {
 
     public BadRequestException(String message) {
-        super(message);
+        super(ResponseCode.BAD_REQUEST, message);
     }
 
-    public BadRequestException(String message, Throwable cause) {
-        super(message, cause);
+    public BadRequestException(ResponseCode code, String message) {
+        super(code, message);
     }
+
 }
