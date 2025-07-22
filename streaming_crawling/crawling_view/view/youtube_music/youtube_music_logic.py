@@ -6,7 +6,9 @@ import random
 import logging
 import re
 import os
+import json
 from datetime import datetime
+from pathlib import Path
 from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -28,9 +30,159 @@ class YouTubeMusicCrawler:
         self.youtube_music_id = os.getenv('YOUTUBE_MUSIC_ID', '')
         self.youtube_music_password = os.getenv('YOUTUBE_MUSIC_PASSWORD', '')
         self.is_logged_in = False
-    
+        
+        # 쿠키 저장 경로 설정
+        self.cookies_dir = Path("user_data/cookies")
+        self.cookies_dir.mkdir(parents=True, exist_ok=True)
+        self.cookies_file = self.cookies_dir / "youtube_music_cookies.json"
 
-    
+    def _save_cookies(self):
+        """
+        현재 브라우저의 쿠키를 파일로 저장
+        
+        Returns:
+            bool: 저장 성공 여부
+        """
+        try:
+            cookies = self.driver.get_cookies()
+            if cookies:
+                with open(self.cookies_file, 'w', encoding='utf-8') as f:
+                    json.dump(cookies, f, ensure_ascii=False, indent=2)
+                logger.info(f"🍪 쿠키 저장 완료 ({len(cookies)}개)")
+                return True
+            else:
+                logger.warning("⚠️ 저장할 쿠키가 없음")
+                return False
+        except Exception as e:
+            logger.error(f"❌ 쿠키 저장 실패: {e}")
+            return False
+
+    def _load_cookies(self):
+        """
+        저장된 쿠키 파일을 로드
+        
+        Returns:
+            list: 쿠키 리스트 또는 None
+        """
+        try:
+            if not self.cookies_file.exists():
+                return None
+            
+            with open(self.cookies_file, 'r', encoding='utf-8') as f:
+                cookies = json.load(f)
+            
+            if cookies:
+                return cookies
+            else:
+                return None
+                
+        except Exception as e:
+            logger.error(f"❌ 쿠키 로드 실패: {e}")
+            return None
+
+    def _apply_cookies(self, cookies):
+        """
+        브라우저에 쿠키 적용
+        
+        Args:
+            cookies (list): 적용할 쿠키 리스트
+            
+        Returns:
+            bool: 적용 성공 여부
+        """
+        try:
+            # YouTube Music 페이지로 이동 (쿠키 적용을 위해)
+            self.driver.get("https://music.youtube.com/")
+            time.sleep(2)
+            
+            applied_count = 0
+            for cookie in cookies:
+                try:
+                    # 쿠키의 domain이 현재 도메인과 호환되는지 확인
+                    current_domain = "music.youtube.com"
+                    cookie_domain = cookie.get('domain', '').lstrip('.')
+                    
+                    if (cookie_domain == current_domain or 
+                        cookie_domain == "youtube.com" or 
+                        cookie_domain == ".youtube.com" or
+                        cookie_domain == "google.com" or
+                        cookie_domain == ".google.com"):
+                        
+                        # 만료일 체크 (expiry가 있는 경우)
+                        if 'expiry' in cookie:
+                            if cookie['expiry'] < time.time():
+                                continue
+                        
+                        # 쿠키 적용
+                        cookie_to_add = {
+                            'name': cookie['name'],
+                            'value': cookie['value'],
+                            'domain': cookie.get('domain', '.youtube.com'),
+                            'path': cookie.get('path', '/'),
+                            'secure': cookie.get('secure', True),
+                            'httpOnly': cookie.get('httpOnly', False)
+                        }
+                        
+                        # expiry가 있으면 추가
+                        if 'expiry' in cookie:
+                            cookie_to_add['expiry'] = cookie['expiry']
+                            
+                        self.driver.add_cookie(cookie_to_add)
+                        applied_count += 1
+                        
+                except Exception:
+                    continue
+            
+            return applied_count > 0
+            
+        except Exception as e:
+            logger.error(f"❌ 쿠키 적용 실패: {e}")
+            return False
+
+    def _try_cookie_login(self):
+        """
+        저장된 쿠키를 사용하여 로그인 시도
+        
+        Returns:
+            bool: 쿠키 로그인 성공 여부
+        """
+        try:
+            # 쿠키 로드
+            cookies = self._load_cookies()
+            if not cookies:
+                return False
+            
+            # 쿠키 적용
+            if not self._apply_cookies(cookies):
+                return False
+            
+            # 페이지 새로고침하여 쿠키 적용 확인
+            self.driver.refresh()
+            time.sleep(3)
+            
+            # 로그인 상태 확인
+            if self._check_login_status():
+                logger.info("🍪 쿠키 로그인 성공")
+                self.is_logged_in = True
+                return True
+            else:
+                logger.info("🍪 쿠키 로그인 실패")
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ 쿠키 로그인 오류: {e}")
+            return False
+
+    def _clear_stored_cookies(self):
+        """
+        저장된 쿠키 파일 삭제
+        """
+        try:
+            if self.cookies_file.exists():
+                self.cookies_file.unlink()
+        except Exception:
+            pass
+
     def _check_login_status(self):
         """로그인 상태 확인"""
         try:
@@ -103,22 +255,35 @@ class YouTubeMusicCrawler:
             except Exception as e:
                 logger.debug(f"스크린샷 저장 실패: {e}")
             
-                return False
+            return False
             
         except Exception as e:
             logger.warning(f"로그인 상태 확인 실패: {e}")
             return False
-    
+
     def login(self):
         """
-        YouTube Music 로그인 (일반 로그인만 사용)
+        YouTube Music 로그인 (쿠키 우선, 실패 시 수동 로그인)
         
         Returns:
             bool: 로그인 성공 여부
         """
         try:
-            logger.info("🔐 일반 로그인 시도")
-            return self._perform_manual_login()
+            # 1. 먼저 쿠키 기반 로그인 시도
+            if self._try_cookie_login():
+                return True
+            
+            # 2. 쿠키 로그인 실패 시 기존 쿠키 삭제 후 수동 로그인
+            self._clear_stored_cookies()
+            self.driver.delete_all_cookies()
+            
+            # 수동 로그인 수행
+            if self._perform_manual_login():
+                self._save_cookies()
+                return True
+            else:
+                logger.error("❌ 수동 로그인 실패")
+                return False
             
         except Exception as e:
             logger.error(f"❌ YouTube Music 로그인 실패: {e}", exc_info=True)
