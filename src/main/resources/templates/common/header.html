@@ -6,19 +6,21 @@
 <body>
     <div th:fragment="header">
         <div class="header">
-            <img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" />
+            <img src="/img/unearth_icon.png" alt="UNEARTH 로고" class="header-logo" />
         </div>
         
-        <!-- 공통 에러 모달 (곡 등록 모달 스타일 차용) -->
+        <!-- 공통 에러 모달 -->
         <div id="errorModal" class="modal">
             <div class="modal-content error-modal-content">
                 <div class="modal-header">
                     <span class="modal-title">알림</span>
                     <span class="modal-close" onclick="closeModal()">&times;</span>
                 </div>
-                <div class="modal-message" id="modalMessage"></div>
+                <div class="modal-body">
+                    <div class="modal-message" id="modalMessage"></div>
+                </div>
                 <div class="modal-footer">
-                    <button class="modal-btn" onclick="closeModal()">확인</button>
+                    <button class="btn btn-primary" onclick="closeModal()">확인</button>
                 </div>
             </div>
         </div>
@@ -41,12 +43,12 @@
             // 전역 모달 함수들
             function showModal(message, shouldRefresh = false) {
                 document.getElementById('modalMessage').innerText = message;
-                document.getElementById('errorModal').style.display = 'block';
+                document.getElementById('errorModal').classList.add('show');
                 needRefresh = shouldRefresh;
             }
             
             function closeModal() {
-                document.getElementById('errorModal').style.display = 'none';
+                document.getElementById('errorModal').classList.remove('show');
                 // 새로고침이 필요한 경우 확인 버튼 클릭 시 새로고침
                 if (needRefresh) {
                     location.reload();
