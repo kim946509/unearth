@@ -135,16 +135,8 @@ public class CrawlingCsvService {
                 CrawlingData previousData = previousDayData.get(currentData.getPlatform());
                 if (previousData != null) {
                     // 조회수 증가량 계산
-                    if (currentData.getViews() != -999 && currentData.getViews() != -1
-                            && previousData.getViews() != -999 && previousData.getViews() != -1) {
-                        viewsIncrease = currentData.getViews() - previousData.getViews();
-                    }
-
-                    // 청취자수 증가량 계산
-                    if (currentData.getListeners() != -999 && currentData.getListeners() != -1
-                            && previousData.getListeners() != -999 && previousData.getListeners() != -1) {
-                        listenersIncrease = currentData.getListeners() - previousData.getListeners();
-                    }
+                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getViews(), previousData.getViews());
+                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getListeners(), previousData.getListeners());
                 }
 
                 // CSV 행 생성
