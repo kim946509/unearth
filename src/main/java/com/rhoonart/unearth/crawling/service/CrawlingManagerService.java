@@ -31,6 +31,10 @@ public class CrawlingManagerService {
         crawlingExecuteService.executeSingleSongCrawling(dto.getSongId());
     }
 
+    /**
+     * 크롤링 실패한 곡을 크롤링할 때 사용하는 메서드
+     * @param songId
+     */
     @Transactional
     public void executeCrawlingOnly(String songId) {
 

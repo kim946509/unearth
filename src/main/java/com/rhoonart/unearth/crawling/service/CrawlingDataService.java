@@ -3,6 +3,7 @@ package com.rhoonart.unearth.crawling.service;
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.util.DataAuthorityService;
+import com.rhoonart.unearth.common.util.ValidateInput;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataWithSongInfoDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingData;
@@ -13,6 +14,7 @@ import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.user.dto.UserDto;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +37,7 @@ public class CrawlingDataService {
     private final CrawlingPeriodService crawlingPeriodService;
     private final DataAuthorityService dataAuthorityService;
 
-    public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(UserDto userDto, String songId, LocalDate startDate,
-                                                                  LocalDate endDate, PlatformType platform, int page, int size) {
+    public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(UserDto userDto, String songId, String startDateStr, String endDateStr, String platformTypeStr, int page, int size) {
         // 음원 존재 여부 확인
         SongInfo songInfo = songInfoRepository.findById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -44,7 +45,14 @@ public class CrawlingDataService {
         // 사용자 권한 확인
         dataAuthorityService.isAccessSongData(userDto, songInfo);
 
-        // 1. Pageable 생성 (페이지는 0부터 시작하므로 -1)
+        // 입력 값 검증 및 파싱
+        LocalDate startDate = ValidateInput.parseDate(startDateStr);
+        LocalDate endDate = ValidateInput.parseDate(endDateStr);
+        PlatformType platform = PlatformType.fromString(platformTypeStr);
+        size= ValidateInput.restrictPageSize(size);
+        page = ValidateInput.calculatePageNumber(page);
+
+        // 1. Pageable 생성 (실제로 데이터 상 페이지는 0부터 시작하므로 -1)
         Pageable pageable = PageRequest.of(page - 1, size);
 
         // 2. DB 레벨에서 페이징된 데이터 조회
@@ -145,7 +153,4 @@ public class CrawlingDataService {
                 .pageSize(size)
                 .build();
     }
-
-
-
 }

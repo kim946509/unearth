@@ -7,4 +7,8 @@ public class ForbiddenException extends BaseException {
     public ForbiddenException(String message) {
         super(ResponseCode.FORBIDDEN, message);
     }
+
+    public ForbiddenException() {
+        super(ResponseCode.FORBIDDEN, "접근 권한이 없습니다.");
+    }
 }

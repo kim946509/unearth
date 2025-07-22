@@ -2,6 +2,7 @@ package com.rhoonart.unearth.crawling.service;
 
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
+import com.rhoonart.unearth.common.util.DataAuthorityService;
 import com.rhoonart.unearth.crawling.dto.CrawlingCsvDownloadDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingDataResponseDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingData;
@@ -9,6 +10,10 @@ import com.rhoonart.unearth.crawling.entity.PlatformType;
 import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
+import com.rhoonart.unearth.user.dto.UserDto;
+import com.rhoonart.unearth.user.exception.ForbiddenException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Comparator;
@@ -27,13 +32,19 @@ public class CrawlingCsvService {
     private final SongInfoRepository songInfoRepository;
     private final CrawlingDataRepository crawlingDataRepository;
     private final CrawlingPeriodService crawlingPeriodService;
-
+    private final DataAuthorityService dataAuthorityService;
     /**
      * CSV 다운로드를 위한 메인 메서드입니다.
      */
     @Transactional(readOnly = true)
-    public CrawlingCsvDownloadDto generateCrawlingDataCsvForDownload(String songId, String startDateStr,
-            String endDateStr) {
+    public CrawlingCsvDownloadDto generateCrawlingDataCsvForDownload(UserDto userDto, String songId, String startDateStr,
+                                                                     String endDateStr) {
+
+        // 권한 체크
+        if(dataAuthorityService.isAccessSongData(userDto,songId)){
+            throw new ForbiddenException();
+        }
+
         // 날짜 파싱
         LocalDate startDate = parseDateParameter(startDateStr);
         LocalDate endDate = parseDateParameter(endDateStr);
@@ -50,7 +61,12 @@ public class CrawlingCsvService {
                 cleanFilename(songInfo.getArtistKo()),
                 cleanFilename(songInfo.getTitleKo()));
 
-        return new CrawlingCsvDownloadDto(csvData, filename);
+        // 한글 파일명 인코딩
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20");
+
+
+        return new CrawlingCsvDownloadDto(csvData, encodedFilename);
     }
 
     /**
