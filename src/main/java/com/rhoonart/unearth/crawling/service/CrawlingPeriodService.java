@@ -52,8 +52,7 @@ public class CrawlingPeriodService {
                 .uploadAt(parseUploadAt(dto.getUploadAt()))
                 .build();
 
-        crawlingPeriodRepository.save(crawlingPeriod);
-
+        return crawlingPeriodRepository.save(crawlingPeriod);
     }
 
     /**
