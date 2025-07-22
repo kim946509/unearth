@@ -29,6 +29,7 @@
 /* 테이블 컨테이너 */
 .table-section {
     margin-bottom: 24px;
+    margin-top: 15px;
 }
 
 .table-container {
@@ -59,7 +60,7 @@
 }
 
 .holder-table td {
-    padding: 10px 12px;
+    padding: 8px 12px;
     border-bottom: 1px solid #f3f4f6;
     color: #1f2937;
     font-size: 14px;
@@ -127,43 +128,38 @@
     color: #991b1b;
 }
 
-/* YouTube 링크 버튼 */
+/* 특별한 버튼 스타일 - base.css 버튼과 조화롭게 */
 .youtube-link {
-    background: #1f2937;
-    color: #ffffff;
-    border-color: #1f2937;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 .youtube-link:hover {
-    background: #111827;
-    border-color: #111827;
-    color: #ffffff;
+    text-decoration: none;
 }
 
-/* 데이터 버튼 */
 .data-btn {
-    background: #3b82f6;
-    color: #ffffff;
-    border-color: #3b82f6;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 .data-btn:hover {
-    background: #2563eb;
-    border-color: #2563eb;
-    color: #ffffff;
+    text-decoration: none;
 }
 
 .data-btn.no-data {
-    background: #f3f4f6;
-    color: #9ca3af;
-    border-color: #e5e7eb;
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    border-color: #e5e7eb !important;
     cursor: not-allowed;
 }
 
 .data-btn.no-data:hover {
-    background: #f3f4f6;
-    color: #9ca3af;
-    border-color: #e5e7eb;
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    border-color: #e5e7eb !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1) !important;
 }
 
 /* 모달 스타일 개선 */

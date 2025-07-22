@@ -97,7 +97,7 @@ body
 
 .content {
     flex: 1;
-    padding: 32px;
+    padding: 20px;
     background: #f8f9fb;
     min-height: calc(100vh - 64px);
 }
