@@ -15,6 +15,7 @@ import com.rhoonart.unearth.crawling.repository.CrawlingDataRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.user.dto.UserDto;
+import com.rhoonart.unearth.user.exception.ForbiddenException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,9 @@ public class CrawlingDataService {
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
 
         // 사용자 권한 확인
-        dataAuthorityService.isAccessSongData(userDto, songInfo);
+        if(!dataAuthorityService.isAccessSongData(userDto, songInfo)){
+            throw new ForbiddenException();
+        }
 
         // 입력 값 검증 및 파싱
         LocalDate startDate = ValidateInput.parseDate(startDateStr);
