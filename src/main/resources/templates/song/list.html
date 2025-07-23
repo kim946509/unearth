@@ -92,10 +92,9 @@
                         </select>
                     </div>
                     <div class="search-group">
-                        <label class="form-label">크롤링 상태</label>
-                        <div style="display: flex; align-items: center; gap: 8px; height: 40px;">
-                            <input type="checkbox" id="crawlingActive" name="isCrawlingActive" th:checked="${isCrawlingActive}" onchange="this.form.submit()" />
-                            <label for="crawlingActive" style="margin: 0; font-size: 14px;">크롤링 실행중 곡만</label>
+                        <label class="form-label">오늘 기준 크롤링 실행중 곡만</label>
+                        <div class="crawling-checkbox-container">
+                            <input type="checkbox" id="crawlingActive" name="isCrawlingActive" th:checked="${isCrawlingActive}" onchange="this.form.submit()" class="crawling-checkbox" />
                         </div>
                     </div>
                     <div class="search-group">
