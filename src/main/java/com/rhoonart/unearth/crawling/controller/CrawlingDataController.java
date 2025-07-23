@@ -34,7 +34,7 @@ public class CrawlingDataController {
      * @param endDateStr
      * @param platformStr
      * @param page
-     * @param size
+     * @param days
      * @param session
      * @param model
      * @return
@@ -46,14 +46,14 @@ public class CrawlingDataController {
             @RequestParam(value = "endDate", required = false) String endDateStr,
             @RequestParam(value = "platform", required = false) String platformStr,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(value = "size", required = false, defaultValue = "20") Integer size,
+            @RequestParam(value = "days", required = false, defaultValue = "7") Integer days,
             HttpSession session,
             Model model) {
         // 권한 체크: SUPER_ADMIN, ADMIN 또는 해당 권리자 본인만 접근 가능
         UserDto user = SessionUserUtil.requireLogin(session);
 
         CrawlingDataWithSongInfoDto crawlingDataWithSongInfo = crawlingDataService.getCrawlingDataWithFilters(
-                user, songId, startDateStr, endDateStr, platformStr, page, size);
+                user, songId, startDateStr, endDateStr, platformStr, page, days);
 
         model.addAttribute("response", CommonResponse.success(null));
         model.addAttribute("crawlingData", crawlingDataWithSongInfo); // 그룹화된 데이터 포함
@@ -61,6 +61,7 @@ public class CrawlingDataController {
         model.addAttribute("startDate", startDateStr);
         model.addAttribute("endDate", endDateStr);
         model.addAttribute("platform", platformStr);
+        model.addAttribute("days", days);
 
         return "crawling/data";
     }

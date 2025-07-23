@@ -41,7 +41,7 @@ public class CrawlingDataService {
 
         public CrawlingDataWithSongInfoDto getCrawlingDataWithFilters(UserDto userDto, String songId,
                         String startDateStr,
-                        String endDateStr, String platformTypeStr, int page, int size) {
+                        String endDateStr, String platformTypeStr, int page, int days) {
                 // 음원 존재 여부 확인
                 SongInfo songInfo = songInfoRepository.findById(songId)
                                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
@@ -60,7 +60,8 @@ public class CrawlingDataService {
                         platform = PlatformType.fromString(platformTypeStr);
                 }
 
-                size = ValidateInput.restrictPageSize(size);
+                // 일수를 페이지 크기로 변환
+                int size = ValidateInput.restrictCrawlingDataPageSize(days);
                 page = ValidateInput.calculatePageNumber(page);
 
                 // 1. Pageable 생성 (실제로 데이터 상 페이지는 0부터 시작하므로 -1)

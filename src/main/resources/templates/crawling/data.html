@@ -40,12 +40,12 @@
                         </select>
                     </div>
                     <div class="search-group">
-                        <label class="form-label">페이지 크기</label>
-                        <select name="size" class="form-control">
-                            <option value="10" th:selected="${crawlingData.pageInfo.pageSize == 10}">10개</option>
-                            <option value="20" th:selected="${crawlingData.pageInfo.pageSize == 20}">20개</option>
-                            <option value="50" th:selected="${crawlingData.pageInfo.pageSize == 50}">50개</option>
-                            <option value="100" th:selected="${crawlingData.pageInfo.pageSize == 100}">100개</option>
+                        <label class="form-label">페이지 표시 일수</label>
+                        <select name="days" class="form-control">
+                            <option value="5" th:selected="${days == 5}">5일</option>
+                            <option value="7" th:selected="${days == 7}">7일</option>
+                            <option value="14" th:selected="${days == 14}">14일</option>
+                            <option value="30" th:selected="${days == 30}">30일</option>
                         </select>
                     </div>
                     <div class="search-group">
@@ -167,13 +167,13 @@
         <div class="pagination" th:if="${crawlingData.pageInfo.totalPages > 0}">
             <!-- 첫 페이지 -->
             <a th:if="${crawlingData.pageInfo.currentPage > 1}"
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=1, size=${crawlingData.pageInfo.pageSize})}"
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=1, days=${days})}"
                class="page-link" title="처음">
                <img src="/img/first-arrow.png" alt="처음" style="width: 16px; height: 16px;"/>
             </a>
             <!-- 이전 페이지 -->
             <a th:if="${crawlingData.pageInfo.currentPage > 1}"
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage - 1}, size=${crawlingData.pageInfo.pageSize})}"
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage - 1}, days=${days})}"
                class="page-link" title="이전">
                <img src="/img/previous-arrow.png" alt="이전" style="width: 16px; height: 16px;"/>
             </a>
@@ -188,7 +188,7 @@
             ">
                 <span th:each="i : ${#numbers.sequence(adjustedStartPage, adjustedEndPage)}">
                     <a th:if="${i != currentPage}"
-                       th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${i}, size=${crawlingData.pageInfo.pageSize})}"
+                       th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${i}, days=${days})}"
                        th:text="${i}"
                        class="page-link"></a>
                     <span th:if="${i == currentPage}"
@@ -198,13 +198,13 @@
             </th:block>
             <!-- 다음 페이지 -->
             <a th:if="${crawlingData.pageInfo.currentPage < crawlingData.pageInfo.totalPages}"
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage + 1}, size=${crawlingData.pageInfo.pageSize})}"
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.currentPage + 1}, days=${days})}"
                class="page-link" title="다음">
                <img src="/img/next-arrow.png" alt="다음" style="width: 16px; height: 16px;"/>
             </a>
             <!-- 마지막 페이지 -->
             <a th:if="${crawlingData.pageInfo.currentPage < crawlingData.pageInfo.totalPages}"
-               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.totalPages}, size=${crawlingData.pageInfo.pageSize})}"
+               th:href="@{/crawling/data/{songId}(songId=${songId}, startDate=${startDate}, endDate=${endDate}, platform=${platform}, page=${crawlingData.pageInfo.totalPages}, days=${days})}"
                class="page-link" title="마지막">
                <img src="/img/last-arrow.png" alt="마지막" style="width: 16px; height: 16px;"/>
             </a>
