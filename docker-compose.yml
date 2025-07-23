@@ -41,6 +41,10 @@ services:
       - DB_PASSWORD=${MYSQL_PASSWORD}
       - SERVER_PORT=8080
 
+      # SuperAdmin 계정 설정
+      - SUPERADMIN_USERNAME=${SUPERADMIN_USERNAME}
+      - SUPERADMIN_PASSWORD=${SUPERADMIN_PASSWORD}
+
       # Django 환경변수 (Spring Boot와 동일한 DB 사용)
       - DB_ENGINE=django.db.backends.mysql
       - DJANGO_DB_NAME=${MYSQL_DATABASE}
