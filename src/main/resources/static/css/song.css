@@ -106,7 +106,6 @@
 
 /* 크롤링 관련 스타일 */
 .crawling-column {
-    display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
