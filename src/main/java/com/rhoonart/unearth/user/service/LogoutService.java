@@ -18,7 +18,6 @@ public class LogoutService {
         if (session != null) {
             String username = (String) session.getAttribute("username");
             session.invalidate();
-            log.info("사용자 로그아웃 완료: {}", username);
         }
     }
 }
