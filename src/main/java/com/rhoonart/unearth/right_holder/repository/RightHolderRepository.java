@@ -23,10 +23,7 @@ public interface RightHolderRepository
               :contractDate IS NULL
               OR (r.contractStart <= :contractDate AND r.contractEnd >= :contractDate)
             )
-          ORDER BY
-            CASE WHEN :holderName IS NOT NULL AND r.holderName LIKE CONCAT(:holderName, '%') THEN 0 ELSE 1 END,
-            r.contractStart DESC,
-            r.holderName ASC
+          ORDER BY r.createdAt DESC
       """)
   Page<RightHolder> search(
       @Param("holderType") HolderType holderType,
