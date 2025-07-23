@@ -21,12 +21,19 @@ body {
     padding: 0 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 64px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 .header-logo {
     height: 36px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* ========== 사이드바 스타일 ========== */
@@ -193,6 +200,17 @@ body {
 }
 
 .btn-danger:hover {
+    background: #dc2626;
+    border-color: #dc2626;
+}
+
+.btn-logout {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+}
+
+.btn-logout:hover {
     background: #dc2626;
     border-color: #dc2626;
 }

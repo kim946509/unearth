@@ -151,11 +151,11 @@ if (closePasswordChangeBtn) {
 
 function closePasswordChangeModal() {
     passwordChangeModal.classList.remove('show');
+    // 비밀번호 변경 폼 초기화
+    passwordChangeForm.reset();
 }
 
-window.addEventListener('click', (e) => { 
-    if (e.target === passwordChangeModal) closePasswordChangeModal(); 
-});
+
 
 // 비밀번호 변경 폼 제출 처리
 const passwordChangeForm = document.getElementById('passwordChangeForm');

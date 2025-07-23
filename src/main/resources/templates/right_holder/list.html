@@ -268,10 +268,14 @@
 // 모달 제어 함수들
 function closeModal() {
     document.getElementById('registerModal').classList.remove('show');
+    // 등록 폼 초기화
+    document.getElementById('registerForm').reset();
 }
 
 function closeEditModal() {
     document.getElementById('editModal').classList.remove('show');
+    // 수정 폼 초기화
+    document.getElementById('editForm').reset();
 }
 
 function closeExtendModal() {
@@ -284,13 +288,11 @@ const modal = document.getElementById('registerModal');
 const closeBtn = document.getElementById('closeModalBtn');
 openBtn && openBtn.addEventListener('click', () => { modal.classList.add('show'); });
 closeBtn && closeBtn.addEventListener('click', closeModal);
-window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
 // 수정 모달 열기/닫기
 const editModal = document.getElementById('editModal');
 const closeEditBtn = document.getElementById('closeEditModalBtn');
 closeEditBtn && closeEditBtn.addEventListener('click', closeEditModal);
-window.addEventListener('click', (e) => { if (e.target === editModal) closeEditModal(); });
 
 // 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
 function openEditModalFromData(button) {
@@ -319,9 +321,6 @@ const closeExtendBtn = document.getElementById('closeExtendModalBtn');
 const confirmExtendBtn = document.getElementById('confirmExtendBtn');
 
 closeExtendBtn && closeExtendBtn.addEventListener('click', closeExtendModal);
-window.addEventListener('click', (e) => { 
-    if (e.target === extendModal) closeExtendModal();
-});
 
 // 계약 연장 함수
 function extendContract(button) {
