@@ -63,7 +63,7 @@ public class CrawlingCsvService {
                 cleanFilename(songInfo.getArtistKo()),
                 cleanFilename(songInfo.getTitleKo()));
 
-        // 한글 파일명 인코딩
+        // 한글 파일명 인코딩 (RFC 5987 형식)
         String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20");
 
@@ -93,7 +93,7 @@ public class CrawlingCsvService {
         Map<LocalDate, List<CrawlingData>> dataByDate = allData.stream()
                 .collect(Collectors.groupingBy(data -> data.getCreatedAt().toLocalDate()));
 
-        // CSV 헤더 (단일 컬럼 방식)
+        // CSV 헤더 (단일 컬럼 방식) - UTF-8 인코딩 명시
         StringBuilder csvBuilder = new StringBuilder();
         csvBuilder.append("날짜,아티스트명,노래제목,플랫폼,조회수,조회수증가,청취자수,청취자수증가,영상정보(채널명/제목/url/순서)\n");
 

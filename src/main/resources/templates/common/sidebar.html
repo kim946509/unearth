@@ -6,7 +6,7 @@
 <body>
 <div th:fragment="sidebar">
     <aside class="sidebar">
-        <div class="sidebar-title">UNEARTH 관리</div>
+        <div class="sidebar-title"><img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" /></div>
         <a th:href="@{/right-holder/list}" 
            th:class="${activeMenu == 'rightHolderList'} ? 'sidebar-menu active' : 'sidebar-menu'" 
            class="sidebar-menu">권리자 관리</a>
