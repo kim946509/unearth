@@ -3,6 +3,7 @@ package com.rhoonart.unearth.song.repository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
 import com.rhoonart.unearth.crawling.entity.CrawlingPeriod;
+import java.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -118,7 +119,7 @@ public interface SongInfoRepository extends JpaRepository<SongInfo, String> {
     Page<SongInfo> searchSongsWithCrawlingFilter(
             @Param("search") String search,
             @Param("isCrawlingActive") Boolean isCrawlingActive,
-            @Param("currentDate") java.time.LocalDate currentDate,
+            @Param("currentDate") LocalDate currentDate,
             Pageable pageable);
 
     Optional<SongInfo> findByIdAndRightHolderId(String songId, String rightHolderId);

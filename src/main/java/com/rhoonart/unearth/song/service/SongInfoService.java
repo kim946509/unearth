@@ -26,45 +26,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SongInfoService {
     private final SongInfoRepository songInfoRepository;
-    private final RightHolderRepository rightHolderRepository;
     private final CrawlingPeriodRepository crawlingPeriodRepository;
 
-    @Transactional
-    public void register(SongInfoRegisterRequestDto dto) {
-        // 1. songId(멜론) 중복 체크
-        if (songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
-            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 멜론 곡 ID입니다.");
-        }
-
-        // 2. artist_ko와 title_ko 중복 체크
-        if (songInfoRepository.existsByArtistKoAndTitleKo(dto.getArtistKo(), dto.getTitleKo())) {
-            throw new BaseException(ResponseCode.INVALID_INPUT,
-                    String.format("이미 등록된 곡입니다: %s - %s", dto.getArtistKo(), dto.getTitleKo()));
-        }
-
-        // 3. 권리자명으로 RightHolder 조회
-        RightHolder rightHolder = rightHolderRepository.findByHolderName(dto.getRightHolderName())
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
-
-        // 4. 엔티티 생성/저장
-        SongInfo song = SongInfo.builder()
-                .artistKo(dto.getArtistKo())
-                .artistEn(dto.getArtistEn())
-                .albumKo(dto.getAlbumKo())
-                .albumEn(dto.getAlbumEn())
-                .titleKo(dto.getTitleKo())
-                .titleEn(dto.getTitleEn())
-                .youtubeUrl(dto.getYoutubeUrl())
-                .melonSongId(dto.getMelonSongId())
-                .rightHolder(rightHolder)
-                .build();
-        songInfoRepository.save(song);
-    }
-
-    public Page<SongInfo> findSongs(String search, Pageable pageable) {
-        // (예시) 아티스트명, 앨범명, 트랙명, 권리자명 등에서 검색
-        return songInfoRepository.searchSearchFields(search, pageable);
-    }
 
     public Page<SongInfoWithCrawlingDto> findSongsWithCrawling(String search, Pageable pageable,
             Boolean isCrawlingActive) {
@@ -89,44 +52,6 @@ public class SongInfoService {
         return new PageImpl<>(songsWithCrawling, pageable, songPage.getTotalElements());
     }
 
-    @Transactional
-    public void update(String songId, SongInfoUpdateRequestDto dto) {
-        // 1. 음원 존재 여부 확인
-        SongInfo song = songInfoRepository.findById(songId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
-
-        // 2. melonSongId 중복 체크 (자신 제외)
-        if (!song.getMelonSongId().equals(dto.getMelonSongId()) &&
-                songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
-            throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 멜론 곡 ID입니다.");
-        }
-
-        // 3. artist_ko와 title_ko 중복 체크 (자신 제외)
-        if (!song.getArtistKo().equals(dto.getArtistKo()) || !song.getTitleKo().equals(dto.getTitleKo())) {
-            if (songInfoRepository.existsByArtistKoAndTitleKoExcludingId(dto.getArtistKo(), dto.getTitleKo(), songId)) {
-                throw new BaseException(ResponseCode.INVALID_INPUT,
-                        String.format("이미 등록된 곡입니다: %s - %s", dto.getArtistKo(), dto.getTitleKo()));
-            }
-        }
-
-        // 4. 권리자명으로 RightHolder 조회
-        RightHolder rightHolder = rightHolderRepository.findByHolderName(dto.getRightHolderName())
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
-
-        // 5. 음원 정보 업데이트
-        song.updateInfo(
-                dto.getArtistKo(),
-                dto.getArtistEn(),
-                dto.getAlbumKo(),
-                dto.getAlbumEn(),
-                dto.getTitleKo(),
-                dto.getTitleEn(),
-                dto.getYoutubeUrl(),
-                dto.getMelonSongId(),
-                rightHolder);
-
-        songInfoRepository.save(song);
-    }
 
     /**
      * 음원 ID로 음원 정보를 조회합니다.

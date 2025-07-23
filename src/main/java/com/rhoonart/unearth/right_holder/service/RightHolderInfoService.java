@@ -29,4 +29,11 @@ public class RightHolderInfoService {
     public Optional<RightHolder> findRightHolderById(String rightHolderId) {
         return rightHolderRepository.findById(rightHolderId);
     }
+
+    /**
+     * 권리자 이름으로 권리자 조회
+     */
+    public Optional<RightHolder> findRightHolderByName(String holderName) {
+        return rightHolderRepository.findByHolderName(holderName);
+    }
 }

@@ -2,6 +2,7 @@ package com.rhoonart.unearth.song.service;
 
 import com.rhoonart.unearth.common.util.EncodingDetector;
 import com.rhoonart.unearth.song.dto.CsvSongDataDto;
+import com.rhoonart.unearth.song.dto.SongBulkRegisterResponseDto;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
 import com.rhoonart.unearth.song.dto.SongRegistrationFailureDto;
 import com.rhoonart.unearth.song.entity.SongInfo;
@@ -39,13 +40,11 @@ public class SongBulkRegisterService {
      * @return 일괄 등록 결과
      */
     @Transactional
-    public SongBulkRegisterResultDto bulkRegisterFromCsv(MultipartFile file) {
-        log.info("🎵 CSV 일괄 등록 시작: 파일명={}, 크기={}bytes", file.getOriginalFilename(), file.getSize());
+    public SongBulkRegisterResponseDto bulkRegisterFromCsv(MultipartFile file) {
 
         try {
             // 1. CSV 파일 읽기
             List<CsvSongDataDto> csvDataList = readCsvFile(file);
-            log.info("📊 CSV 파일 읽기 완료: {}개 행", csvDataList.size());
 
             // 2. 권리자 검증 및 매핑
             Map<String, RightHolder> rightHolderMap = validateAndMapRightHolders(csvDataList);
@@ -53,10 +52,8 @@ public class SongBulkRegisterService {
             // 3. 중복 검사 및 등록 대상 분리
             SongBulkRegisterResultDto result = processBulkRegistration(csvDataList, rightHolderMap);
 
-            log.info("✅ CSV 일괄 등록 완료: 성공={}개, 중복={}개, 실패={}개",
-                    result.getSuccessCount(), result.getDuplicateCount(), result.getFailureCount());
-
-            return result;
+            // 결과를 DTO로 변환
+            return SongBulkRegisterResponseDto.from(result);
 
         } catch (IOException e) {
             log.error("❌ CSV 파일 읽기 중 오류 발생", e);
@@ -82,7 +79,6 @@ public class SongBulkRegisterService {
         // 2. 인코딩 감지
         String detectedEncoding = EncodingDetector.detectEncoding(fileBytes);
         log.info("📑 감지된 인코딩: {}", detectedEncoding);
-
         // 3. 인코딩에 맞춰 읽기
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ByteArrayInputStream(fileBytes), detectedEncoding))) {

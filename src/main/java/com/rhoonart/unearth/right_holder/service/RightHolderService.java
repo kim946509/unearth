@@ -44,7 +44,7 @@ public class RightHolderService {
         User user = userSignUpService.signUp(dto.getUsername(),dto.getPassword(),Role.RIGHT_HOLDER);
 
         // 2. 권리자 생성
-        RightHolder rightHolder = rightHolderCreateService.createRightHolder(dto, user);
+        rightHolderCreateService.createRightHolder(dto, user);
     }
 
     public Page<RightHolderListResponseDto> findRightHolders(String holderTypeStr,String contractDateStr, String holderName, int page, int size) {
