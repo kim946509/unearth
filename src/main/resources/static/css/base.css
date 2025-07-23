@@ -542,3 +542,30 @@ body {
         width: calc(100% - 32px);
     }
 }
+
+/* 로그아웃 버튼 커스텀 스타일 */
+.logout-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+    text-decoration: none;
+}
+.logout-link:hover {
+    color: #dc2626;
+    text-decoration: underline;
+}
+.logout-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 2px;
+    vertical-align: middle;
+    display: inline-block;
+}

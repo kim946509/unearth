@@ -6,9 +6,15 @@
 <body>
     <div th:fragment="header">
         <div class="header">
-            <img src="/img/unearth_icon.png" alt="UNEARTH 로고" class="header-logo" />
+            <div class="header-left">
+                <img src="/img/unearth_icon.png" alt="UNEARTH 로고" class="header-logo" />
+                <img src="/img/unearth_logo_black.png" alt="UNEARTH 로고" class="header-logo" />
+            </div>
             <div class="header-right">
-                <a href="/user/logout" class="btn btn-success">로그아웃</a>
+                <a href="/user/logout" class="logout-link">
+                    <img src="/img/logout_icon.png" alt="로그아웃" class="logout-icon" />
+                    로그아웃
+                </a>
             </div>
         </div>
         
