@@ -35,6 +35,17 @@ public class RightHolderController {
     private final RightHolderService rightHolderService;
     private final RightHolderUpdateService rightHolderUpdateService;
 
+    /**
+     * 권리자 목록 페이지
+     * @param holderTypeStr : HolderType의 이름으로 필터링 (예: "개인", "사업자")
+     * @param holderName : 권리자 이름으로 필터링
+     * @param contractDateStr : 해당 날짜로부터 계약 기간이 포함된 권리자만 조회
+     * @param page : 페이지 번호 (0부터 시작)
+     * @param size : 페이지 크기 (10, 30, 50 중 하나)
+     * @param session : HTTP 세션, 사용자 권한 확인에 사용
+     * @param model : Spring MVC 모델, 뷰에 데이터를 전달하는 데 사용
+     * @return
+     */
     @GetMapping("/list")
     public String listPage(
             @RequestParam(value = "holderType", required = false) String holderTypeStr,
@@ -61,6 +72,13 @@ public class RightHolderController {
         return "right_holder/list";
     }
 
+    /**
+     * 권리자 등록 페이지
+     * @param dto : 권리자 등록 요청 DTO
+     * @param session : HTTP 세션, 사용자 권한 확인에 사용
+     * @param model : Spring MVC 모델, 뷰에 데이터를 전달하는 데 사용
+     * @return : 권리자 리스트 페이지로 리다이렉트
+     */
     @PostMapping("/register")
     public String registerSubmit(@Valid @ModelAttribute RightHolderRegisterRequestDto dto,
             HttpSession session,
@@ -72,6 +90,14 @@ public class RightHolderController {
         return "redirect:/right-holder/list";
     }
 
+    /**
+     * 권리자 수정 페이지
+     * @param rightHolderId : 수정할 권리자의 ID
+     * @param dto : 권리자 수정 요청 DTO
+     * @param session : HTTP 세션, 사용자 권한 확인에 사용
+     * @param model : Spring MVC 모델, 뷰에 데이터를 전달하는 데 사용
+     * @return : 권리자 리스트 페이지로 리다이렉트
+     */
     @PostMapping("/{rightHolderId}/update")
     public String updateSubmit(@PathVariable String rightHolderId,
             @Valid @ModelAttribute RightHolderUpdateRequestDto dto,
@@ -84,7 +110,13 @@ public class RightHolderController {
         return "redirect:/right-holder/list";
     }
 
-
+    /**
+     * 권리자 계약 연장
+     * @param rightHolderId : 연장할 권리자의 ID
+     * @param dto : 계약 연장 요청 DTO
+     * @param session : HTTP 세션, 사용자 권한 확인에 사용
+     * @return : 계약 연장 성공 메시지를 포함한 CommonResponse
+     */
     @PostMapping("/{rightHolderId}/extend")
     @ResponseBody
     public CommonResponse<String> extendContract(
@@ -98,6 +130,13 @@ public class RightHolderController {
         return CommonResponse.success("계약이 성공적으로 연장되었습니다.");
     }
 
+    /**
+     * 권리자의 로그인 가능 여부를 활성화/비활성화하는 컨트롤러
+     * @param rightHolderId : 로그인 상태를 변경할 권리자의 ID
+     * @param dto : 로그인 토글 요청 DTO
+     * @param session : HTTP 세션, 사용자 권한 확인에 사용
+     * @return
+     */
     @PostMapping("/{rightHolderId}/toggle-login")
     @ResponseBody
     public CommonResponse<String> toggleLoginStatus(

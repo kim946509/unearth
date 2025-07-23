@@ -45,8 +45,7 @@ public class PasswordChangeController {
     }
 
     /**
-     * 비밀번호 변경 처리 (JSON 요청)
-     * 모달에서 AJAX로 호출되는 엔드포인트
+     * 비밀번호 변경 처리
      */
     @PostMapping("/change")
     @ResponseBody

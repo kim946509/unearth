@@ -1,6 +1,7 @@
 package com.rhoonart.unearth.song.controller;
 
 import com.rhoonart.unearth.common.util.SessionUserUtil;
+import com.rhoonart.unearth.right_holder.service.RightHolderUtilService;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
 import com.rhoonart.unearth.song.dto.SongInfoRegisterRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoUpdateRequestDto;
@@ -8,7 +9,6 @@ import com.rhoonart.unearth.song.dto.SongInfoWithCrawlingDto;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResponseDto;
 import com.rhoonart.unearth.song.service.SongInfoService;
 import com.rhoonart.unearth.song.service.SongBulkRegisterService;
-import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.common.CommonResponse;
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.common.exception.BaseException;
@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 public class SongInfoController {
     private final SongInfoService songInfoService;
     private final SongBulkRegisterService songBulkRegisterService;
-    private final RightHolderService rightHolderService;
+    private final RightHolderUtilService rightHolderUtilService;
 
     @GetMapping("/list")
     public String listPage(
@@ -55,7 +55,7 @@ public class SongInfoController {
         model.addAttribute("search", search);
         model.addAttribute("isCrawlingActive", isCrawlingActive != null && isCrawlingActive);
         // 권리자 드롭다운용 목록
-        var rightHolders = rightHolderService.findAllForDropdown();
+        var rightHolders = rightHolderUtilService.findAllForDropdown();
         model.addAttribute("rightHolders", rightHolders);
 
         // 권리자가 없으면 경고 로그 출력 (디버깅용)
@@ -98,7 +98,7 @@ public class SongInfoController {
         SessionUserUtil.requireAdminRole(session);
 
         // 권리자 목록 (등록된 권리자 확인용)
-        var rightHolders = rightHolderService.findAllForDropdown();
+        var rightHolders = rightHolderUtilService.findAllForDropdown();
         model.addAttribute("rightHolders", rightHolders);
 
         return "song/bulk-register";

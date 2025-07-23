@@ -3,7 +3,7 @@ package com.rhoonart.unearth.crawling.controller;
 import com.rhoonart.unearth.common.util.SessionUserUtil;
 import com.rhoonart.unearth.crawling.dto.CrawlingFailureDto;
 import com.rhoonart.unearth.crawling.service.CrawlingFailureService;
-import com.rhoonart.unearth.right_holder.service.RightHolderService;
+import com.rhoonart.unearth.right_holder.service.RightHolderUtilService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CrawlingFailureController {
 
     private final CrawlingFailureService crawlingFailureService;
-    private final RightHolderService rightHolderService;
+    private final RightHolderUtilService rightHolderUtilService;
 
     @GetMapping("/failures")
     public String viewCrawlingFailures(
@@ -35,7 +35,7 @@ public class CrawlingFailureController {
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         // 권리자 드롭다운용 목록
-        List<String> rightHolders = rightHolderService.findAllForDropdown();
+        List<String> rightHolders = rightHolderUtilService.findAllForDropdown();
         model.addAttribute("rightHolders", rightHolders);
         return "crawling/failures";
     }

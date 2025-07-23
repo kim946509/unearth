@@ -1,6 +1,6 @@
 package com.rhoonart.unearth.user.service;
 
-import com.rhoonart.unearth.right_holder.service.RightHolderService;
+import com.rhoonart.unearth.right_holder.service.RightHolderUtilService;
 import com.rhoonart.unearth.user.dto.LoginRequestDto;
 import com.rhoonart.unearth.user.dto.LoginResponseDto;
 import com.rhoonart.unearth.user.dto.UserDto;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RightHolderService rightHolderService;
+    private final RightHolderUtilService rightHolderUtilService;
 
     @Transactional(readOnly = true)
     public LoginResponseDto login(LoginRequestDto request) {
@@ -47,7 +47,7 @@ public class LoginService {
         String rightHolderId = null;
         if (user.getRole() == Role.RIGHT_HOLDER) {
             try {
-                rightHolderId = rightHolderService.findByUserId(user.getId()).getId();
+                rightHolderId = rightHolderUtilService.findByUserId(user.getId()).getId();
             } catch (Exception e) {
                 rightHolderId = null;
             }
