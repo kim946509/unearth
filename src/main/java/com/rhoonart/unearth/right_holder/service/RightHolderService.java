@@ -1,5 +1,6 @@
 package com.rhoonart.unearth.right_holder.service;
 
+import com.rhoonart.unearth.common.util.ValidateInput;
 import com.rhoonart.unearth.right_holder.dto.RightHolderListResponseDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
@@ -14,6 +15,7 @@ import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.user.service.UserSignUpService;
 import com.rhoonart.unearth.user.service.UserUpdateService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -45,10 +47,28 @@ public class RightHolderService {
         RightHolder rightHolder = rightHolderCreateService.createRightHolder(dto, user);
     }
 
-    public Page<RightHolderListResponseDto> findRightHolders(HolderType holderType, String holderName,
-            LocalDate contractDate, Pageable pageable) {
-        Page<RightHolder> page = rightHolderRepository.search(holderType, holderName, contractDate, pageable);
-        return page.map(rh -> {
+    public Page<RightHolderListResponseDto> findRightHolders(String holderTypeStr,String contractDateStr, String holderName, int page, int size) {
+
+        // 빈 문자열이면 null로 변환
+        HolderType holderType = null;
+        if (holderTypeStr != null && !holderTypeStr.isBlank()) {
+            holderType = HolderType.valueOf(holderTypeStr);
+        }
+
+        if (holderName != null && holderName.isBlank())
+            holderName = null;
+
+        LocalDate contractDate = null;
+        if (contractDateStr != null && !contractDateStr.isBlank()) {
+            contractDate = java.time.LocalDate.parse(contractDateStr);
+        }
+
+        // size 제한: 10, 30, 50만 허용
+        size = ValidateInput.restrictPageSize(size);
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<RightHolder> searchResult = rightHolderRepository.search(holderType, holderName, contractDate, pageable);
+        return searchResult.map(rh -> {
             // 계약 종료일까지 남은 일수 계산
             long daysLeft = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), rh.getContractEnd());
 

@@ -83,9 +83,16 @@ class CrawlingResultSummary:
                 logger.info(line)
         logger.info("=" * 60)
         
-        # Slack 메시지 전송
-        slack_message = self.generate_slack_message()
-        send_slack_message(slack_message)
+        # 실패한 경우에만 Slack 메시지 전송
+        stats = summary['statistics']
+        has_failures = stats['failed'] > 0 or stats['error'] > 0
+        
+        if has_failures:
+            logger.info("⚠️ 실패가 발생하여 Slack 알림을 전송합니다.")
+            slack_message = self.generate_slack_message()
+            send_slack_message(slack_message)
+        else:
+            logger.info("✅ 모든 플랫폼이 성공하여 Slack 알림을 생략합니다.")
         
     def generate_slack_message(self) -> str:
         """Slack 메시지용 텍스트 생성"""

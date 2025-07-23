@@ -4,14 +4,22 @@
     <link rel="stylesheet" href="/css/base.css">
 </head>
 <body>
-<div th:fragment="sidebar" style="background-color: #f7f7f7">
+<div th:fragment="sidebar">
     <aside class="sidebar">
-        <div class="sidebar-title">UNEARTH 관리</div>
-        <a th:href="@{/right-holder/list}" th:classappend="${activeMenu == 'rightHolderList'} ? ' active'" class="sidebar-menu">권리자 등록</a>
-        <a th:href="@{/song/list}" th:classappend="${activeMenu == 'songRegister'} ? ' active'" class="sidebar-menu">음원 등록</a>
-        <a th:href="@{/crawling/failures}" th:classappend="${activeMenu == 'crawlingFailures'} ? ' active'" class="sidebar-menu">
+        <div class="sidebar-title"><img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" /></div>
+        <a th:href="@{/right-holder/list}" 
+           th:class="${activeMenu == 'rightHolderList'} ? 'sidebar-menu active' : 'sidebar-menu'" 
+           class="sidebar-menu">권리자 관리</a>
+        <a th:href="@{/song/list}" 
+           th:class="${activeMenu == 'songRegister'} ? 'sidebar-menu active' : 'sidebar-menu'" 
+           class="sidebar-menu">음원 관리</a>
+        <a th:href="@{/crawling/failures}" 
+           th:class="${activeMenu == 'crawlingFailures'} ? 'sidebar-menu active' : 'sidebar-menu'" 
+           class="sidebar-menu">
             크롤링 실패 목록
-            <span th:if="${crawlingFailureCount > 0}" class="failure-count-badge" th:text="${crawlingFailureCount}"></span>
+            <span th:if="${crawlingFailureCount > 0}" 
+                  class="failure-count-badge" 
+                  th:text="${crawlingFailureCount}"></span>
         </a>
     </aside>
 </div>

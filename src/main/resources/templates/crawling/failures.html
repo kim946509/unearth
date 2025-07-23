@@ -5,63 +5,111 @@
     <link rel="icon" type="image/png" href="/img/unearth_icon.png">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/base.css">
-    <link rel="stylesheet" href="/css/failures.css">
+    <link rel="stylesheet" href="/css/song.css">
 </head>
 <body>
 <div th:replace="~{common/header :: header}"></div>
 <div class="main-container">
     <div th:replace="~{common/sidebar :: sidebar(activeMenu='crawlingFailures')}"></div>
     <section class="content">
-        <h2 class="failures-title">크롤링 실패 곡 목록</h2>
-        <table class="failures-table">
-            <thead>
-            <tr>
-                <th>아티스트명(국문)</th>
-                <th>트랙명(국문)</th>
-                <th>크롤링 실행 날짜/시간</th>
-                <th class="failed-platforms-column">실패한 플랫폼</th>
-                <th>크롤링 재실행</th>
-                <th>수정</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="fail : ${failures.content}">
-                <td th:text="${fail.artistKo}"></td>
-                <td th:text="${fail.titleKo}"></td>
-                <td th:text="${#temporals.format(fail.failedAt, 'yyyy-MM-dd HH:mm')}"></td>
-                <td>
-                    <span th:each="platform : ${fail.failedPlatforms}" class="failed-platform-badge" th:text="${platform}"></span>
-                </td>
-                <td>
-                    <button type="button" class="retry-crawling-btn" th:attr="data-song-id=${fail.songId}" onclick="retryCrawling(this)">재실행</button>
-                </td>
-                <td>
-                    <button type="button" class="edit-song-btn" 
-                            th:attr="data-song-id=${fail.songId},
-                                     data-artist-ko=${fail.artistKo},
-                                     data-artist-en=${fail.artistEn},
-                                     data-album-ko=${fail.albumKo},
-                                     data-album-en=${fail.albumEn},
-                                     data-title-ko=${fail.titleKo},
-                                     data-title-en=${fail.titleEn},
-                                     data-youtube-url=${fail.youtubeUrl},
-                                     data-melon-song-id=${fail.melonSongId},
-                                     data-right-holder-name=${fail.rightHolderName}"
-                            onclick="openEditModalFromData(this)">수정</button>
-                </td>
-            </tr>
-            <tr th:if="${failures.content.size() == 0}">
-                <td colspan="6" class="no-failures-message">크롤링 실패 곡이 없습니다.</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="page-header">
+            <h2>크롤링 실패 곡 목록</h2>
+        </div>
+        <div class="table-section">
+            <div class="table-container">
+                <table class="holder-table song-table">
+                    <thead>
+                    <tr>
+                        <th>아티스트명(국문)</th>
+                        <th>트랙명(국문)</th>
+                        <th>크롤링 실행 날짜/시간</th>
+                        <th>실패한 플랫폼</th>
+                        <th>크롤링 재실행</th>
+                        <th>수정</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="fail : ${failures.content}">
+                        <td th:text="${fail.artistKo}"></td>
+                        <td th:text="${fail.titleKo}"></td>
+                        <td th:text="${#temporals.format(fail.failedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td>
+                            <span th:each="platform : ${fail.failedPlatforms}" class="badge badge-danger" th:text="${platform}"></span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm retry-crawling-btn" th:attr="data-song-id=${fail.songId}" onclick="retryCrawling(this)">재실행</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-secondary btn-sm edit-song-btn"
+                                    th:attr="data-song-id=${fail.songId},
+                                             data-artist-ko=${fail.artistKo},
+                                             data-artist-en=${fail.artistEn},
+                                             data-album-ko=${fail.albumKo},
+                                             data-album-en=${fail.albumEn},
+                                             data-title-ko=${fail.titleKo},
+                                             data-title-en=${fail.titleEn},
+                                             data-youtube-url=${fail.youtubeUrl},
+                                             data-melon-song-id=${fail.melonSongId},
+                                             data-right-holder-name=${fail.rightHolderName}"
+                                    onclick="openEditModalFromData(this)">수정</button>
+                        </td>
+                    </tr>
+                    <tr th:if="${failures.content.size() == 0}">
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-state-icon">🎵</div>
+                            <div class="empty-state-title">크롤링 실패 곡이 없습니다</div>
+                            <div class="empty-state-message">모든 곡의 크롤링이 성공적으로 완료되었습니다.</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- 페이지네이션 -->
         <div class="pagination" th:if="${failures.totalPages > 0}">
-            <a th:if="${failures.hasPrevious()}" th:href="@{/crawling/failures(page=${failures.number - 1}, size=${size})}" class="page-btn">이전</a>
-            <span th:each="i : ${#numbers.sequence(0, failures.totalPages - 1)}">
-                <a th:if="${i != failures.number}" th:href="@{/crawling/failures(page=${i}, size=${size})}" th:text="${i + 1}" class="page-btn"></a>
-                <span th:if="${i == failures.number}" th:text="${i + 1}" class="page-btn current"></span>
-            </span>
-            <a th:if="${failures.hasNext()}" th:href="@{/crawling/failures(page=${failures.number + 1}, size=${size})}" class="page-btn">다음</a>
+            <!-- 첫 페이지 -->
+            <a th:if="${failures.number > 0}"
+               th:href="@{/crawling/failures(page=0, size=${size})}"
+               class="page-link" title="처음">
+               <img src="/img/first-arrow.png" alt="처음" style="width: 16px; height: 16px;"/>
+            </a>
+            <!-- 이전 페이지 -->
+            <a th:if="${failures.hasPrevious()}"
+               th:href="@{/crawling/failures(page=${failures.number - 1}, size=${size})}"
+               class="page-link" title="이전">
+               <img src="/img/previous-arrow.png" alt="이전" style="width: 16px; height: 16px;"/>
+            </a>
+            <!-- 페이지 번호들 (현재 페이지 기준 앞뒤 5개씩, 최대 10개) -->
+            <th:block th:with="
+                currentPage=${failures.number},
+                totalPages=${failures.totalPages},
+                startPage=${T(java.lang.Math).max(0, currentPage - 4)},
+                endPage=${T(java.lang.Math).min(totalPages - 1, currentPage + 5)},
+                adjustedStartPage=${T(java.lang.Math).max(0, T(java.lang.Math).min(startPage, endPage - 9))},
+                adjustedEndPage=${T(java.lang.Math).min(totalPages - 1, T(java.lang.Math).max(endPage, adjustedStartPage + 9))}
+            ">
+                <span th:each="i : ${#numbers.sequence(adjustedStartPage, adjustedEndPage)}">
+                    <a th:if="${i != currentPage}"
+                       th:href="@{/crawling/failures(page=${i}, size=${size})}"
+                       th:text="${i + 1}"
+                       class="page-link"></a>
+                    <span th:if="${i == currentPage}"
+                          th:text="${i + 1}"
+                          class="page-link active"></span>
+                </span>
+            </th:block>
+            <!-- 다음 페이지 -->
+            <a th:if="${failures.hasNext()}"
+               th:href="@{/crawling/failures(page=${failures.number + 1}, size=${size})}"
+               class="page-link" title="다음">
+               <img src="/img/next-arrow.png" alt="다음" style="width: 16px; height: 16px;"/>
+            </a>
+            <!-- 마지막 페이지 -->
+            <a th:if="${failures.number < failures.totalPages - 1}"
+               th:href="@{/crawling/failures(page=${failures.totalPages - 1}, size=${size})}"
+               class="page-link" title="마지막">
+               <img src="/img/last-arrow.png" alt="마지막" style="width: 16px; height: 16px;"/>
+            </a>
         </div>
     </section>
 </div>
@@ -102,18 +150,14 @@ const editModal = document.getElementById('editModal');
 const closeEditModalBtn = document.getElementById('closeEditModalBtn');
 const editForm = document.getElementById('editForm');
 
-// 수정 모달 열기/닫기
 closeEditModalBtn && closeEditModalBtn.addEventListener('click', () => {
     editModal.classList.remove('show');
 });
-
 window.addEventListener('click', (e) => {
     if (e.target === editModal) {
         editModal.classList.remove('show');
     }
 });
-
-// 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
 function openEditModalFromData(button) {
     const songId = button.getAttribute('data-song-id');
     const artistKo = button.getAttribute('data-artist-ko');
@@ -125,10 +169,8 @@ function openEditModalFromData(button) {
     const youtubeUrl = button.getAttribute('data-youtube-url');
     const melonSongId = button.getAttribute('data-melon-song-id');
     const rightHolderName = button.getAttribute('data-right-holder-name');
-    
     const form = document.getElementById('editForm');
     form.action = `/song/${songId}/update?redirect=/crawling/failures`;
-    
     form.elements['artistKo'].value = artistKo || '';
     form.elements['artistEn'].value = artistEn || '';
     form.elements['albumKo'].value = albumKo || '';
@@ -138,33 +180,26 @@ function openEditModalFromData(button) {
     form.elements['youtubeUrl'].value = youtubeUrl || '';
     form.elements['melonSongId'].value = melonSongId || '';
     form.elements['rightHolderName'].value = rightHolderName || '';
-    
     editModal.classList.add('show');
 }
-
-// 수정 폼 유효성 및 수정 전 확인
 if (editForm) {
     editForm.addEventListener('submit', function(e) {
-        // 필수값 체크
         const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'];
         for (const name of required) {
             const el = editForm.elements[name];
             if (!el || !el.value || el.value.trim() === '') {
-                showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+                alert(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
                 el && el.focus();
                 e.preventDefault();
                 return false;
             }
         }
-        // 수정 확인
         if (!confirm('수정하시겠습니까?')) {
             e.preventDefault();
             return false;
         }
-        // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
     });
 }
-
 function retryCrawling(button) {
     const songId = button.getAttribute('data-song-id');
     if (!confirm('이 곡의 크롤링을 재실행하시겠습니까?')) return;
@@ -173,16 +208,20 @@ function retryCrawling(button) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `songId=${encodeURIComponent(songId)}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
     .then(data => {
-        if (data.code === 'SUCCESS') {
-            showModal('크롤링이 성공적으로 재실행되었습니다.', true);
+        if (data && data.code === 'SUCCESS') {
+            alert('크롤링이 성공적으로 재실행되었습니다.');
+            location.reload();
         } else {
-            showModal(data.message || '크롤링 재실행에 실패했습니다.');
+            alert(data ? (data.message || '크롤링 재실행에 실패했습니다.') : '크롤링 재실행에 실패했습니다.');
         }
     })
     .catch(error => {
-        showModal('크롤링 재실행 중 오류가 발생했습니다.');
+        alert('크롤링 재실행 중 오류가 발생했습니다.');
     });
 }
 </script>

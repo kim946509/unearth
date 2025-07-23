@@ -6,22 +6,30 @@
 <body>
     <div th:fragment="header">
         <div class="header">
-            <img src="/img/unearth_logo.png" alt="UNEARTH 로고" class="header-logo" />
+            <div class="header-left">
+                <img src="/img/unearth_icon.png" alt="UNEARTH 로고" class="header-logo" />
+                <img src="/img/unearth_logo_black.png" alt="UNEARTH 로고" class="header-logo" />
+            </div>
             <div class="header-right">
-                <a href="/user/logout" class="logout-btn">로그아웃</a>
+                <a href="/user/logout" class="logout-link">
+                    <img src="/img/logout_icon.png" alt="로그아웃" class="logout-icon" />
+                    로그아웃
+                </a>
             </div>
         </div>
         
-        <!-- 공통 에러 모달 (곡 등록 모달 스타일 차용) -->
+        <!-- 공통 에러 모달 -->
         <div id="errorModal" class="modal">
             <div class="modal-content error-modal-content">
                 <div class="modal-header">
                     <span class="modal-title">알림</span>
-                    <span class="modal-close" onclick="closeModal()">&times;</span>
+                    <span class="modal-close" onclick="closeErrorModal()">&times;</span>
                 </div>
-                <div class="modal-message" id="modalMessage"></div>
+                <div class="modal-body">
+                    <div class="modal-message" id="modalMessage"></div>
+                </div>
                 <div class="modal-footer">
-                    <button class="modal-btn" onclick="closeModal()">확인</button>
+                    <button class="btn btn-primary" onclick="closeErrorModal()">확인</button>
                 </div>
             </div>
         </div>
@@ -44,12 +52,12 @@
             // 전역 모달 함수들
             function showModal(message, shouldRefresh = false) {
                 document.getElementById('modalMessage').innerText = message;
-                document.getElementById('errorModal').style.display = 'block';
+                document.getElementById('errorModal').classList.add('show');
                 needRefresh = shouldRefresh;
             }
             
-            function closeModal() {
-                document.getElementById('errorModal').style.display = 'none';
+            window.closeErrorModal = function() {
+                document.getElementById('errorModal').classList.remove('show');
                 // 새로고침이 필요한 경우 확인 버튼 클릭 시 새로고침
                 if (needRefresh) {
                     location.reload();
@@ -57,17 +65,14 @@
                 }
             }
             
-            // 모달 외부 클릭 시 닫기
-            window.onclick = function(event) {
-                const modal = document.getElementById('errorModal');
-                if (event.target === modal) {
-                    closeModal();
-                }
-            }
-            
             // 전역 에러 처리 함수 (AJAX 요청용)
             function handleApiError(response) {
                 if (!response.ok) {
+                    if (response.status === 401) {
+                        // 세션 만료 등 인증 필요 시 로그인 페이지로 이동
+                        window.location.href = '/user/login';
+                        return true;
+                    }
                     response.json().then(data => {
                         showModal(data.message || '오류가 발생했습니다.');
                     }).catch(() => {

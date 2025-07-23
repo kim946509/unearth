@@ -47,24 +47,9 @@ public class RightHolderController {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
         UserDto user = SessionUserUtil.requireAdminRole(session);
 
-        // 빈 문자열이면 null로 변환
-        HolderType holderType = null;
-        if (holderTypeStr != null && !holderTypeStr.isBlank()) {
-            holderType = HolderType.valueOf(holderTypeStr);
-        }
-        if (holderName != null && holderName.isBlank())
-            holderName = null;
-        java.time.LocalDate contractDate = null;
-        if (contractDateStr != null && !contractDateStr.isBlank()) {
-            contractDate = java.time.LocalDate.parse(contractDateStr);
-        }
 
-        // size 제한: 10, 30, 50만 허용
-        if (size != 10 && size != 30 && size != 50)
-            size = 10;
-        Pageable pageable = PageRequest.of(page, size);
-        Page<RightHolderListResponseDto> holderPage = rightHolderService.findRightHolders(holderType, holderName,
-                contractDate, pageable);
+        Page<RightHolderListResponseDto> holderPage = rightHolderService.findRightHolders(holderTypeStr, contractDateStr, holderName,
+                page, size);
         CommonResponse<Page<RightHolderListResponseDto>> response = CommonResponse.success(holderPage);
         model.addAttribute("response", response);
         model.addAttribute("page", page);

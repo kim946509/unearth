@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>UNEARTH | 권리자 등록</title>
+    <title>UNEARTH | 권리자 관리</title>
     <link rel="icon" type="image/png" href="/img/unearth_icon.png">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/base.css">
@@ -12,236 +12,339 @@
 <div class="main-container">
     <div th:replace="~{common/sidebar :: sidebar(activeMenu='rightHolderList')}"></div>
     <section class="content">
-        <form class="search-form" method="get" th:action="@{/right-holder/list}">
-            <div class="search-row">
-                <div class="search-group">
-                    <label>구분</label>
-                    <select name="holderType" class="search-input">
-                        <option value="" th:selected="${holderType == null}">전체</option>
-                        <option value="개인" th:selected="${holderType == '개인'}">개인</option>
-                        <option value="사업자" th:selected="${holderType == '사업자'}">사업자</option>
-                    </select>
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h2>권리자 관리</h2>
+        </div>
+        
+        <!-- 검색 폼 -->
+        <div class="search-section">
+            <form class="search-form" method="get" th:action="@{/right-holder/list}">
+                <div class="search-row">
+                    <div class="search-group">
+                        <label class="form-label">구분</label>
+                        <select name="holderType" class="form-control">
+                            <option value="" th:selected="${holderType == null}">전체</option>
+                            <option value="개인" th:selected="${holderType == '개인'}">개인</option>
+                            <option value="사업자" th:selected="${holderType == '사업자'}">사업자</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <label class="form-label">권리자명</label>
+                        <input type="text" name="holderName" class="form-control" th:value="${holderName}" placeholder="권리자명 입력" />
+                    </div>
+                    <div class="search-group">
+                        <label class="form-label">계약 기간</label>
+                        <input type="date" name="contractDate" class="form-control" th:value="${contractDate}" />
+                    </div>
+                    <div class="search-group">
+                        <label class="form-label">페이지당 개수</label>
+                        <select name="size" class="form-control">
+                            <option th:value="10" th:selected="${size == 10}">10</option>
+                            <option th:value="30" th:selected="${size == 30}">30</option>
+                            <option th:value="50" th:selected="${size == 50}">50</option>
+                        </select>
+                    </div>
+                    <div class="search-group">
+                        <button type="submit" class="btn btn-primary btn-lg">검색</button>
+                    </div>
+                    <div class="search-group">
+                        <button type="button" class="btn btn-success btn-lg" id="openRegisterModalBtn">권리자 등록하기</button>
+                    </div>
                 </div>
-                <div class="search-group">
-                    <label>권리자명</label>
-                    <input type="text" name="holderName" class="search-input" th:value="${holderName}" placeholder="권리자명 입력" />
-                </div>
-                <div class="search-group">
-                    <label>계약 기간</label>
-                    <input type="date" name="contractDate" class="search-input" th:value="${contractDate}" />
-                </div>
-                <div class="search-group">
-                    <label>페이지당 개수</label>
-                    <select name="size" class="search-input">
-                        <option th:value="10" th:selected="${size == 10}">10</option>
-                        <option th:value="30" th:selected="${size == 30}">30</option>
-                        <option th:value="50" th:selected="${size == 50}">50</option>
-                    </select>
-                </div>
-                <div class="search-group search-btn-group">
-                    <button type="submit" class="search-btn">검색</button>
-                </div>
-                <div class="search-group register-btn-group">
-                    <button type="button" class="register-btn" id="openRegisterModalBtn">권리자 등록하기</button>
-                </div>
-            </div>
-        </form>
-        <!-- 안내문구 영역 제거 및 팝업 처리 -->
+            </form>
+        </div>
+        
+        <!-- 에러 메시지 처리 -->
         <div th:if="${response != null and response.code.name() != 'SUCCESS' and response.message != null and !#strings.isEmpty(response.message)}">
             <script th:inline="javascript">
                 alert(/*[[${response.message}]]*/ '오류가 발생했습니다.');
             </script>
         </div>
+        
+        <!-- 권리자 테이블 -->
+        <div class="table-section">
+            <div class="table-container">
+                <table class="holder-table">
+                    <thead>
+                    <tr>
+                        <th>구분</th>
+                        <th>권리자명</th>
+                        <th>계약 기간</th>
+                        <th>남은 일수</th>
+                        <th>계약 연장</th>
+                        <th>등록 곡 수</th>
+                        <th>권리자 페이지</th>
+                        <th>로그인 상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="holder : ${response.data.content}">
+                        <td th:text="${holder.holderType}"></td>
+                        <td th:text="${holder.holderName}"></td>
+                        <td th:text="${holder.contractStart} + ' ~ ' + ${holder.contractEnd}"></td>
+                        <td>
+                            <span class="badge contract-status"
+                                  th:class="${'badge contract-status ' + (holder.daysLeft < 0 ? 'contract-expired' : holder.daysLeft <= 30 ? 'contract-warning' : 'contract-normal')}"
+                                  th:text="${holder.daysLeft < 0 ? '만료됨' : holder.daysLeft + '일'}">
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-secondary btn-sm"
+                                    th:data-holder-id="${holder.holderId}"
+                                    th:data-holder-name="${holder.holderName}"
+                                    th:data-contract-end="${holder.contractEnd}"
+                                    onclick="extendContract(this)">연장</button>
+                        </td>
+                        <td th:text="${#numbers.formatInteger(holder.songCount, 0, 'COMMA')}"></td>
+                        <td>
+                            <div class="action-buttons">
+                                <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="btn btn-secondary btn-sm">이동</a>
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                        th:data-holder-id="${holder.holderId}"
+                                        th:data-holder-type="${holder.holderType}"
+                                        th:data-holder-name="${holder.holderName}"
+                                        th:data-contract-start="${holder.contractStart}"
+                                        th:data-contract-end="${holder.contractEnd}"
+                                        th:data-business-number="${holder.businessNumber}"
+                                        onclick="openEditModalFromData(this)">수정</button>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" 
+                                    class="btn btn-sm"
+                                    th:class="'btn btn-sm ' + (${holder.isLoginEnabled} ? 'btn-danger' : 'btn-success')"
+                                    th:data-holder-id="${holder.holderId}"
+                                    th:data-holder-name="${holder.holderName}"
+                                    th:data-is-enabled="${holder.isLoginEnabled ? 'true' : 'false'}"
+                                    th:text="${holder.isLoginEnabled ? '비활성화' : '활성화'}"
+                                    onclick="toggleLoginStatus(this)">
+                            </button>
+                        </td>
+                    </tr>
+                    <tr th:if="${response.data.content.size() == 0}">
+                        <td colspan="8" class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <div class="empty-state-title">등록된 권리자가 없습니다</div>
+                            <div class="empty-state-message">새로운 권리자를 등록해보세요.</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 페이지네이션 -->
+        <div class="pagination" th:if="${response.data.totalPages > 0}">
+            <!-- 첫 페이지 -->
+            <a th:if="${response.data.number > 0}" 
+               th:href="@{/right-holder/list(page=0, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" 
+               class="page-link" title="처음">
+               <img src="/img/first-arrow.png" alt="처음" style="width: 16px; height: 16px;"/>
+            </a>
+            
+            <!-- 이전 페이지 -->
+            <a th:if="${response.data.hasPrevious()}" 
+               th:href="@{/right-holder/list(page=${response.data.number - 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" 
+               class="page-link" title="이전">
+               <img src="/img/previous-arrow.png" alt="이전" style="width: 16px; height: 16px;"/>
+            </a>
+            
+            <!-- 페이지 번호들 (현재 페이지 기준 앞뒤 5개씩, 최대 10개) -->
+            <th:block th:with="
+                currentPage=${response.data.number},
+                totalPages=${response.data.totalPages},
+                startPage=${T(java.lang.Math).max(0, currentPage - 4)},
+                endPage=${T(java.lang.Math).min(totalPages - 1, currentPage + 5)},
+                adjustedStartPage=${T(java.lang.Math).max(0, T(java.lang.Math).min(startPage, endPage - 9))},
+                adjustedEndPage=${T(java.lang.Math).min(totalPages - 1, T(java.lang.Math).max(endPage, adjustedStartPage + 9))}
+            ">
+                <span th:each="i : ${#numbers.sequence(adjustedStartPage, adjustedEndPage)}">
+                    <a th:if="${i != currentPage}" 
+                       th:href="@{/right-holder/list(page=${i}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" 
+                       th:text="${i + 1}" 
+                       class="page-link"></a>
+                    <span th:if="${i == currentPage}" 
+                          th:text="${i + 1}" 
+                          class="page-link active"></span>
+                </span>
+            </th:block>
+            
+            <!-- 다음 페이지 -->
+            <a th:if="${response.data.hasNext()}" 
+               th:href="@{/right-holder/list(page=${response.data.number + 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" 
+               class="page-link" title="다음">
+               <img src="/img/next-arrow.png" alt="다음" style="width: 16px; height: 16px;"/>
+            </a>
+            
+            <!-- 마지막 페이지 -->
+            <a th:if="${response.data.number < response.data.totalPages - 1}" 
+               th:href="@{/right-holder/list(page=${response.data.totalPages - 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" 
+               class="page-link" title="마지막">
+               <img src="/img/last-arrow.png" alt="마지막" style="width: 16px; height: 16px;"/>
+            </a>
+        </div>
+        
         <!-- 권리자 등록 모달 -->
         <div id="registerModal" class="modal">
-          <div class="modal-content">
-            <button type="button" id="closeModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
-            <h3 style="margin-bottom:18px;">권리자 등록</h3>
-            <form id="registerForm" class="modal-form" method="post" th:action="@{/right-holder/register}">
-              <div class="form-row">
-                <label>계약 시작일 <span class="required-star">*</span></label>
-                <input type="date" name="contractStart" required />
-              </div>
-              <div class="form-row">
-                <label>계약 종료일 <span class="required-star">*</span></label>
-                <input type="date" name="contractEnd" required />
-              </div>
-              <div class="form-row">
-                <label>사업자 번호 <span class="required-star">*</span></label>
-                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-              </div>
-              <div class="form-row">
-                <label>사업자 타입 <span class="required-star">*</span></label>
-                <select name="holderType" required>
-                  <option value="개인">개인</option>
-                  <option value="사업자">사업자</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <label>권리자명 <span class="required-star">*</span></label>
-                <input type="text" name="holderName" required />
-              </div>
-              <input type="hidden" name="username" />
-              <input type="hidden" name="password" value="1234" />
-              <div class="form-row" style="margin-top:18px;">
-                <button type="submit" class="register-btn" style="width:100%;">등록</button>
-              </div>
-            </form>
-          </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">권리자 등록</span>
+                    <span class="modal-close" id="closeModalBtn">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm" class="modal-form" method="post" th:action="@{/right-holder/register}">
+                        <div class="form-row">
+                            <label class="form-label">계약 시작일 <span class="required-star">*</span></label>
+                            <input type="date" name="contractStart" class="form-control" required />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">계약 종료일 <span class="required-star">*</span></label>
+                            <input type="date" name="contractEnd" class="form-control" required />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">사업자 번호 <span class="required-star">*</span></label>
+                            <input type="text" name="businessNumber" class="form-control" maxlength="20" required 
+                                   placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">사업자 타입 <span class="required-star">*</span></label>
+                            <select name="holderType" class="form-control" required>
+                                <option value="개인">개인</option>
+                                <option value="사업자">사업자</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">권리자명 <span class="required-star">*</span></label>
+                            <input type="text" name="holderName" class="form-control" required />
+                        </div>
+                        <input type="hidden" name="username" />
+                        <input type="hidden" name="password" value="1234" />
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    <button type="submit" form="registerForm" class="btn btn-primary">등록</button>
+                </div>
+            </div>
         </div>
+        
         <!-- 권리자 수정 모달 -->
         <div id="editModal" class="modal">
-          <div class="modal-content">
-            <button type="button" id="closeEditModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
-            <h3 style="margin-bottom:18px;">권리자 수정</h3>
-            <form id="editForm" class="modal-form" method="post">
-              <div class="form-row">
-                <label>계약 시작일 <span class="required-star">*</span></label>
-                <input type="date" name="contractStart" required />
-              </div>
-              <div class="form-row">
-                <label>계약 종료일 <span class="required-star">*</span></label>
-                <input type="date" name="contractEnd" required />
-              </div>
-              <div class="form-row">
-                <label>사업자 번호 <span class="required-star">*</span></label>
-                <input type="text" name="businessNumber" maxlength="20" required placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
-              </div>
-              <div class="form-row">
-                <label>사업자 타입 <span class="required-star">*</span></label>
-                <select name="holderType" required>
-                  <option value="개인">개인</option>
-                  <option value="사업자">사업자</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <label>권리자명 <span class="required-star">*</span><span>수정시 권리자 로그인 아이디가 변경됩니다.</span></label>
-                <input type="text" name="holderName" required />
-              </div>
-              <div class="form-row" style="margin-top:18px;">
-                <button type="submit" class="register-btn" style="width:100%;">수정 완료</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <table class="holder-table">
-            <thead>
-            <tr>
-                <th>구분</th>
-                <th>권리자명</th>
-                <th>계약 기간</th>
-                <th>남은 일수</th>
-                <th>계약 연장</th>
-                <th>등록 곡 수</th>
-                <th>권리자 페이지</th>
-                <th>로그인 상태</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="holder : ${response.data.content}">
-                <td th:text="${holder.holderType}"></td>
-                <td th:text="${holder.holderName}"></td>
-                <td th:text="${holder.contractStart} + '~' + ${holder.contractEnd}"></td>
-                <td>
-                    <span th:class="${holder.daysLeft < 0 ? 'contract-expired' : holder.daysLeft <= 30 ? 'contract-warning' : 'contract-normal'}"
-                          th:text="${holder.daysLeft < 0 ? '만료됨' : holder.daysLeft + '일'}">
-                    </span>
-                </td>
-                <td>
-                    <button type="button" class="extend-btn" 
-                            th:data-holder-id="${holder.holderId}"
-                            th:data-holder-name="${holder.holderName}"
-                            th:data-contract-end="${holder.contractEnd}"
-                            onclick="extendContract(this)">연장</button>
-                </td>
-                <td th:text="${#numbers.formatInteger(holder.songCount, 0, 'COMMA')}"></td>
-                <td>
-                    <a th:href="@{'/right-holder/' + ${holder.holderId}}" class="move-btn">이동</a>
-                    <button type="button" class="edit-btn" 
-                            th:data-holder-id="${holder.holderId}"
-                            th:data-holder-type="${holder.holderType}"
-                            th:data-holder-name="${holder.holderName}"
-                            th:data-contract-start="${holder.contractStart}"
-                            th:data-contract-end="${holder.contractEnd}"
-                            th:data-business-number="${holder.businessNumber}"
-                            onclick="openEditModalFromData(this)">수정</button>
-                </td>
-                <td>
-                    <button type="button" 
-                            th:class="${holder.isLoginEnabled ? 'login-disable-btn' : 'login-enable-btn'}"
-                            th:data-holder-id="${holder.holderId}"
-                            th:data-holder-name="${holder.holderName}"
-                            th:data-is-enabled="${holder.isLoginEnabled ? 'true' : 'false'}"
-                            th:text="${holder.isLoginEnabled ? '비활성화' : '활성화'}"
-                            onclick="toggleLoginStatus(this)">
-                    </button>
-                </td>
-            </tr>
-            <tr th:if="${response.data.content.size() == 0}">
-                <td colspan="8" style="text-align:center;">권리자가 없습니다.</td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="pagination" th:if="${response.data.totalPages > 0}">
-            <a th:if="${response.data.hasPrevious()}" th:href="@{/right-holder/list(page=${response.data.number - 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" class="page-btn">이전</a>
-            <span th:each="i : ${#numbers.sequence(0, response.data.totalPages - 1)}">
-                <a th:if="${i != response.data.number}" th:href="@{/right-holder/list(page=${i}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" th:text="${i + 1}" class="page-btn"></a>
-                <span th:if="${i == response.data.number}" th:text="${i + 1}" class="page-btn current"></span>
-            </span>
-            <a th:if="${response.data.hasNext()}" th:href="@{/right-holder/list(page=${response.data.number + 1}, size=${size}, holderType=${param.holderType}, holderName=${param.holderName}, contractDate=${param.contractDate})}" class="page-btn">다음</a>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">권리자 수정</span>
+                    <span class="modal-close" id="closeEditModalBtn">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" class="modal-form" method="post">
+                        <div class="form-row">
+                            <label class="form-label">계약 시작일 <span class="required-star">*</span></label>
+                            <input type="date" name="contractStart" class="form-control" required />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">계약 종료일 <span class="required-star">*</span></label>
+                            <input type="date" name="contractEnd" class="form-control" required />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">사업자 번호 <span class="required-star">*</span></label>
+                            <input type="text" name="businessNumber" class="form-control" maxlength="20" required 
+                                   placeholder="숫자만 입력" pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">사업자 타입 <span class="required-star">*</span></label>
+                            <select name="holderType" class="form-control" required>
+                                <option value="개인">개인</option>
+                                <option value="사업자">사업자</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">권리자명 <span class="required-star">*</span>
+                                <small class="text-muted">수정시 권리자 로그인 아이디가 변경됩니다.</small>
+                            </label>
+                            <input type="text" name="holderName" class="form-control" required />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">취소</button>
+                    <button type="submit" form="editForm" class="btn btn-primary">수정 완료</button>
+                </div>
+            </div>
         </div>
         
         <!-- 계약 연장 확인 모달 -->
         <div id="extendModal" class="modal">
             <div class="modal-content">
-                <button type="button" id="closeExtendModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
-                <h3 style="margin-bottom:18px;">계약 연장 확인</h3>
-                <div id="extendModalContent">
-                    <p>권리자 <strong id="extendHolderName"></strong>의 계약을 연장하시겠습니까?</p>
-                    <p>현재 계약 종료일: <strong id="currentEndDate"></strong></p>
-                    <p>연장 후 계약 종료일: <strong id="newEndDate"></strong></p>
+                <div class="modal-header">
+                    <span class="modal-title">계약 연장 확인</span>
+                    <span class="modal-close" id="closeExtendModalBtn">&times;</span>
                 </div>
-                <div class="form-row" style="margin-top:18px;">
-                    <button type="button" id="confirmExtendBtn" class="register-btn" style="width:100%;">연장 확인</button>
+                <div class="modal-body">
+                    <div id="extendModalContent">
+                        <p>권리자 <strong id="extendHolderName"></strong>의 계약을 연장하시겠습니까?</p>
+                        <p>현재 계약 종료일: <strong id="currentEndDate"></strong></p>
+                        <p>연장 후 계약 종료일: <strong id="newEndDate"></strong></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeExtendModal()">취소</button>
+                    <button type="button" id="confirmExtendBtn" class="btn btn-warning">연장 확인</button>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 <script>
+// 모달 제어 함수들
+function closeModal() {
+    document.getElementById('registerModal').classList.remove('show');
+    // 등록 폼 초기화
+    document.getElementById('registerForm').reset();
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('show');
+    // 수정 폼 초기화
+    document.getElementById('editForm').reset();
+}
+
+function closeExtendModal() {
+    document.getElementById('extendModal').classList.remove('show');
+}
+
 // 등록 모달 열기/닫기
 const openBtn = document.getElementById('openRegisterModalBtn');
 const modal = document.getElementById('registerModal');
 const closeBtn = document.getElementById('closeModalBtn');
 openBtn && openBtn.addEventListener('click', () => { modal.classList.add('show'); });
-closeBtn && closeBtn.addEventListener('click', () => { modal.classList.remove('show'); });
-window.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+closeBtn && closeBtn.addEventListener('click', closeModal);
 
 // 수정 모달 열기/닫기
 const editModal = document.getElementById('editModal');
 const closeEditBtn = document.getElementById('closeEditModalBtn');
-closeEditBtn && closeEditBtn.addEventListener('click', () => { editModal.classList.remove('show'); });
-window.addEventListener('click', (e) => { if (e.target === editModal) editModal.classList.remove('show'); });
+closeEditBtn && closeEditBtn.addEventListener('click', closeEditModal);
 
 // 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
 function openEditModalFromData(button) {
-  const holderId = button.getAttribute('data-holder-id');
-  const holderType = button.getAttribute('data-holder-type');
-  const holderName = button.getAttribute('data-holder-name');
-  const contractStart = button.getAttribute('data-contract-start');
-  const contractEnd = button.getAttribute('data-contract-end');
-  const businessNumber = button.getAttribute('data-business-number');
-  
-  const form = document.getElementById('editForm');
-  form.action = `/right-holder/${holderId}/update`;
-  
-  form.elements['contractStart'].value = contractStart;
-  form.elements['contractEnd'].value = contractEnd;
-  form.elements['businessNumber'].value = businessNumber;
-  form.elements['holderType'].value = holderType;
-  form.elements['holderName'].value = holderName;
-  
-  editModal.classList.add('show');
+    const holderId = button.getAttribute('data-holder-id');
+    const holderType = button.getAttribute('data-holder-type');
+    const holderName = button.getAttribute('data-holder-name');
+    const contractStart = button.getAttribute('data-contract-start');
+    const contractEnd = button.getAttribute('data-contract-end');
+    const businessNumber = button.getAttribute('data-business-number');
+    
+    const form = document.getElementById('editForm');
+    form.action = `/right-holder/${holderId}/update`;
+    
+    form.elements['contractStart'].value = contractStart;
+    form.elements['contractEnd'].value = contractEnd;
+    form.elements['businessNumber'].value = businessNumber;
+    form.elements['holderType'].value = holderType;
+    form.elements['holderName'].value = holderName;
+    
+    editModal.classList.add('show');
 }
 
 // 계약 연장 모달 제어
@@ -249,13 +352,7 @@ const extendModal = document.getElementById('extendModal');
 const closeExtendBtn = document.getElementById('closeExtendModalBtn');
 const confirmExtendBtn = document.getElementById('confirmExtendBtn');
 
-closeExtendBtn && closeExtendBtn.addEventListener('click', () => { 
-    extendModal.classList.remove('show'); 
-});
-
-window.addEventListener('click', (e) => { 
-    if (e.target === extendModal) extendModal.classList.remove('show'); 
-});
+closeExtendBtn && closeExtendBtn.addEventListener('click', closeExtendModal);
 
 // 계약 연장 함수
 function extendContract(button) {
@@ -297,20 +394,23 @@ confirmExtendBtn && confirmExtendBtn.addEventListener('click', function() {
             newEndDate: newEndDate
         })
     })
-    .then(response => response.json())
-            .then(data => {
-            if (data.code === 'SUCCESS') {
-                showModal('계약이 성공적으로 연장되었습니다.', true);
-            } else {
-                showModal(data.message || '계약 연장에 실패했습니다.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showModal('계약 연장 중 오류가 발생했습니다.');
-        })
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.code === 'SUCCESS') {
+            showModal('계약이 성공적으로 연장되었습니다.', true);
+        } else {
+            showModal(data ? (data.message || '계약 연장에 실패했습니다.') : '계약 연장에 실패했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showModal('계약 연장 중 오류가 발생했습니다.');
+    })
     .finally(() => {
-        extendModal.classList.remove('show');
+        closeExtendModal();
     });
 });
 
@@ -321,13 +421,6 @@ function toggleLoginStatus(button) {
     const isEnabledValue = button.getAttribute('data-is-enabled');
     const isCurrentlyEnabled = isEnabledValue === 'true';
     const newStatus = !isCurrentlyEnabled;
-    
-    // 디버깅용 로그
-    console.log('Debug - holderId:', holderId);
-    console.log('Debug - holderName:', holderName);
-    console.log('Debug - data-is-enabled raw value:', isEnabledValue);
-    console.log('Debug - isCurrentlyEnabled:', isCurrentlyEnabled);
-    console.log('Debug - newStatus:', newStatus);
     
     const action = newStatus ? '활성화' : '비활성화';
     const confirmMessage = `권리자 "${holderName}"의 로그인을 ${action}하시겠습니까?`;
@@ -343,12 +436,15 @@ function toggleLoginStatus(button) {
                 isLoginEnabled: newStatus.toString()
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (handleApiError(response)) return;
+            return response.json();
+        })
         .then(data => {
-            if (data.code === 'SUCCESS') {
+            if (data && data.code === 'SUCCESS') {
                 showModal(`로그인이 성공적으로 ${action}되었습니다.`, true);
             } else {
-                showModal(data.message || `로그인 ${action}에 실패했습니다.`);
+                showModal(data ? (data.message || `로그인 ${action}에 실패했습니다.`) : `로그인 ${action}에 실패했습니다.`);
             }
         })
         .catch(error => {
@@ -357,89 +453,88 @@ function toggleLoginStatus(button) {
         });
     }
 }
+
 // 폼 유효성 및 등록 전 확인
 const form = document.getElementById('registerForm');
 if (form) {
-  form.onsubmit = function(e) {
-    // 필수값 체크
-    const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
-    for (const name of required) {
-      const el = form.elements[name];
-      if (!el || !el.value || el.value.trim() === '') {
-        showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
-        el && el.focus();
-        e.preventDefault();
-        return false;
-      }
-    }
-    // 날짜 논리 체크
-    const start = form.elements['contractStart'].value;
-    const end = form.elements['contractEnd'].value;
-    if (start && end && start > end) {
-      showModal('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
-      form.elements['contractStart'].focus();
-      e.preventDefault();
-      return false;
-    }
-    // 사업자 번호 숫자 검증
-    const businessNumber = form.elements['businessNumber'].value;
-    if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
-      showModal('사업자 번호는 숫자만 입력 가능합니다.');
-      form.elements['businessNumber'].focus();
-      e.preventDefault();
-      return false;
-    }
-    // username=holderName, password=1234 자동 설정
-    form.elements['username'].value = form.elements['holderName'].value;
-    form.elements['password'].value = '1234';
-    // 등록 확인
-    if (!confirm('등록하시겠습니까?')) {
-      e.preventDefault();
-      return false;
-    }
-    // 등록 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
-  };
+    form.onsubmit = function(e) {
+        // 필수값 체크
+        const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
+        for (const name of required) {
+            const el = form.elements[name];
+            if (!el || !el.value || el.value.trim() === '') {
+                showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+                el && el.focus();
+                e.preventDefault();
+                return false;
+            }
+        }
+        // 날짜 논리 체크
+        const start = form.elements['contractStart'].value;
+        const end = form.elements['contractEnd'].value;
+        if (start && end && start > end) {
+            showModal('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
+            form.elements['contractStart'].focus();
+            e.preventDefault();
+            return false;
+        }
+        // 사업자 번호 숫자 검증
+        const businessNumber = form.elements['businessNumber'].value;
+        if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
+            showModal('사업자 번호는 숫자만 입력 가능합니다.');
+            form.elements['businessNumber'].focus();
+            e.preventDefault();
+            return false;
+        }
+        // username=holderName, password=1234 자동 설정
+        form.elements['username'].value = form.elements['holderName'].value;
+        form.elements['password'].value = '1234';
+        // 등록 확인
+        if (!confirm('등록하시겠습니까?')) {
+            e.preventDefault();
+            return false;
+        }
+    };
 }
 
 // 수정 폼 유효성 및 수정 전 확인
 const editForm = document.getElementById('editForm');
 if (editForm) {
-  editForm.onsubmit = function(e) {
-    // 필수값 체크
-    const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
-    for (const name of required) {
-      const el = editForm.elements[name];
-      if (!el || !el.value || el.value.trim() === '') {
-        showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
-        el && el.focus();
-        e.preventDefault();
-        return false;
-      }
-    }
-    // 날짜 논리 체크
-    const start = editForm.elements['contractStart'].value;
-    const end = editForm.elements['contractEnd'].value;
-    if (start && end && start > end) {
-      showModal('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
-      editForm.elements['contractStart'].focus();
-      e.preventDefault();
-      return false;
-    }
-    // 사업자 번호 숫자 검증
-    const businessNumber = editForm.elements['businessNumber'].value;
-    if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
-      showModal('사업자 번호는 숫자만 입력 가능합니다.');
-      editForm.elements['businessNumber'].focus();
-      e.preventDefault();
-      return false;
-    }
-    // 수정 확인
-    if (!confirm('수정하시겠습니까?')) {
-      e.preventDefault();
-      return false;
-    }
-    // 수정 성공 시 새로고침은 컨트롤러에서 redirect로 처리됨
-  };
+    editForm.onsubmit = function(e) {
+        // 필수값 체크
+        const required = ['contractStart','contractEnd','businessNumber','holderType','holderName'];
+        for (const name of required) {
+            const el = editForm.elements[name];
+            if (!el || !el.value || el.value.trim() === '') {
+                showModal(el.previousElementSibling ? el.previousElementSibling.innerText.replace('*','').trim() + '은(는) 필수 입력입니다.' : '필수 입력입니다.');
+                el && el.focus();
+                e.preventDefault();
+                return false;
+            }
+        }
+        // 날짜 논리 체크
+        const start = editForm.elements['contractStart'].value;
+        const end = editForm.elements['contractEnd'].value;
+        if (start && end && start > end) {
+            showModal('계약 시작일은 계약 종료일보다 같거나 이전이어야 합니다.');
+            editForm.elements['contractStart'].focus();
+            e.preventDefault();
+            return false;
+        }
+        // 사업자 번호 숫자 검증
+        const businessNumber = editForm.elements['businessNumber'].value;
+        if (businessNumber && !/^[0-9]+$/.test(businessNumber)) {
+            showModal('사업자 번호는 숫자만 입력 가능합니다.');
+            editForm.elements['businessNumber'].focus();
+            e.preventDefault();
+            return false;
+        }
+        // 수정 확인
+        if (!confirm('수정하시겠습니까?')) {
+            e.preventDefault();
+            return false;
+        }
+    };
 }
 </script>
 </body>
