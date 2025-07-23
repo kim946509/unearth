@@ -1,6 +1,5 @@
 package com.rhoonart.unearth.song.dto;
 
-import com.rhoonart.unearth.song.service.SongBulkRegisterService;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -21,9 +20,9 @@ public class SongBulkRegisterResponseDto {
     private final List<FailureInfo> failureList;
 
     /**
-     * SongBulkRegisterService의 결과를 DTO로 변환
+     * SongBulkRegisterResultDto의 결과를 ResponseDto로 변환
      */
-    public static SongBulkRegisterResponseDto from(SongBulkRegisterService.BulkRegisterResult result) {
+    public static SongBulkRegisterResponseDto from(SongBulkRegisterResultDto result) {
         return SongBulkRegisterResponseDto.builder()
                 .totalCount(result.getTotalCount())
                 .successCount(result.getSuccessCount())
@@ -35,7 +34,7 @@ public class SongBulkRegisterResponseDto {
                 .build();
     }
 
-    private static List<SongInfo> convertToSongInfoList(List<SongBulkRegisterService.CsvSongData> csvDataList) {
+    private static List<SongInfo> convertToSongInfoList(List<CsvSongDataDto> csvDataList) {
         return csvDataList.stream()
                 .map(csvData -> SongInfo.builder()
                         .artistKo(csvData.getArtistKo())
@@ -52,7 +51,7 @@ public class SongBulkRegisterResponseDto {
     }
 
     private static List<FailureInfo> convertToFailureInfoList(
-            List<SongBulkRegisterService.BulkRegisterResult.FailureData> failureDataList) {
+            List<SongRegistrationFailureDto> failureDataList) {
         return failureDataList.stream()
                 .map(failureData -> FailureInfo.builder()
                         .artistKo(failureData.getCsvData().getArtistKo())
