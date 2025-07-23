@@ -269,9 +269,9 @@
 <!-- 크롤링 실행 모달 -->
 <div id="crawlingModal" class="modal">
     <div class="modal-content crawling-modal-content">
-        <button type="button" id="closeCrawlingModalBtn" style="position:absolute; right:18px; top:18px; background:none; border:none; font-size:22px; cursor:pointer;">&times;</button>
+        <button type="button" id="closeCrawlingModalBtn" class="close-btn">&times;</button>
         <h3 id="crawlingModalTitle" style="margin-bottom:18px;">크롤링 실행</h3>
-        <form id="crawlingForm" method="post" action="/crawling/execute">
+        <form id="crawlingForm" class="modal-form" method="post" action="/crawling/execute">
             <input type="hidden" id="crawlingSongId" name="songId" />
             <div class="form-row">
                 <label>채널명 <span class="required-star">*</span></label>
@@ -444,12 +444,7 @@ function openCrawlingModal(songId, artistKo, titleKo) {
 
 closeCrawlingModalBtn && closeCrawlingModalBtn.addEventListener('click', () => {
     crawlingModal.classList.remove('show');
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === crawlingModal) {
-        crawlingModal.classList.remove('show');
-    }
+    crawlingForm.reset(); // 모달 닫을 때 폼 내용 초기화
 });
 
 // 크롤링 폼 제출
@@ -486,12 +481,7 @@ const editForm = document.getElementById('editForm');
 // 수정 모달 열기/닫기
 closeEditModalBtn && closeEditModalBtn.addEventListener('click', () => {
     editModal.classList.remove('show');
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === editModal) {
-        editModal.classList.remove('show');
-    }
+    editForm.reset(); // 모달 닫을 때 폼 내용 초기화
 });
 
 // 수정 모달 열기 함수 (data-* 속성에서 데이터 읽기)
@@ -572,6 +562,7 @@ function openBulkRegisterModal() {
 // 일괄등록 모달 닫기
 closeBulkRegisterModalBtn && closeBulkRegisterModalBtn.addEventListener('click', () => {
     bulkRegisterModal.classList.remove('show');
+    bulkRegisterForm.reset(); // 모달 닫을 때 폼 내용 초기화
 });
 
 // 일괄등록 결과 모달 닫기
@@ -584,17 +575,6 @@ function closeBulkResultModal() {
     // 결과 모달 닫을 때 페이지 새로고침
     location.reload();
 }
-
-// 모달 외부 클릭 시 닫기
-window.addEventListener('click', (e) => {
-    if (e.target === bulkRegisterModal) {
-        bulkRegisterModal.classList.remove('show');
-    }
-    if (e.target === bulkRegisterResultModal) {
-        bulkRegisterResultModal.classList.remove('show');
-        location.reload();
-    }
-});
 
 // 일괄등록 폼 제출
 if (bulkRegisterForm) {
