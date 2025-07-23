@@ -17,7 +17,7 @@ public class UserUpdateService {
     @Transactional
     public User updateUsername(User user, String newUsername) {
 
-        if(!newUsername.equals(user.getUsername()) && userRepository.existsByUsername(user.getUsername())) {
+        if (!newUsername.equals(user.getUsername()) && userRepository.existsByUsername(newUsername)) {
             throw new BadRequestException("이미 사용 중인 아이디입니다.");
         }
 
