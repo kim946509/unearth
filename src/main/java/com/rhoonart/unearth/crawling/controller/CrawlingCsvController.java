@@ -35,18 +35,19 @@ public class CrawlingCsvController {
                 UserDto userDto = SessionUserUtil.requireLogin(session);
 
                 // CSV 데이터 및 파일명 생성
-                CrawlingCsvDownloadDto csvDownloadDto = crawlingCsvService.generateCrawlingDataCsvForDownload(userDto,songId,
+                CrawlingCsvDownloadDto csvDownloadDto = crawlingCsvService.generateCrawlingDataCsvForDownload(userDto,
+                                songId,
                                 startDateStr,
                                 endDateStr);
 
-                // HTTP 헤더 설정
+                // HTTP 헤더 설정 - Excel 호환성을 위해 application/octet-stream 사용
                 HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.parseMediaType("text/csv; charset=UTF-8"));
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
                 headers.set("Content-Disposition", "attachment; filename*=UTF-8''" + csvDownloadDto.getFilename());
+                headers.set("Content-Transfer-Encoding", "binary");
 
                 return ResponseEntity.ok()
                                 .headers(headers)
                                 .body("\uFEFF" + csvDownloadDto.getCsvData()); // UTF-8 BOM 추가 (Excel에서 한글 깨짐 방지)
         }
-
 }

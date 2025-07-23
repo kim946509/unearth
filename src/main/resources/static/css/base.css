@@ -30,8 +30,6 @@ body {
 }
 
 /* ========== 사이드바 스타일 ========== */
-body 
-
 .sidebar {
     width: 280px;
     background: #1e293b;
@@ -329,6 +327,11 @@ body
     font-size: 14px;
     font-weight: 500;
     color: #6b7280;
+    gap: 12px;
+}
+
+.password-change-btn {
+    padding: 10px 20px;
     background: #ffffff;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -391,7 +394,6 @@ body
 
 .modal-header {
     display: flex;
-    justify-content: between;
     align-items: center;
     padding: 24px 24px 0 24px;
     margin-bottom: 16px;
