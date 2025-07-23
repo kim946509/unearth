@@ -162,14 +162,18 @@ body {
 }
 
 .btn-secondary {
-    background: #f1f5f9;
+    background: white;
     color: #475569;
-    border-color: #e2e8f0;
+     border-color: #d0d0d0;
 }
 
 .btn-secondary:hover {
-    background: #e2e8f0;
-    color: #334155;
+    /* background: #e2e8f0; */
+    /* color: #334155; */
+    
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 0.12);
+    border-color: #d0d0d0;
 }
 
 .btn-success {
@@ -364,9 +368,10 @@ body {
 }
 
 .pagination .page-link.active {
-    background: #3b82f6;
-    border-color: #3b82f6;
+    background: #1e293b;
+    /* border-color: #3b82f6; */
     color: #ffffff;
+    border-radius: 100px;
 }
 
 /* 모달 스타일 */

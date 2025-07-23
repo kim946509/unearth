@@ -117,7 +117,6 @@
 }
 
 .crawling-btn {
-    background: #3b82f6;
     color: #ffffff;
     border: none;
     border-radius: 6px;
@@ -132,10 +131,11 @@
     height: 32px;
     min-width: 32px;
     flex-shrink: 0;
+    background-color:white;
 }
 
 .crawling-btn:hover {
-    background: #2563eb;
+    /* background: #2563eb; */
     transform: translateY(-1px);
     box-shadow: 0 4px 8px 0 rgb(0 0 0 / 0.12);
 }

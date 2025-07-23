@@ -196,12 +196,16 @@
             <!-- 첫 페이지 -->
             <a th:if="${response.data.number > 0}" 
                th:href="@{/song/list(page=0, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" 
-               class="page-link">처음</a>
+               class="page-link" title="처음">
+               <img src="/img/first-arrow.png" alt="처음" style="width: 16px; height: 16px;"/>
+            </a>
             
             <!-- 이전 페이지 -->
             <a th:if="${response.data.hasPrevious()}" 
                th:href="@{/song/list(page=${response.data.number - 1}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" 
-               class="page-link">이전</a>
+               class="page-link" title="이전">
+               <img src="/img/previous-arrow.png" alt="이전" style="width: 16px; height: 16px;"/>
+            </a>
             
             <!-- 페이지 번호들 (현재 페이지 기준 앞뒤 5개씩, 최대 10개) -->
             <th:block th:with="
@@ -226,12 +230,16 @@
             <!-- 다음 페이지 -->
             <a th:if="${response.data.hasNext()}" 
                th:href="@{/song/list(page=${response.data.number + 1}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" 
-               class="page-link">다음</a>
+               class="page-link" title="다음">
+               <img src="/img/next-arrow.png" alt="다음" style="width: 16px; height: 16px;"/>
+            </a>
             
             <!-- 마지막 페이지 -->
             <a th:if="${response.data.number < response.data.totalPages - 1}" 
                th:href="@{/song/list(page=${response.data.totalPages - 1}, size=${size}, search=${search}, isCrawlingActive=${isCrawlingActive})}" 
-               class="page-link">마지막</a>
+               class="page-link" title="마지막">
+               <img src="/img/last-arrow.png" alt="마지막" style="width: 16px; height: 16px;"/>
+            </a>
         </div>
     </section>
 </div>
