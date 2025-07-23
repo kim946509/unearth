@@ -362,12 +362,15 @@ confirmExtendBtn && confirmExtendBtn.addEventListener('click', function() {
             newEndDate: newEndDate
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
     .then(data => {
-        if (data.code === 'SUCCESS') {
+        if (data && data.code === 'SUCCESS') {
             showModal('계약이 성공적으로 연장되었습니다.', true);
         } else {
-            showModal(data.message || '계약 연장에 실패했습니다.');
+            showModal(data ? (data.message || '계약 연장에 실패했습니다.') : '계약 연장에 실패했습니다.');
         }
     })
     .catch(error => {
@@ -401,12 +404,15 @@ function toggleLoginStatus(button) {
                 isLoginEnabled: newStatus.toString()
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (handleApiError(response)) return;
+            return response.json();
+        })
         .then(data => {
-            if (data.code === 'SUCCESS') {
+            if (data && data.code === 'SUCCESS') {
                 showModal(`로그인이 성공적으로 ${action}되었습니다.`, true);
             } else {
-                showModal(data.message || `로그인 ${action}에 실패했습니다.`);
+                showModal(data ? (data.message || `로그인 ${action}에 실패했습니다.`) : `로그인 ${action}에 실패했습니다.`);
             }
         })
         .catch(error => {

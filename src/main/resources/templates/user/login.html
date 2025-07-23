@@ -39,6 +39,9 @@
                 headers: { 'Accept': 'application/json' },
                 body: params
             });
+            
+            if (handleApiError(response)) return;
+            
             const result = await response.json();
             if (result.code === 'SUCCESS') {
                 const role = result.data && result.data.userDto && result.data.userDto.role;

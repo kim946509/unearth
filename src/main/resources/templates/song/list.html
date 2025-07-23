@@ -457,14 +457,17 @@ crawlingForm && crawlingForm.addEventListener('submit', function(e) {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
     .then(data => {
-        if (data.code === 'SUCCESS') {
+        if (data && data.code === 'SUCCESS') {
             alert('크롤링이 성공적으로 실행되었습니다.');
             crawlingModal.classList.remove('show');
             location.reload(); // 페이지 새로고침으로 크롤링 기간 업데이트
         } else {
-            alert('크롤링 실행 중 오류가 발생했습니다: ' + data.message);
+            alert('크롤링 실행 중 오류가 발생했습니다: ' + (data ? data.message : ''));
         }
     })
     .catch(error => {
@@ -604,6 +607,7 @@ if (bulkRegisterForm) {
             body: formData
         })
         .then(response => {
+            if (handleApiError(response)) return;
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -768,12 +772,15 @@ function executeFullCrawling() {
             'Content-Type': 'application/json',
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
     .then(data => {
-        if (data.code === 'SUCCESS') {
+        if (data && data.code === 'SUCCESS') {
             alert('전체 크롤링이 시작되었습니다.\n\n크롤링이 완료되면 페이지를 새로고침하여 결과를 확인하세요.');
         } else {
-            alert('크롤링 실행 중 오류가 발생했습니다: ' + data.message);
+            alert('크롤링 실행 중 오류가 발생했습니다: ' + (data ? data.message : ''));
         }
     })
     .catch(error => {
@@ -786,6 +793,8 @@ function executeFullCrawling() {
         btn.disabled = false;
     });
 }
+
+
 </script>
 </body>
 </html> 

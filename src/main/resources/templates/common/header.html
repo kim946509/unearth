@@ -68,6 +68,11 @@
             // 전역 에러 처리 함수 (AJAX 요청용)
             function handleApiError(response) {
                 if (!response.ok) {
+                    if (response.status === 401) {
+                        // 세션 만료 등 인증 필요 시 로그인 페이지로 이동
+                        window.location.href = '/user/login';
+                        return true;
+                    }
                     response.json().then(data => {
                         showModal(data.message || '오류가 발생했습니다.');
                     }).catch(() => {

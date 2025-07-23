@@ -227,14 +227,17 @@ if (passwordChangeForm) {
                 businessRegistrationNumber: businessRegistrationNumber
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (handleApiError(response)) return;
+            return response.json();
+        })
         .then(data => {
-            if (data.code === 'SUCCESS') {
+            if (data && data.code === 'SUCCESS') {
                 alert('비밀번호가 성공적으로 변경되었습니다.');
                 passwordChangeModal.classList.remove('show');
                 passwordChangeForm.reset();
             } else {
-                alert(data.message || '비밀번호 변경에 실패했습니다.');
+                alert(data ? (data.message || '비밀번호 변경에 실패했습니다.') : '비밀번호 변경에 실패했습니다.');
             }
         })
         .catch(error => {

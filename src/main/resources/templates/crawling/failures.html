@@ -200,13 +200,16 @@ function retryCrawling(button) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `songId=${encodeURIComponent(songId)}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (handleApiError(response)) return;
+        return response.json();
+    })
     .then(data => {
-        if (data.code === 'SUCCESS') {
+        if (data && data.code === 'SUCCESS') {
             alert('크롤링이 성공적으로 재실행되었습니다.');
             location.reload();
         } else {
-            alert(data.message || '크롤링 재실행에 실패했습니다.');
+            alert(data ? (data.message || '크롤링 재실행에 실패했습니다.') : '크롤링 재실행에 실패했습니다.');
         }
     })
     .catch(error => {
