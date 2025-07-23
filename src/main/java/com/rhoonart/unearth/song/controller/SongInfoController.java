@@ -1,6 +1,7 @@
 package com.rhoonart.unearth.song.controller;
 
 import com.rhoonart.unearth.common.util.SessionUserUtil;
+import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
 import com.rhoonart.unearth.song.dto.SongInfoRegisterRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoUpdateRequestDto;
 import com.rhoonart.unearth.song.dto.SongInfoWithCrawlingDto;
@@ -128,7 +129,7 @@ public class SongInfoController {
             }
 
             // 일괄 등록 실행
-            SongBulkRegisterService.BulkRegisterResult result = songBulkRegisterService.bulkRegisterFromCsv(file);
+            SongBulkRegisterResultDto result = songBulkRegisterService.bulkRegisterFromCsv(file);
 
             // 결과를 DTO로 변환
             SongBulkRegisterResponseDto responseDto = SongBulkRegisterResponseDto.from(result);
@@ -185,7 +186,7 @@ public class SongInfoController {
             }
 
             // 일괄 등록 실행
-            SongBulkRegisterService.BulkRegisterResult result = songBulkRegisterService.bulkRegisterFromCsv(file);
+            SongBulkRegisterResultDto result = songBulkRegisterService.bulkRegisterFromCsv(file);
 
             // 결과를 DTO로 변환
             SongBulkRegisterResponseDto responseDto = SongBulkRegisterResponseDto.from(result);

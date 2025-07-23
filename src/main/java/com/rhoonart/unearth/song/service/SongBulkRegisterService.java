@@ -1,11 +1,16 @@
 package com.rhoonart.unearth.song.service;
 
+import com.rhoonart.unearth.common.util.EncodingDetector;
+import com.rhoonart.unearth.song.dto.CsvSongDataDto;
+import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
+import com.rhoonart.unearth.song.dto.SongRegistrationFailureDto;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
 import com.rhoonart.unearth.right_holder.repository.RightHolderRepository;
 import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.common.ResponseCode;
+import java.io.ByteArrayInputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,19 +39,19 @@ public class SongBulkRegisterService {
      * @return 일괄 등록 결과
      */
     @Transactional
-    public BulkRegisterResult bulkRegisterFromCsv(MultipartFile file) {
+    public SongBulkRegisterResultDto bulkRegisterFromCsv(MultipartFile file) {
         log.info("🎵 CSV 일괄 등록 시작: 파일명={}, 크기={}bytes", file.getOriginalFilename(), file.getSize());
 
         try {
             // 1. CSV 파일 읽기
-            List<CsvSongData> csvDataList = readCsvFile(file);
+            List<CsvSongDataDto> csvDataList = readCsvFile(file);
             log.info("📊 CSV 파일 읽기 완료: {}개 행", csvDataList.size());
 
             // 2. 권리자 검증 및 매핑
             Map<String, RightHolder> rightHolderMap = validateAndMapRightHolders(csvDataList);
 
             // 3. 중복 검사 및 등록 대상 분리
-            BulkRegisterResult result = processBulkRegistration(csvDataList, rightHolderMap);
+            SongBulkRegisterResultDto result = processBulkRegistration(csvDataList, rightHolderMap);
 
             log.info("✅ CSV 일괄 등록 완료: 성공={}개, 중복={}개, 실패={}개",
                     result.getSuccessCount(), result.getDuplicateCount(), result.getFailureCount());
@@ -68,28 +73,33 @@ public class SongBulkRegisterService {
     /**
      * CSV 파일을 읽어서 데이터 리스트로 변환
      */
-    private List<CsvSongData> readCsvFile(MultipartFile file) throws IOException {
-        List<CsvSongData> dataList = new ArrayList<>();
+    private List<CsvSongDataDto> readCsvFile(MultipartFile file) throws IOException {
+        List<CsvSongDataDto> dataList = new ArrayList<>();
 
+        // 1. 파일을 byte[]로 먼저 읽음
+        byte[] fileBytes = file.getBytes();
+
+        // 2. 인코딩 감지
+        String detectedEncoding = EncodingDetector.detectEncoding(fileBytes);
+        log.info("📑 감지된 인코딩: {}", detectedEncoding);
+
+        // 3. 인코딩에 맞춰 읽기
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+                new InputStreamReader(new ByteArrayInputStream(fileBytes), detectedEncoding))) {
 
             String line;
             boolean isFirstLine = true;
 
             while ((line = reader.readLine()) != null) {
-                // 헤더 라인 스킵
                 if (isFirstLine) {
                     isFirstLine = false;
                     continue;
                 }
 
-                // 빈 라인 스킵
-                if (line.trim().isEmpty()) {
+                if (line.trim().isEmpty())
                     continue;
-                }
 
-                CsvSongData csvData = parseCsvLine(line);
+                CsvSongDataDto csvData = parseCsvLine(line);
                 if (csvData != null) {
                     dataList.add(csvData);
                 }
@@ -100,9 +110,9 @@ public class SongBulkRegisterService {
     }
 
     /**
-     * CSV 라인을 파싱하여 CsvSongData 객체로 변환
+     * CSV 라인을 파싱하여 CsvSongDataDto 객체로 변환
      */
-    private CsvSongData parseCsvLine(String line) {
+    private CsvSongDataDto parseCsvLine(String line) {
         try {
             // CSV 파싱 (쉼표로 구분, 따옴표 처리)
             String[] columns = parseCsvColumns(line);
@@ -112,7 +122,7 @@ public class SongBulkRegisterService {
                 return null;
             }
 
-            return CsvSongData.builder()
+            return CsvSongDataDto.builder()
                     .artistKo(cleanString(columns[1])) // 아티스트명 (국문)
                     .artistEn(cleanString(columns[2])) // 아티스트명 (영문)
                     .albumKo(cleanString(columns[3])) // 앨범명 (국문)
@@ -169,10 +179,10 @@ public class SongBulkRegisterService {
     /**
      * 권리자 검증 및 매핑
      */
-    private Map<String, RightHolder> validateAndMapRightHolders(List<CsvSongData> csvDataList) {
+    private Map<String, RightHolder> validateAndMapRightHolders(List<CsvSongDataDto> csvDataList) {
         // 고유한 권리자명 추출
         Set<String> rightHolderNames = csvDataList.stream()
-                .map(CsvSongData::getRightHolderName)
+                .map(CsvSongDataDto::getRightHolderName)
                 .filter(name -> !name.isEmpty())
                 .collect(Collectors.toSet());
 
@@ -207,11 +217,11 @@ public class SongBulkRegisterService {
     /**
      * 중복 검사 및 일괄 등록 처리
      */
-    private BulkRegisterResult processBulkRegistration(List<CsvSongData> csvDataList,
+    private SongBulkRegisterResultDto processBulkRegistration(List<CsvSongDataDto> csvDataList,
             Map<String, RightHolder> rightHolderMap) {
-        BulkRegisterResult result = new BulkRegisterResult();
+        SongBulkRegisterResultDto result = new SongBulkRegisterResultDto();
 
-        for (CsvSongData csvData : csvDataList) {
+        for (CsvSongDataDto csvData : csvDataList) {
             try {
                 // 필수 필드 검증
                 if (!isValidCsvData(csvData)) {
@@ -242,7 +252,7 @@ public class SongBulkRegisterService {
     /**
      * CSV 데이터 유효성 검사
      */
-    private boolean isValidCsvData(CsvSongData csvData) {
+    private boolean isValidCsvData(CsvSongDataDto csvData) {
         return csvData.getArtistKo() != null && !csvData.getArtistKo().trim().isEmpty() &&
                 csvData.getTitleKo() != null && !csvData.getTitleKo().trim().isEmpty() &&
                 csvData.getRightHolderName() != null && !csvData.getRightHolderName().trim().isEmpty();
@@ -251,7 +261,7 @@ public class SongBulkRegisterService {
     /**
      * 중복 곡 검사
      */
-    private boolean isDuplicateSong(CsvSongData csvData) {
+    private boolean isDuplicateSong(CsvSongDataDto csvData) {
         // artist_ko + title_ko 중복 검사
         if (songInfoRepository.existsByArtistKoAndTitleKo(csvData.getArtistKo(), csvData.getTitleKo())) {
             return true;
@@ -270,7 +280,7 @@ public class SongBulkRegisterService {
     /**
      * CSV 데이터로부터 SongInfo 엔티티 생성
      */
-    private SongInfo createSongFromCsvData(CsvSongData csvData, RightHolder rightHolder) {
+    private SongInfo createSongFromCsvData(CsvSongDataDto csvData, RightHolder rightHolder) {
         return SongInfo.builder()
                 .artistKo(csvData.getArtistKo())
                 .artistEn(csvData.getArtistEn() != null ? csvData.getArtistEn() : "")
@@ -282,187 +292,5 @@ public class SongBulkRegisterService {
                 .melonSongId(csvData.getMelonSongId() != null ? csvData.getMelonSongId() : "")
                 .rightHolder(rightHolder)
                 .build();
-    }
-
-    /**
-     * CSV 곡 데이터 클래스
-     */
-    public static class CsvSongData {
-        private String artistKo;
-        private String artistEn;
-        private String albumKo;
-        private String albumEn;
-        private String titleKo;
-        private String titleEn;
-        private String youtubeUrl;
-        private String melonSongId;
-        private String rightHolderName;
-
-        // Builder 패턴
-        public static Builder builder() {
-            return new Builder();
-        }
-
-        public static class Builder {
-            private CsvSongData csvData = new CsvSongData();
-
-            public Builder artistKo(String artistKo) {
-                csvData.artistKo = artistKo;
-                return this;
-            }
-
-            public Builder artistEn(String artistEn) {
-                csvData.artistEn = artistEn;
-                return this;
-            }
-
-            public Builder albumKo(String albumKo) {
-                csvData.albumKo = albumKo;
-                return this;
-            }
-
-            public Builder albumEn(String albumEn) {
-                csvData.albumEn = albumEn;
-                return this;
-            }
-
-            public Builder titleKo(String titleKo) {
-                csvData.titleKo = titleKo;
-                return this;
-            }
-
-            public Builder titleEn(String titleEn) {
-                csvData.titleEn = titleEn;
-                return this;
-            }
-
-            public Builder youtubeUrl(String youtubeUrl) {
-                csvData.youtubeUrl = youtubeUrl;
-                return this;
-            }
-
-            public Builder melonSongId(String melonSongId) {
-                csvData.melonSongId = melonSongId;
-                return this;
-            }
-
-            public Builder rightHolderName(String rightHolderName) {
-                csvData.rightHolderName = rightHolderName;
-                return this;
-            }
-
-            public CsvSongData build() {
-                return csvData;
-            }
-        }
-
-        // Getters
-        public String getArtistKo() {
-            return artistKo;
-        }
-
-        public String getArtistEn() {
-            return artistEn;
-        }
-
-        public String getAlbumKo() {
-            return albumKo;
-        }
-
-        public String getAlbumEn() {
-            return albumEn;
-        }
-
-        public String getTitleKo() {
-            return titleKo;
-        }
-
-        public String getTitleEn() {
-            return titleEn;
-        }
-
-        public String getYoutubeUrl() {
-            return youtubeUrl;
-        }
-
-        public String getMelonSongId() {
-            return melonSongId;
-        }
-
-        public String getRightHolderName() {
-            return rightHolderName;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s - %s", artistKo, titleKo);
-        }
-    }
-
-    /**
-     * 일괄 등록 결과 클래스
-     */
-    public static class BulkRegisterResult {
-        private final List<CsvSongData> successList = new ArrayList<>();
-        private final List<CsvSongData> duplicateList = new ArrayList<>();
-        private final List<FailureData> failureList = new ArrayList<>();
-
-        public void addSuccess(CsvSongData csvData) {
-            successList.add(csvData);
-        }
-
-        public void addDuplicate(CsvSongData csvData) {
-            duplicateList.add(csvData);
-        }
-
-        public void addFailure(CsvSongData csvData, String reason) {
-            failureList.add(new FailureData(csvData, reason));
-        }
-
-        public int getSuccessCount() {
-            return successList.size();
-        }
-
-        public int getDuplicateCount() {
-            return duplicateList.size();
-        }
-
-        public int getFailureCount() {
-            return failureList.size();
-        }
-
-        public int getTotalCount() {
-            return getSuccessCount() + getDuplicateCount() + getFailureCount();
-        }
-
-        public List<CsvSongData> getSuccessList() {
-            return new ArrayList<>(successList);
-        }
-
-        public List<CsvSongData> getDuplicateList() {
-            return new ArrayList<>(duplicateList);
-        }
-
-        public List<FailureData> getFailureList() {
-            return new ArrayList<>(failureList);
-        }
-
-        public static class FailureData {
-            private final CsvSongData csvData;
-            private final String reason;
-
-            public FailureData(CsvSongData csvData, String reason) {
-                this.csvData = csvData;
-                this.reason = reason;
-            }
-
-            public CsvSongData getCsvData() {
-                return csvData;
-            }
-
-            public String getReason() {
-                return reason;
-            }
-        }
     }
 }
