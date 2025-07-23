@@ -5,6 +5,7 @@ import com.rhoonart.unearth.user.entity.Role;
 import com.rhoonart.unearth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -17,12 +18,18 @@ public class SuperAdminInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${superadmin.username:unearth}")
+    private String superAdminUsername;
+
+    @Value("${superadmin.password:1234}")
+    private String superAdminPassword;
+
     @Override
     public void run(String... args) throws Exception {
-        if (!userRepository.existsByUsername("superadmin")) {
+        if (!userRepository.existsByUsername(superAdminUsername)) {
             User superAdmin = User.builder()
-                    .username("superadmin")
-                    .password(passwordEncoder.encode("superadmin1234"))
+                    .username(superAdminUsername)
+                    .password(passwordEncoder.encode(superAdminPassword))
                     .role(Role.SUPER_ADMIN)
                     .isLoginEnabled(true)
                     .build();
@@ -30,7 +37,7 @@ public class SuperAdminInitializer implements CommandLineRunner {
             userRepository.save(superAdmin);
             log.info("Super Admin 계정이 생성되었습니다: {}", superAdmin.getUsername());
         } else {
-            log.info("Super Admin 계정이 이미 존재합니다.");
+            log.info("Super Admin 계정이 이미 존재합니다: {}", superAdminUsername);
         }
     }
 }

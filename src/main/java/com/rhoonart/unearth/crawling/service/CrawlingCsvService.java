@@ -33,15 +33,17 @@ public class CrawlingCsvService {
     private final CrawlingDataRepository crawlingDataRepository;
     private final CrawlingPeriodService crawlingPeriodService;
     private final DataAuthorityService dataAuthorityService;
+
     /**
      * CSV 다운로드를 위한 메인 메서드입니다.
      */
     @Transactional(readOnly = true)
-    public CrawlingCsvDownloadDto generateCrawlingDataCsvForDownload(UserDto userDto, String songId, String startDateStr,
-                                                                     String endDateStr) {
+    public CrawlingCsvDownloadDto generateCrawlingDataCsvForDownload(UserDto userDto, String songId,
+            String startDateStr,
+            String endDateStr) {
 
         // 권한 체크
-        if(!dataAuthorityService.isAccessSongData(userDto,songId)){
+        if (!dataAuthorityService.isAccessSongData(userDto, songId)) {
             throw new ForbiddenException();
         }
 
@@ -64,7 +66,6 @@ public class CrawlingCsvService {
         // 한글 파일명 인코딩
         String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20");
-
 
         return new CrawlingCsvDownloadDto(csvData, encodedFilename);
     }
@@ -135,8 +136,10 @@ public class CrawlingCsvService {
                 CrawlingData previousData = previousDayData.get(currentData.getPlatform());
                 if (previousData != null) {
                     // 조회수 증가량 계산
-                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getViews(), previousData.getViews());
-                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getListeners(), previousData.getListeners());
+                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getViews(),
+                            previousData.getViews());
+                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getListeners(),
+                            previousData.getListeners());
                 }
 
                 // CSV 행 생성

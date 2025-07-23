@@ -108,6 +108,27 @@ img {
 .header-right {
     display: flex;
     align-items: center;
+    gap: 12px;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    background: #dc3545;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+    background: #c82333;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .password-change-btn {

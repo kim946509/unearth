@@ -20,6 +20,9 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  # env.properties 파일 로드
+  config:
+    import: classpath:env.properties
 
 server:
   port: ${SERVER_PORT:8080}
