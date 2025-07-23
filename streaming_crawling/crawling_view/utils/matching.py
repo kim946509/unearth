@@ -256,7 +256,7 @@ def _match_title_with_brackets(found_title, target_title):
 
 def _match_artist_names(artist1, artist2):
     """
-    아티스트명 매칭 (유연한 방식)
+    아티스트명 매칭 (유연한 방식, 공통 키워드 매칭만 엄격하게)
     
     Args:
         artist1 (str): 첫 번째 아티스트명
@@ -273,18 +273,21 @@ def _match_artist_names(artist1, artist2):
     if (len(artist1) >= 2 and artist1 in artist2) or (len(artist2) >= 2 and artist2 in artist1):
         return True
     
-    # 3. 공통 키워드 매칭 (2글자 이상의 공통 부분)
+    # 3. 공통 키워드 매칭 (더 엄격하게)
+    # 3-1. 연속된 공통 문자열이 3글자 이상일 때만 매칭
+    from difflib import SequenceMatcher
+    seq_match = SequenceMatcher(None, artist1, artist2)
+    longest_match = seq_match.find_longest_match(0, len(artist1), 0, len(artist2))
+    if longest_match.size >= 3:
+        return True
+    
+    # 3-2. 전체 길이 대비 공통 문자 비율이 0.7 이상일 때만 매칭
     common_chars = set(artist1) & set(artist2)
-    if len(common_chars) >= 2:
-        # 공통 문자들이 연속적으로 나타나는지 확인
-        for char in common_chars:
-            if char in artist1 and char in artist2:
-                # 각 아티스트명에서 해당 문자의 위치 확인
-                pos1 = artist1.find(char)
-                pos2 = artist2.find(char)
-                # 같은 위치 근처에 있으면 매칭 가능성 높음
-                if abs(pos1 - pos2) <= 2:
-                    return True
+    total_chars = set(artist1) | set(artist2)
+    if total_chars:
+        ratio = len(common_chars) / len(total_chars)
+        if ratio >= 0.7:
+            return True
     
     # 4. 특별한 케이스 처리
     special_cases = {
@@ -293,7 +296,6 @@ def _match_artist_names(artist1, artist2):
         ('akmu', '악동뮤지션'): True,
         ('악동뮤지션', 'akmu'): True,
     }
-    
     if (artist1, artist2) in special_cases:
         return special_cases[(artist1, artist2)]
     
