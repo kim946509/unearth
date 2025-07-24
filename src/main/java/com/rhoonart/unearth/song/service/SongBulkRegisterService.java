@@ -126,8 +126,8 @@ public class SongBulkRegisterService {
                     .titleKo(cleanString(columns[5])) // 트랙명 (국문)
                     .titleEn(cleanString(columns[6])) // 트랙명 (영문)
                     .youtubeUrl(cleanString(columns[7])) // 음원 링크(유튜브 URL)
-                    .melonSongId("") // Melon Id는 빈 값으로 설정 (자동 검색으로 찾을 예정)
-                    .rightHolderName(cleanString(columns[8])) // 권리자 (한 칸 당겨짐)
+                    .melonSongId(null) // Melon Id는 NULL로 설정 (자동 검색으로 찾을 예정)
+                    .rightHolderName(cleanString(columns[10])) // 권리자 (한 칸 당겨짐)
                     .build();
 
         } catch (Exception e) {
@@ -281,7 +281,7 @@ public class SongBulkRegisterService {
                 .titleKo(csvData.getTitleKo())
                 .titleEn(csvData.getTitleEn() != null ? csvData.getTitleEn() : "")
                 .youtubeUrl(csvData.getYoutubeUrl() != null ? csvData.getYoutubeUrl() : "")
-                .melonSongId("") // CSV 대량등록에서는 빈 값으로 설정 (단일 곡 크롤링 시 자동 검색)
+                .melonSongId(null) // CSV 대량등록에서는 NULL로 설정 (단일 곡 크롤링 시 자동 검색)
                 .rightHolder(rightHolder)
                 .build();
     }

@@ -3,6 +3,7 @@ package com.rhoonart.unearth.common.exception;
 import com.rhoonart.unearth.common.CommonResponse;
 import com.rhoonart.unearth.common.ResponseCode;
 import com.rhoonart.unearth.user.exception.UnauthorizedException;
+import com.rhoonart.unearth.user.exception.LoginException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,14 @@ public class GlobalExceptionHandler {
     public String handleUnauthorizedException(UnauthorizedException ex) {
         // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         return "redirect:/user/login";
+    }
+
+    @ExceptionHandler(LoginException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public CommonResponse<Void> handleLoginException(LoginException ex) {
+        // 로그인 실패는 항상 JSON으로 응답
+        return CommonResponse.fail(ex.getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(BaseException.class)

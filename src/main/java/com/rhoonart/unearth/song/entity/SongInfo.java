@@ -44,7 +44,7 @@ public class SongInfo extends BaseEntity {
     @Column(name = "youtube_url", length = 500)
     private String youtubeUrl;
 
-    @Column(name = "melon_song_id", length = 100, unique = true)
+    @Column(name = "melon_song_id", length = 100, unique = true, nullable = true)
     private String melonSongId;
 
     @Column(name = "album_ko", length = 255)

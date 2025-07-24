@@ -36,14 +36,22 @@
             }
             const response = await fetch('/user/login', {
                 method: 'POST',
-                headers: { 'Accept': 'application/json' },
+                headers: { 
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 body: params
             });
             
             if (handleApiError(response)) return;
             
             const result = await response.json();
+            // ResponseCode enum이 JSON으로 직렬화될 때 name() 값이 전달됨
             if (result.code === 'SUCCESS') {
+                // 성공 시 에러 메시지 숨기기
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.style.display = 'none';
+                
                 const role = result.data && result.data.userDto && result.data.userDto.role;
                 const rightHolderId = result.data && result.data.rightHolderId;
                 
@@ -56,8 +64,10 @@
                     window.location.href = '/home';
                 }
             } else {
-                // 에러 모달 표시 (헤더에서 제공하는 전역 함수 사용)
-                showModal(result.message || '로그인에 실패했습니다.');
+                // 에러 메시지를 로그인 폼 아래에 표시
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.textContent = result.message || '로그인에 실패했습니다.';
+                errorMessage.style.display = 'block';
             }
         });
     </script>
