@@ -99,7 +99,7 @@ public class RightHolderService {
         // 3. username 업데이트
         userUpdateService.updateUsername(rightHolder.getUser(),dto.getHolderName());
     }
-    
+
     @Transactional
     public void rightHolderLoginStatusUpdate(String rightHolderId, boolean isLoginEnabled) {
         // 권리자 존재 여부 확인

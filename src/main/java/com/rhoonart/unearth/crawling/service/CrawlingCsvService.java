@@ -65,7 +65,7 @@ public class CrawlingCsvService {
 
         // 한글 파일명 인코딩 (RFC 5987 형식)
         String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20");
+                .replace("+", "%20");
 
         return new CrawlingCsvDownloadDto(csvData, encodedFilename);
     }
