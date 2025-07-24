@@ -28,7 +28,6 @@ public class SongInfoUpdateRequestDto {
     @NotBlank(message = "유튜브 공식 URL은 필수입니다.")
     private String youtubeUrl;
 
-    @NotBlank(message = "songId(멜론)는 필수입니다.")
     private String melonSongId;
 
     @NotBlank(message = "권리자명은 필수입니다.")

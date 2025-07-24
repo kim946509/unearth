@@ -117,8 +117,8 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 # Melon은 song_dict에서 직접 melon_song_id 사용
                 melon_song_id = song_dict.get('melon_song_id')
                 
-                # melon_song_id가 없으면 자동으로 찾아서 저장
-                if not melon_song_id:
+                # melon_song_id가 없으면 자동으로 찾아서 저장 (null, 빈 문자열, 공백 모두 체크)
+                if not melon_song_id or melon_song_id.strip() == "":
                     logger.info(f"🍈 Melon song_id가 없어 자동 검색 시작: {song_dict['artist_ko']} - {song_dict['title_ko']}")
                     
                     try:
