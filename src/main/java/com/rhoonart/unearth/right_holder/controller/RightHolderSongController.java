@@ -3,8 +3,8 @@ package com.rhoonart.unearth.right_holder.controller;
 import com.rhoonart.unearth.common.CommonResponse;
 import com.rhoonart.unearth.common.util.SessionUserUtil;
 import com.rhoonart.unearth.right_holder.dto.RightHolderSongListResponseDto;
-import com.rhoonart.unearth.right_holder.service.RightHolderService;
 import com.rhoonart.unearth.right_holder.service.RightHolderSongService;
+import com.rhoonart.unearth.right_holder.service.RightHolderUtilService;
 import com.rhoonart.unearth.user.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RightHolderSongController {
 
     private final RightHolderSongService rightHolderSongService;
-    private final RightHolderService rightHolderService;
+    private final RightHolderUtilService rightHolderUtilService;
 
     @GetMapping("/{rightHolderId}")
     public String rightHolderDetailPage(
@@ -55,7 +55,7 @@ public class RightHolderSongController {
         model.addAttribute("user", user);
         model.addAttribute("userRole", user.getRole().name());
         // 권리자 정보 추가
-        var rightHolder = rightHolderService.findById(rightHolderId);
+        var rightHolder = rightHolderUtilService.findById(rightHolderId);
         model.addAttribute("rightHolder", rightHolder);
         return "right_holder/detail";
     }

@@ -4,6 +4,42 @@
 
 from selenium.webdriver.common.by import By
 
+# Melon 관련 셀렉터  
+class MelonSelectors:
+    # 검색 관련
+    SEARCH_INPUT = "#top_search"
+    SEARCH_BUTTON = "button.ui-autocomplete-button"
+    
+    # 검색 결과 관련 (실제 HTML 구조 기반)
+    SEARCH_RESULTS_SECTION = "div.wrap_song_list"
+    SONG_ITEMS = "div.wrap_song_list div.d_song_list tbody tr"
+    
+    # 곡 정보 관련 (실제 HTML 구조 기반)
+    SONG_TITLE = "a.fc_gray"           # 곡명 링크 (title 속성에 곡명이 있음)
+    ARTIST_NAME = [
+        "#artistName",                  # 아티스트명 ID (가장 정확)
+        "div#artistName",               # div 태그의 artistName ID
+        "span#artistName",              # span 태그의 artistName ID
+        "div.wrap_artist_name a",       # 아티스트명 링크 (backup)
+        "div.ellipsis.rank02 a",        # 기존 셀렉터 (backup)
+        "td.t_left a",                  # 일반적인 링크 (backup)
+    ]
+    DETAIL_BUTTON = "a.btn_icon_detail"     # 상세 정보 버튼
+    
+    # 곡명과 아티스트명을 포함하는 td 셀렉터들
+    SONG_INFO_TD = "td.t_left"          # 곡 정보가 있는 td
+    ARTIST_INFO_TD = "td.t_left"        # 아티스트 정보가 있는 td
+    
+    # 상세 페이지 곡 정보
+    DETAIL_SONG_TITLE = "div.song_name"
+    DETAIL_ARTIST_NAME = "div.artist a"
+
+class MelonSettings:
+    BASE_URL = "https://www.melon.com"
+    SEARCH_URL = "https://www.melon.com/search/total/index.htm"
+    DEFAULT_WAIT_TIME = 10
+    MAX_PARSE_ATTEMPTS = 3
+
 # Genie 관련 셀렉터
 class GenieSelectors:
     # 검색 관련

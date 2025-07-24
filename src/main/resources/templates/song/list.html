@@ -42,8 +42,8 @@
                         <input type="text" name="titleKo" class="form-control" required />
                     </div>
                     <div class="form-row">
-                        <label class="form-label">songId(멜론) <span class="required-star">*</span></label>
-                        <input type="text" name="melonSongId" class="form-control" required />
+                        <label class="form-label">songId(멜론)</label>
+                        <input type="text" name="melonSongId" class="form-control" />
                     </div>
                     <div class="form-row">
                         <label class="form-label">아티스트명(영문) <span class="required-star">*</span></label>
@@ -118,7 +118,7 @@
             
             <div style="display: flex; align-items: center; gap: 15px;">
                 <h3>전체 크롤링</h3>
-                <button type="button" class="btn btn-warning" onclick="executeFullCrawling()">
+                <button type="button" class="btn btn-warning full-crawling-btn" onclick="executeFullCrawling()">
                     전체 크롤링 실행
                 </button>
                 <span>
@@ -253,7 +253,7 @@
                 <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
                 <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
                 <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
-                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>songId(멜론)</label><input type="text" name="melonSongId" /></div>
                 <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
                 <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
                 <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
@@ -326,7 +326,10 @@
             <div class="csv-format-info">
                 <h4>CSV 파일 형식</h4>
                 <p>
-                    <strong>필수 컬럼:</strong> 아티스트명(국문/영문), 트랙명(국문/영문), 권리자, 앨범명(국문/영문), 유튜브 URL, 멜론 ID
+                    <strong>필수 컬럼:</strong> 아티스트명(국문/영문), 트랙명(국문/영문), 권리자, 앨범명(국문/영문), 유튜브 URL
+                </p>
+                <p>
+                    <strong>참고:</strong> 멜론 ID는 자동으로 검색하여 찾아드립니다.
                 </p>
             </div>
             
@@ -378,7 +381,7 @@ function validateForm() {
     }
     
     let valid = true;
-    ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'].forEach(name => {
+    ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','rightHolderName'].forEach(name => {
         const el = form.elements[name];
         if (!el || !el.value || el.value.trim() === '') valid = false;
     });
@@ -527,7 +530,7 @@ function openEditModalFromData(button) {
 if (editForm) {
     editForm.addEventListener('submit', function(e) {
         // 필수값 체크
-        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'];
+        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','rightHolderName'];
         for (const name of required) {
             const el = editForm.elements[name];
             if (!el || !el.value || el.value.trim() === '') {
@@ -768,6 +771,7 @@ function executeFullCrawling() {
     
     // 버튼 비활성화
     const btn = document.querySelector('.full-crawling-btn');
+    if (!btn) return; // 버튼이 없으면 함수 종료
     const originalText = btn.innerHTML;
     btn.innerHTML = '⏳ 실행 중...';
     btn.disabled = true;

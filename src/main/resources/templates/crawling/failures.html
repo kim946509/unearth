@@ -124,7 +124,7 @@
                 <div class="form-row"><label>아티스트명(국문) <span class="required-star">*</span></label><input type="text" name="artistKo" required /></div>
                 <div class="form-row"><label>앨범명(국문) <span class="required-star">*</span></label><input type="text" name="albumKo" required /></div>
                 <div class="form-row"><label>트랙명(국문) <span class="required-star">*</span></label><input type="text" name="titleKo" required /></div>
-                <div class="form-row"><label>songId(멜론) <span class="required-star">*</span></label><input type="text" name="melonSongId" required /></div>
+                <div class="form-row"><label>songId(멜론)</label><input type="text" name="melonSongId" /></div>
                 <div class="form-row"><label>아티스트명(영문) <span class="required-star">*</span></label><input type="text" name="artistEn" required /></div>
                 <div class="form-row"><label>앨범명(영문) <span class="required-star">*</span></label><input type="text" name="albumEn" required /></div>
                 <div class="form-row"><label>트랙명(영문) <span class="required-star">*</span></label><input type="text" name="titleEn" required /></div>
@@ -184,7 +184,7 @@ function openEditModalFromData(button) {
 }
 if (editForm) {
     editForm.addEventListener('submit', function(e) {
-        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','melonSongId','rightHolderName'];
+        const required = ['artistKo','artistEn','albumKo','albumEn','titleKo','titleEn','youtubeUrl','rightHolderName'];
         for (const name of required) {
             const el = editForm.elements[name];
             if (!el || !el.value || el.value.trim() === '') {

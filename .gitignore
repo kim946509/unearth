@@ -46,6 +46,8 @@ user_data/
 
 streaming_crawling/logs/
 
+logs
+
 src/main/resources/static/data/**
 
 .scannerwork

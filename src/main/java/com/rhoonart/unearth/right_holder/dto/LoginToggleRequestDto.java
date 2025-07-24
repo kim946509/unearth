@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class LoginToggleRequestDto {
-    private String isLoginEnabled;
+    private String isLoginEnabled; // 로그인 기능 활성화 여부
 
     public boolean getIsLoginEnabledAsBoolean() {
         return "true".equalsIgnoreCase(isLoginEnabled);

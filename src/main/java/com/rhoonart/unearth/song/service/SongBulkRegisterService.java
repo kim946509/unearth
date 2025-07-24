@@ -2,6 +2,7 @@ package com.rhoonart.unearth.song.service;
 
 import com.rhoonart.unearth.common.util.EncodingDetector;
 import com.rhoonart.unearth.song.dto.CsvSongDataDto;
+import com.rhoonart.unearth.song.dto.SongBulkRegisterResponseDto;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
 import com.rhoonart.unearth.song.dto.SongRegistrationFailureDto;
 import com.rhoonart.unearth.song.entity.SongInfo;
@@ -39,13 +40,11 @@ public class SongBulkRegisterService {
      * @return 일괄 등록 결과
      */
     @Transactional
-    public SongBulkRegisterResultDto bulkRegisterFromCsv(MultipartFile file) {
-        log.info("🎵 CSV 일괄 등록 시작: 파일명={}, 크기={}bytes", file.getOriginalFilename(), file.getSize());
+    public SongBulkRegisterResponseDto bulkRegisterFromCsv(MultipartFile file) {
 
         try {
             // 1. CSV 파일 읽기
             List<CsvSongDataDto> csvDataList = readCsvFile(file);
-            log.info("📊 CSV 파일 읽기 완료: {}개 행", csvDataList.size());
 
             // 2. 권리자 검증 및 매핑
             Map<String, RightHolder> rightHolderMap = validateAndMapRightHolders(csvDataList);
@@ -53,10 +52,8 @@ public class SongBulkRegisterService {
             // 3. 중복 검사 및 등록 대상 분리
             SongBulkRegisterResultDto result = processBulkRegistration(csvDataList, rightHolderMap);
 
-            log.info("✅ CSV 일괄 등록 완료: 성공={}개, 중복={}개, 실패={}개",
-                    result.getSuccessCount(), result.getDuplicateCount(), result.getFailureCount());
-
-            return result;
+            // 결과를 DTO로 변환
+            return SongBulkRegisterResponseDto.from(result);
 
         } catch (IOException e) {
             log.error("❌ CSV 파일 읽기 중 오류 발생", e);
@@ -82,7 +79,6 @@ public class SongBulkRegisterService {
         // 2. 인코딩 감지
         String detectedEncoding = EncodingDetector.detectEncoding(fileBytes);
         log.info("📑 감지된 인코딩: {}", detectedEncoding);
-
         // 3. 인코딩에 맞춰 읽기
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ByteArrayInputStream(fileBytes), detectedEncoding))) {
@@ -117,7 +113,7 @@ public class SongBulkRegisterService {
             // CSV 파싱 (쉼표로 구분, 따옴표 처리)
             String[] columns = parseCsvColumns(line);
 
-            if (columns.length < 12) {
+            if (columns.length < 11) {
                 log.warn("⚠️ CSV 컬럼 수 부족: {}", line);
                 return null;
             }
@@ -130,8 +126,8 @@ public class SongBulkRegisterService {
                     .titleKo(cleanString(columns[5])) // 트랙명 (국문)
                     .titleEn(cleanString(columns[6])) // 트랙명 (영문)
                     .youtubeUrl(cleanString(columns[7])) // 음원 링크(유튜브 URL)
-                    .melonSongId(cleanString(columns[10])) // Melon Id
-                    .rightHolderName(cleanString(columns[11])) // 권리자
+                    .melonSongId(null) // Melon Id는 NULL로 설정 (자동 검색으로 찾을 예정)
+                    .rightHolderName(cleanString(columns[10])) // 권리자 (한 칸 당겨짐)
                     .build();
 
         } catch (Exception e) {
@@ -267,12 +263,8 @@ public class SongBulkRegisterService {
             return true;
         }
 
-        // melon_song_id 중복 검사 (있는 경우에만)
-        if (csvData.getMelonSongId() != null && !csvData.getMelonSongId().trim().isEmpty()) {
-            if (songInfoRepository.existsByMelonSongId(csvData.getMelonSongId())) {
-                return true;
-            }
-        }
+        // CSV 대량등록에서는 melon_song_id가 빈 값이므로 중복 검사 제외
+        // 나중에 단일 곡 크롤링 시 자동으로 찾아서 저장됨
 
         return false;
     }
@@ -289,7 +281,7 @@ public class SongBulkRegisterService {
                 .titleKo(csvData.getTitleKo())
                 .titleEn(csvData.getTitleEn() != null ? csvData.getTitleEn() : "")
                 .youtubeUrl(csvData.getYoutubeUrl() != null ? csvData.getYoutubeUrl() : "")
-                .melonSongId(csvData.getMelonSongId() != null ? csvData.getMelonSongId() : "")
+                .melonSongId(null) // CSV 대량등록에서는 NULL로 설정 (단일 곡 크롤링 시 자동 검색)
                 .rightHolder(rightHolder)
                 .build();
     }

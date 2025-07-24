@@ -44,7 +44,7 @@ public class RightHolderService {
         User user = userSignUpService.signUp(dto.getUsername(),dto.getPassword(),Role.RIGHT_HOLDER);
 
         // 2. 권리자 생성
-        RightHolder rightHolder = rightHolderCreateService.createRightHolder(dto, user);
+        rightHolderCreateService.createRightHolder(dto, user);
     }
 
     public Page<RightHolderListResponseDto> findRightHolders(String holderTypeStr,String contractDateStr, String holderName, int page, int size) {
@@ -83,20 +83,6 @@ public class RightHolderService {
                     daysLeft,
                     rh.getUser().isLoginEnabled());
         });
-    }
-
-    public List<String> findAllForDropdown() {
-        return rightHolderRepository.findAllHolderNames();
-    }
-
-    public RightHolder findById(String rightHolderId) {
-        return rightHolderRepository.findById(rightHolderId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
-    }
-
-    public RightHolder findByUserId(String userId) {
-        return rightHolderRepository.findByUserId(userId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
     }
 
     @Transactional
