@@ -118,7 +118,7 @@
             
             <div style="display: flex; align-items: center; gap: 15px;">
                 <h3>전체 크롤링</h3>
-                <button type="button" class="btn btn-warning" onclick="executeFullCrawling()">
+                <button type="button" class="btn btn-warning full-crawling-btn" onclick="executeFullCrawling()">
                     전체 크롤링 실행
                 </button>
                 <span>
@@ -768,6 +768,7 @@ function executeFullCrawling() {
     
     // 버튼 비활성화
     const btn = document.querySelector('.full-crawling-btn');
+    if (!btn) return; // 버튼이 없으면 함수 종료
     const originalText = btn.innerHTML;
     btn.innerHTML = '⏳ 실행 중...';
     btn.disabled = true;

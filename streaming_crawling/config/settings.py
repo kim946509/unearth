@@ -38,10 +38,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',  # 모델 메타데이터용
     'django.contrib.sessions',      # 세션 (크롤링 시 쿠키 관리용)
-    
-    # DRF
-    'rest_framework',               # Django REST Framework
-    
     # 앱 추가
     'crawling_view',                # 크롤링 시스템
 ]
