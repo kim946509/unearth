@@ -22,23 +22,6 @@ public class SessionUserUtil {
         return (UserDto) session.getAttribute(LOGIN_USER_KEY);
     }
 
-    /**
-     * 로그인 여부를 확인합니다.
-     * 
-     * @param session HttpSession
-     * @return 로그인 여부
-     */
-    public static boolean isLoggedIn(HttpSession session) {
-        return getLoginUser(session) != null;
-    }
-
-    /**
-     * 로그인을 요구합니다. 로그인하지 않은 경우 예외를 발생시킵니다.
-     * 
-     * @param session HttpSession
-     * @return UserDto
-     * @throws UnauthorizedException 로그인하지 않은 경우
-     */
     public static UserDto requireLogin(HttpSession session) {
         UserDto user = getLoginUser(session);
         if (user == null) {
@@ -84,17 +67,6 @@ public class SessionUserUtil {
     }
 
     /**
-     * 사용자 ID를 가져옵니다.
-     * 
-     * @param session HttpSession
-     * @return 사용자 ID 또는 null
-     */
-    public static String getUserId(HttpSession session) {
-        UserDto user = getLoginUser(session);
-        return user != null ? user.getId() : null;
-    }
-
-    /**
      * 사용자 권한을 가져옵니다.
      * 
      * @param session HttpSession
@@ -105,64 +77,4 @@ public class SessionUserUtil {
         return user != null ? user.getRole().name() : null;
     }
 
-    /**
-     * 관리자 권한(SUPER_ADMIN, ADMIN)을 확인합니다.
-     * 
-     * @param session HttpSession
-     * @return 관리자 권한 여부
-     */
-    public static boolean isAdmin(HttpSession session) {
-        String role = getUserRole(session);
-        return "SUPER_ADMIN".equals(role) || "ADMIN".equals(role);
-    }
-
-    /**
-     * 특정 권리자의 데이터에 접근할 권한이 있는지 확인합니다.
-     * 
-     * @param session       HttpSession
-     * @param rightHolderId 권리자 ID
-     * @return 접근 권한 여부
-     */
-    public static boolean hasAccessToRightHolder(HttpSession session, String rightHolderId) {
-        UserDto user = getLoginUser(session);
-        if (user == null) {
-            return false;
-        }
-        if (user.isAdmin()) {
-            return true;
-        }
-        if (user.isRightHolder()) {
-            return rightHolderId.equals(user.getRightHolderId());
-        }
-        return false;
-    }
-
-    /**
-     * 권리자 데이터 접근 권한 체크
-     */
-    public static boolean canAccessRightHolder(UserDto user, String rightHolderId) {
-        if (user == null || rightHolderId == null)
-            return false;
-        if (user.isAdmin())
-            return true;
-        if (user.isRightHolder()) {
-            return rightHolderId.equals(user.getRightHolderId());
-        }
-        return false;
-    }
-
-    /**
-     * 곡 데이터 접근 권한 체크
-     */
-    public static boolean canAccessSong(UserDto user, String songId,
-            com.rhoonart.unearth.song.repository.SongInfoRepository songInfoRepository) {
-        if (user == null || songId == null)
-            return false;
-        if (user.isAdmin())
-            return true;
-        if (user.isRightHolder()) {
-            return songInfoRepository.existsByIdAndRightHolder_Id(songId, user.getRightHolderId());
-        }
-        return false;
-    }
 }

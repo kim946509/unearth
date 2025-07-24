@@ -36,11 +36,9 @@ public class CrawlingExecuteService {
             if (CrawlingCommandUtil.isWindows()) {
                 command = CrawlingCommandUtil.createWindowsCommand("crawling_view/controller/run_single_song_crawling.py", "--song_id",
                         songId);
-                log.info("Windows 환경에서 크롤링 실행: {}", command);
             } else {
                 command = CrawlingCommandUtil.createLinuxCommand("crawling_view/controller/run_single_song_crawling.py",
                         "--song_id", songId);
-                log.info("Linux/Ubuntu 환경에서 크롤링 실행: {}", command);
             }
 
             // ProcessBuilder 생성
@@ -57,47 +55,13 @@ public class CrawlingExecuteService {
             if (!CrawlingCommandUtil.isWindows()) {
                 Map<String, String> env = processBuilder.environment();
                 env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
-                env.put("PYTHONUNBUFFERED", "1"); // Python 출력 버퍼링 비활성화
+                env.put("PYTHONUNBUFFERED", "1");
             }
 
-            log.info("크롤링 실행 시작: songId={}", songId);
 
             // 프로세스 실행
             Process process = processBuilder.start();
 
-            // 출력 스트림 읽기 (별도 스레드에서)
-            new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getInputStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        log.info("크롤링 출력: {}", line);
-                    }
-                } catch (IOException e) {
-                    log.error("크롤링 출력 읽기 오류", e);
-                }
-            }).start();
-
-            // 에러 스트림 읽기 (별도 스레드에서)
-            new Thread(() -> {
-                try (BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(process.getErrorStream()))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        // Django 로그는 대부분 정보성 메시지이므로 INFO 레벨로 로깅
-                        if (line.contains("ERROR") || line.contains("Exception") || line.contains("Traceback")) {
-                            log.error("크롤링 에러: {}", line);
-                        } else {
-                            log.info("크롤링 로그: {}", line);
-                        }
-                    }
-                } catch (IOException e) {
-                    log.error("크롤링 에러 읽기 오류", e);
-                }
-            }).start();
-
-            // 비동기 실행 - 프로세스 시작 후 즉시 반환
-            log.info("크롤링 실행 시작됨: songId={}", songId);
 
         } catch (IOException e) {
             log.error("크롤링 프로세스 실행 오류: songId={}", songId, e);
@@ -117,10 +81,8 @@ public class CrawlingExecuteService {
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
                 command = CrawlingCommandUtil.createWindowsCommand("crawling_view/controller/run_crawling.py");
-                log.info("Windows 환경에서 전체 크롤링 실행: {}", command);
             } else {
                 command = CrawlingCommandUtil.createLinuxCommand("crawling_view/controller/run_crawling.py");
-                log.info("Linux/Ubuntu 환경에서 전체 크롤링 실행: {}", command);
             }
 
             // ProcessBuilder 생성
