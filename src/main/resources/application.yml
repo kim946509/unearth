@@ -34,3 +34,9 @@ logging:
 
 log:
   crawling-dir: streaming_crawling/logs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,httptrace"
