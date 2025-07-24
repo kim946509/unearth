@@ -15,6 +15,9 @@ from crawling_view.data.csv_writer import (
 )
 from crawling_view.utils.single_crawling_logger import create_summary_logger
 from crawling_view.data.failure_service import FailureService
+from crawling_view.view.melon.melon_song_id_logic import MelonSongIdFinder
+from crawling_view.data.melon_song_id_db_writer import save_melon_song_id_to_db, get_song_info_for_melon_search
+from crawling_view.utils.driver import setup_driver
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +117,31 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 # Melon은 song_dict에서 직접 melon_song_id 사용
                 melon_song_id = song_dict.get('melon_song_id')
                 
+                # melon_song_id가 없으면 자동으로 찾아서 저장
+                if not melon_song_id:
+                    logger.info(f"🍈 Melon song_id가 없어 자동 검색 시작: {song_dict['artist_ko']} - {song_dict['title_ko']}")
+                    
+                    try:
+                        # 드라이버 설정하여 멜론 곡 ID 검색
+                        with setup_driver() as driver:
+                            melon_finder = MelonSongIdFinder(driver)
+                            found_melon_song_id = melon_finder.find_melon_song_id(song_dict)
+                            
+                            if found_melon_song_id:
+                                # DB에 저장
+                                if save_melon_song_id_to_db(song_dict['song_id'], found_melon_song_id):
+                                    melon_song_id = found_melon_song_id
+                                    song_dict['melon_song_id'] = found_melon_song_id  # song_dict도 업데이트
+                                    logger.info(f"✅ Melon song_id 자동 검색 및 저장 완료: {found_melon_song_id}")
+                                else:
+                                    logger.error(f"❌ Melon song_id DB 저장 실패: {found_melon_song_id}")
+                            else:
+                                logger.warning(f"❌ Melon song_id 자동 검색 실패")
+                                
+                    except Exception as e:
+                        logger.error(f"❌ Melon song_id 자동 검색 중 오류: {e}", exc_info=True)
+                
+                # melon_song_id가 있으면 크롤링 진행
                 if melon_song_id:
                     melon_data = [{
                         'song_id': song_dict['song_id'],
@@ -130,8 +158,10 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                         summary_logger.add_platform_result('melon', 'failed')
                         melon_results = None  # 실패 시 None으로 설정 (DB에서 -999로 처리)
                 else:
-                    summary_logger.add_platform_result('melon', 'skipped')
-                    logger.warning(f"⚠️ Melon song_id가 비어있어 건너뜀")
+                    # 멜론 song_id를 찾지 못한 경우는 'failed'로 처리 (크롤링 시도했지만 실패)
+                    summary_logger.add_platform_result('melon', 'failed')
+                    logger.warning(f"❌ Melon song_id를 찾을 수 없어 크롤링 실패")
+                    melon_results = None  # 실패 시 None으로 설정 (DB에서 -999로 처리)
                     
         except Exception as e:
             logger.error(f"❌ {plat.upper()} 크롤링 중 오류: {str(e)}")
@@ -175,6 +205,18 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     
     # 실패 처리 - DB에 저장된 -999 값을 확인하여 실패 처리
     if save_db:
+        logger.info(f"🔍 실패 곡 목록 확인 및 업데이트: {song_dict['song_id']}")
         FailureService.check_and_handle_failures(song_dict['song_id'])
+        
+        # 추가 실패 로깅 (디버깅용)
+        failed_platforms = []
+        for platform, status in summary_logger.platform_status.items():
+            if status in ['failed', 'error']:
+                failed_platforms.append(platform.upper())
+        
+        if failed_platforms:
+            logger.warning(f"❌ 실패한 플랫폼들: {', '.join(failed_platforms)}")
+        else:
+            logger.info(f"✅ 모든 플랫폼 성공")
     
     return summary 
