@@ -1,11 +1,13 @@
 package com.rhoonart.unearth.song.service;
 
 import com.rhoonart.unearth.common.util.EncodingDetector;
+import com.rhoonart.unearth.crawling.service.CrawlingCommandUtil;
 import com.rhoonart.unearth.song.dto.CsvSongDataDto;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResponseDto;
 import com.rhoonart.unearth.song.dto.SongBulkRegisterResultDto;
 import com.rhoonart.unearth.song.dto.SongRegistrationFailureDto;
 import com.rhoonart.unearth.song.entity.SongInfo;
+import com.rhoonart.unearth.song.exception.SongBulkRegisterException;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
 import com.rhoonart.unearth.right_holder.repository.RightHolderRepository;
@@ -57,13 +59,12 @@ public class SongBulkRegisterService {
 
         } catch (IOException e) {
             log.error("❌ CSV 파일 읽기 중 오류 발생", e);
-            throw new BaseException(ResponseCode.INVALID_INPUT, "CSV 파일을 읽을 수 없습니다: " + e.getMessage());
+            throw new SongBulkRegisterException(ResponseCode.INVALID_INPUT, "CSV 파일을 읽을 수 없습니다: " + e.getMessage());
         } catch (BaseException e) {
-            // BaseException은 그대로 재던지기
             throw e;
         } catch (Exception e) {
             log.error("❌ 일괄 등록 중 오류 발생", e);
-            throw new BaseException(ResponseCode.SERVER_ERROR, "일괄 등록 중 오류가 발생했습니다: " + e.getMessage());
+            throw new SongBulkRegisterException(ResponseCode.SERVER_ERROR, "일괄 등록 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 

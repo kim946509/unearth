@@ -6,6 +6,7 @@ import com.rhoonart.unearth.right_holder.dto.RightHolderRegisterRequestDto;
 import com.rhoonart.unearth.right_holder.dto.RightHolderUpdateRequestDto;
 import com.rhoonart.unearth.right_holder.entity.HolderType;
 import com.rhoonart.unearth.right_holder.entity.RightHolder;
+import com.rhoonart.unearth.right_holder.exception.CannotFindRightHolderException;
 import com.rhoonart.unearth.right_holder.repository.RightHolderRepository;
 import com.rhoonart.unearth.song.repository.SongInfoRepository;
 import com.rhoonart.unearth.user.entity.User;
@@ -90,7 +91,7 @@ public class RightHolderService {
 
         // 1. 권리자 존재 여부 확인
         RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+                .orElseThrow(CannotFindRightHolderException::new);
 
         // 2. 권리자 정보 업데이트
         rightHolderUpdateService.update(rightHolder, dto);
@@ -98,14 +99,12 @@ public class RightHolderService {
         // 3. username 업데이트
         userUpdateService.updateUsername(rightHolder.getUser(),dto.getHolderName());
     }
-
-
-
+    
     @Transactional
     public void rightHolderLoginStatusUpdate(String rightHolderId, boolean isLoginEnabled) {
         // 권리자 존재 여부 확인
         RightHolder rightHolder = rightHolderRepository.findById(rightHolderId)
-                .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "권리자를 찾을 수 없습니다."));
+                .orElseThrow(CannotFindRightHolderException::new);
 
         userUpdateService.updateLoginEnabled(rightHolder.getUser(), isLoginEnabled);
     }
