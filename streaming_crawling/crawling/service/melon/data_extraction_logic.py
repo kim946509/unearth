@@ -1,37 +1,22 @@
 """
-Melon 크롤링 및 파싱 로직 (API 기반)
+Melon 데이터 추출 관련 로직
 """
-import os
 import logging
-import requests
 import json
-from dotenv import load_dotenv
 from crawling.utils.utils import get_current_timestamp
-
-# .env 파일 로드
-load_dotenv()
+from .navigation_logic import MelonNavigationLogic
+from .search_logic import MelonSearchLogic
 
 logger = logging.getLogger(__name__)
 
-class MelonCrawler:
-    def __init__(self):
-        # .env에서 API URL 로드
-        self.api_base_url = os.getenv('MELON_API_URL', '')
-        if not self.api_base_url:
-            logger.error("❌ MELON_API_URL 환경변수가 설정되지 않았습니다.")
-            raise ValueError("MELON_API_URL 환경변수가 필요합니다.")
-        
-        self.session = requests.Session()
-        # User-Agent 설정
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/json, text/plain, */*',
-            'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
-            'Referer': 'https://m2.melon.com/',
-            'Origin': 'https://m2.melon.com'
-        })
+class MelonDataExtractionLogic:
+    """Melon 데이터 추출 관련 로직을 담당하는 클래스"""
     
-    def crawl_song(self, melon_song_id, song_id=None):
+    def __init__(self):
+        self.navigation_logic = MelonNavigationLogic()
+        self.search_logic = MelonSearchLogic()
+    
+    def crawl_song(self, melon_song_id: str, song_id: str = None) -> dict:
         """
         단일 곡 크롤링 (API 호출)
         
@@ -43,28 +28,18 @@ class MelonCrawler:
             dict: 크롤링 결과 또는 None
         """
         try:
-            if not melon_song_id:
-                logger.error("❌ melon_song_id가 필요합니다.")
+            if not self.search_logic.validate_melon_song_id(melon_song_id):
+                logger.error("❌ 유효하지 않은 melon_song_id입니다.")
                 return None
             
             logger.debug(f"🎵 Melon API 호출: songId={melon_song_id}")
             
             # API 호출
-            api_url = f"{self.api_base_url}?songId={melon_song_id}"
-            response = self.session.get(api_url, timeout=10)
-            
-            if response.status_code != 200:
-                logger.error(f"❌ API 호출 실패: HTTP {response.status_code}")
+            data = self.navigation_logic.navigate_to_song_api(melon_song_id)
+            if not data:
                 return None
             
-            # JSON 파싱
-            data = response.json()
-            
-            # 응답 구조 확인
-            if 'response' not in data or 'SONGINFO' not in data['response']:
-                logger.error("❌ API 응답 구조가 올바르지 않습니다.")
-                return None
-            
+            # 데이터 추출
             song_info = data['response']['SONGINFO']
             stream_info = data['response'].get('STREAMREPORTINFO', {})
             
@@ -94,9 +69,6 @@ class MelonCrawler:
             logger.debug(f"✅ Melon 크롤링 성공: {song_name} - {artist_name} (조회수: {views}, 청취자: {listeners})")
             return result
             
-        except requests.exceptions.RequestException as e:
-            logger.error(f"❌ API 요청 실패: {e}")
-            return None
         except json.JSONDecodeError as e:
             logger.error(f"❌ JSON 파싱 실패: {e}")
             return None

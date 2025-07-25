@@ -13,7 +13,7 @@ from crawling.repository.melon_song_id_db_writer import save_melon_song_id_to_db
 from crawling.utils.driver import setup_driver
 from crawling.utils.batch_crawling_logger import BatchCrawlingLogger
 
-# 플랫폼 전략들 import
+# 플랫폼 전략들 import (새로운 구조)
 from crawling.service.genie import GenieCrawlingStrategy
 from crawling.service.youtube import YouTubeCrawlingStrategy
 from crawling.service.youtube_music import YouTubeMusicCrawlingStrategy

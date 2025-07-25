@@ -10,7 +10,7 @@ from crawling.utils.batch_crawling_logger import BatchCrawlingLogger
 from crawling.repository.failure_service import FailureService
 from crawling.repository.db_writer import save_all_platforms_for_songs
 
-# 플랫폼 전략들 import
+# 플랫폼 전략들 import (새로운 구조)
 from crawling.service.genie import GenieCrawlingStrategy
 from crawling.service.youtube import YouTubeCrawlingStrategy
 from crawling.service.youtube_music import YouTubeMusicCrawlingStrategy
@@ -18,6 +18,18 @@ from crawling.service.melon import MelonCrawlingStrategy
 
 logger = logging.getLogger(__name__)
 
+
+def songinfo_to_dict(song):
+    return {
+        'song_id': song.id,
+        'title_ko': song.title_ko,
+        'title_en': getattr(song, 'title_en', ''),
+        'artist_ko': song.artist_ko,
+        'artist_en': getattr(song, 'artist_en', ''),
+        'youtube_url': getattr(song, 'youtube_url', ''),
+        'melon_song_id': getattr(song, 'melon_song_id', ''),
+        # 필요에 따라 추가 필드 작성
+    }
 
 class CrawlingManager:
     """크롤링 전체 프로세스를 조율하는 매니저 클래스"""
@@ -62,10 +74,12 @@ class CrawlingManager:
             
             for platform_name, strategy in self.platform_strategies.items():
                 platform_songs = SongService.get_songs_by_platform(active_songs, platform_name)
+                # SongInfo 객체 리스트를 dict 리스트로 변환
+                platform_songs_dict = [songinfo_to_dict(song) for song in platform_songs]
                 
-                if platform_songs:
-                    logger.info(f"🎯 {platform_name} 크롤링 시작: {len(platform_songs)}개 곡")
-                    results = strategy.crawl_platform(platform_songs, self.log_writer)
+                if platform_songs_dict:
+                    logger.info(f"🎯 {platform_name} 크롤링 시작: {len(platform_songs_dict)}개 곡")
+                    results = strategy.crawl_platform(platform_songs_dict, self.log_writer)
                     crawling_results[platform_name] = results
                 else:
                     logger.info(f"⚠️ {platform_name} 크롤링 대상 곡이 없습니다.")

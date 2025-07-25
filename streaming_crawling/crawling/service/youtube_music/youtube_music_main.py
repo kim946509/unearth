@@ -3,7 +3,7 @@ YouTube Music 크롤링 메인 실행 파일
 """
 import logging
 from crawling.utils.driver import setup_driver 
-from .youtube_music_logic import YouTubeMusicCrawler
+from .youtube_music_crawler import YouTubeMusicCrawler
 
 logger = logging.getLogger(__name__)
 

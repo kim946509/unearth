@@ -4,7 +4,7 @@ Melon 크롤링 메인 실행 파일 (API 기반)
 import logging
 import time
 import random
-from .melon_logic import MelonCrawler
+from .melon_crawler import MelonCrawler
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ def run_melon_crawling(song_list):
             logger.debug(f"🔍 API 호출 중: melon_song_id={melon_song_id} (song_id={song_id})")
             
             # 크롤링 실행
-            result = crawler.crawl_song(melon_song_id, song_id)
+            result = crawler.crawl_song(song_info)
             
             if result:
                 crawled_data.append(result)
@@ -45,7 +45,7 @@ def run_melon_crawling(song_list):
                 logger.warning(f"❌ 크롤링 실패: melon_song_id={melon_song_id}")
             
             # API 호출 간격 조절 (서버 부하 방지)
-            time.sleep(random.uniform(0.8,1.2))
+            time.sleep(random.uniform(0.8, 1.2))
         
         logger.info(f"🍈 Melon 크롤링 완료 - 성공: {len(crawled_data)}곡")
         
@@ -57,8 +57,6 @@ def run_melon_crawling(song_list):
 
 if __name__ == "__main__":
     # 테스트용 실행
-    import random
-    
     test_songs = [
         {'melon_song_id': '39156202', 'song_id': 'test_1'},  # FAMOUS - ALLDAY PROJECT
         {'melon_song_id': '39156203', 'song_id': 'test_2'},  # 다른 곡
