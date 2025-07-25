@@ -15,6 +15,7 @@ from crawling.repository.song_service import SongService
 from crawling.managers.platform_crawlers import create_crawler
 from crawling.utils.batch_crawling_logger import BatchCrawlingLogger
 from crawling.repository.failure_service import FailureService
+from crawling.repository.db_writer import save_all_platforms_for_songs
 
 logger = logging.getLogger(__name__)
 
