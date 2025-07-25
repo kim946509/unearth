@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',  # 모델 메타데이터용
     'django.contrib.sessions',      # 세션 (크롤링 시 쿠키 관리용)
     # 앱 추가
-    'crawling_view',                # 크롤링 시스템
+    'crawling',                     # 크롤링 시스템
 ]
 
 MIDDLEWARE = [

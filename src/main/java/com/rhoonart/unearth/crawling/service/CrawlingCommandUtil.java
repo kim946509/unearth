@@ -1,6 +1,7 @@
 package com.rhoonart.unearth.crawling.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CrawlingCommandUtil {
@@ -22,9 +23,7 @@ public class CrawlingCommandUtil {
         command.add("cd streaming_crawling && env\\Scripts\\activate && python " + scriptPath);
 
         // 추가 인자들 추가
-        for (String arg : args) {
-            command.add(arg);
-        }
+        command.addAll(Arrays.asList(args));
 
         return command;
     }
@@ -38,9 +37,7 @@ public class CrawlingCommandUtil {
         command.add(scriptPath);
 
         // 추가 인자들 추가
-        for (String arg : args) {
-            command.add(arg);
-        }
+        command.addAll(Arrays.asList(args));
 
         return command;
     }

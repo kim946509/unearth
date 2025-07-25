@@ -33,11 +33,6 @@ class PlatformCrawlingStrategy(ABC):
         """플랫폼별 크롤링을 실행합니다."""
         pass
     
-    @abstractmethod
-    def save_to_csv(self, crawling_results: Any) -> bool:
-        """크롤링 결과를 CSV로 저장합니다."""
-        pass
-    
     def _log_failures(self, songs: List, successful_song_ids: set, log_writer: BatchCrawlingLogger):
         """크롤링 실패한 곡들을 로그에 기록합니다."""
         for song in songs:
@@ -65,9 +60,6 @@ class GenieCrawlingStrategy(PlatformCrawlingStrategy):
         self._log_failures(songs, successful_song_ids, log_writer)
         
         return results
-    
-    def save_to_csv(self, crawling_results: List[Dict]) -> bool:
-        return save_genie_csv(crawling_results)
 
 
 class YouTubeMusicCrawlingStrategy(PlatformCrawlingStrategy):
@@ -89,9 +81,6 @@ class YouTubeMusicCrawlingStrategy(PlatformCrawlingStrategy):
         self._log_failures(songs, successful_song_ids, log_writer)
         
         return results
-    
-    def save_to_csv(self, crawling_results: List[Dict]) -> bool:
-        return save_youtube_music_csv(crawling_results)
 
 
 class YouTubeCrawlingStrategy(PlatformCrawlingStrategy):
@@ -113,9 +102,6 @@ class YouTubeCrawlingStrategy(PlatformCrawlingStrategy):
         self._log_failures(songs, successful_song_ids, log_writer)
         
         return results
-    
-    def save_to_csv(self, crawling_results: Dict) -> bool:
-        return save_youtube_csv(crawling_results)
 
 
 class MelonCrawlingStrategy(PlatformCrawlingStrategy):
@@ -137,9 +123,6 @@ class MelonCrawlingStrategy(PlatformCrawlingStrategy):
         self._log_failures(songs, successful_song_ids, log_writer)
         
         return results
-    
-    def save_to_csv(self, crawling_results: List[Dict]) -> bool:
-        return save_melon_csv(crawling_results)
 
 
 class CrawlingDataProcessor:
@@ -164,47 +147,6 @@ class CrawlingDataProcessor:
         
         return db_results
     
-    def save_to_csv(self, crawling_results: Dict[str, Any], platform_songs: Dict[str, List]) -> Dict[str, bool]:
-        """크롤링 결과를 CSV 파일로 저장합니다."""
-        csv_results = {}
-        
-        # 각 플랫폼별 CSV 저장
-        for platform, results in crawling_results.items():
-            if platform == 'genie':
-                csv_results['genie'] = self._save_genie_csv(results, platform_songs.get('genie', []))
-            elif platform == 'youtube_music':
-                csv_results['youtube_music'] = self._save_youtube_music_csv(results, platform_songs.get('youtube_music', []))
-            elif platform == 'youtube':
-                csv_results['youtube'] = self._save_youtube_csv(results, platform_songs.get('youtube', []))
-            elif platform == 'melon':
-                csv_results['melon'] = self._save_melon_csv(results, platform_songs.get('melon', []))
-        
-        return csv_results
-    
-    def _save_genie_csv(self, results: List[Dict], songs: List) -> bool:
-        success = save_genie_csv(results)
-        if not success:
-            self._log_csv_failures(songs, 'genie')
-        return success
-    
-    def _save_youtube_music_csv(self, results: List[Dict], songs: List) -> bool:
-        success = save_youtube_music_csv(results)
-        if not success:
-            self._log_csv_failures(songs, 'youtube_music')
-        return success
-    
-    def _save_youtube_csv(self, results: Dict, songs: List) -> bool:
-        success = save_youtube_csv(results)
-        if not success:
-            self._log_csv_failures(songs, 'youtube')
-        return success
-    
-    def _save_melon_csv(self, results: List[Dict], songs: List) -> bool:
-        success = save_melon_csv(results)
-        if not success:
-            self._log_csv_failures(songs, 'melon')
-        return success
-    
     def _log_db_failures(self, song_ids: List[int]):
         """DB 저장 실패를 로그에 기록합니다."""
         for song_id in song_ids:
@@ -215,11 +157,12 @@ class CrawlingDataProcessor:
                 song_name = f"{song.artist_ko} - {song.title_ko}"
                 self.log_writer.add_db_failure(song_name, 'all_platforms')
     
-    def _log_csv_failures(self, songs: List, platform: str):
-        """CSV 저장 실패를 로그에 기록합니다."""
+    def _log_failures(self, songs: List, successful_song_ids: set, log_writer: BatchCrawlingLogger):
+        """크롤링 실패한 곡들을 로그에 기록합니다."""
         for song in songs:
-            song_name = f"{song.artist_ko} - {song.title_ko}"
-            self.log_writer.add_csv_failure(song_name, platform)
+            if song.id not in successful_song_ids:
+                song_name = f"{song.artist_ko} - {song.title_ko}"
+                log_writer.add_crawling_failure(song_name, 'all_platforms')
 
 
 class CrawlingManager:
@@ -272,9 +215,6 @@ class CrawlingManager:
             all_song_ids = [song.id for song in active_songs]
             db_results = self.data_processor.save_to_database(all_song_ids, crawling_results)
             
-            # 4단계: CSV 저장
-            csv_results = self.data_processor.save_to_csv(crawling_results, platform_songs)
-            
             # 실패 처리
             self._handle_failures(active_songs, target_date)
             
@@ -282,7 +222,7 @@ class CrawlingManager:
             self.log_writer.end_crawling()
             
             # 결과 요약
-            return self._create_summary(target_date, active_songs, crawling_results, db_results, csv_results)
+            return self._create_summary(target_date, active_songs, crawling_results, db_results)
             
         except Exception as e:
             logger.error(f"❌ 크롤링 프로세스 실패: {e}", exc_info=True)
@@ -322,9 +262,6 @@ class CrawlingManager:
             all_song_ids = [song.id for song in platform_songs]
             db_results = self._save_single_platform_to_db(platform, all_song_ids, crawling_results)
             
-            # 4단계: CSV 저장
-            csv_results = strategy.save_to_csv(crawling_results) if crawling_results else False
-            
             # 실패 처리
             self._handle_failures(platform_songs, target_date)
             
@@ -332,7 +269,7 @@ class CrawlingManager:
             self.log_writer.end_crawling()
             
             # 결과 요약
-            return self._create_single_platform_summary(platform, target_date, platform_songs, crawling_results, db_results, csv_results)
+            return self._create_single_platform_summary(platform, target_date, platform_songs, crawling_results, db_results)
             
         except Exception as e:
             logger.error(f"❌ {platform} 크롤링 실패: {e}", exc_info=True)
@@ -356,7 +293,7 @@ class CrawlingManager:
         for song in songs:
             FailureService.check_and_handle_failures(song.id, target_date)
     
-    def _create_summary(self, target_date: Optional[date], active_songs: List, crawling_results: Dict, db_results: Dict, csv_results: Dict) -> Dict[str, Any]:
+    def _create_summary(self, target_date: Optional[date], active_songs: List, crawling_results: Dict, db_results: Dict) -> Dict[str, Any]:
         """전체 크롤링 결과 요약을 생성합니다."""
         return {
             'status': 'success',
@@ -364,11 +301,10 @@ class CrawlingManager:
             'total_songs': len(active_songs),
             'crawling_results': crawling_results,
             'db_results': db_results,
-            'csv_results': csv_results,
             'log_summary': self.log_writer.get_summary_dict()
         }
     
-    def _create_single_platform_summary(self, platform: str, target_date: Optional[date], platform_songs: List, crawling_results: Any, db_results: Dict, csv_results: bool) -> Dict[str, Any]:
+    def _create_single_platform_summary(self, platform: str, target_date: Optional[date], platform_songs: List, crawling_results: Any, db_results: Dict) -> Dict[str, Any]:
         """단일 플랫폼 크롤링 결과 요약을 생성합니다."""
         # DB 결과에서 해당 플랫폼 결과만 추출
         platform_db_result = {}
@@ -385,7 +321,6 @@ class CrawlingManager:
             'total_songs': len(platform_songs),
             'crawling_results': crawling_results,
             'db_results': platform_db_result,
-            'csv_results': csv_results,
             'log_summary': self.log_writer.get_summary_dict()
         }
 
