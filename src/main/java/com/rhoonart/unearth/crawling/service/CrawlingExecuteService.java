@@ -39,8 +39,7 @@ public class CrawlingExecuteService {
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
                 command = CrawlingCommandUtil.createWindowsCommand(
-                        SINGLE_SONG_CRAWLING_PATH, "--song_id",
-                        songId);
+                        SINGLE_SONG_CRAWLING_PATH, "--song_id", songId);
             } else {
                 command = CrawlingCommandUtil.createLinuxCommand(SINGLE_SONG_CRAWLING_PATH,
                         "--song_id", songId);
