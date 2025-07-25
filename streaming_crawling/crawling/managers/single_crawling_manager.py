@@ -3,7 +3,6 @@
 """
 import logging
 from crawling.utils.constants import Platforms
-from crawling.managers.crawling_manager import create_crawler
 from crawling.repository.db_writer import (
     save_all_platforms_for_songs
 )
@@ -12,6 +11,13 @@ from crawling.repository.failure_service import FailureService
 from crawling.service.melon.melon_song_id_logic import MelonSongIdFinder
 from crawling.repository.melon_song_id_db_writer import save_melon_song_id_to_db
 from crawling.utils.driver import setup_driver
+from crawling.utils.batch_crawling_logger import BatchCrawlingLogger
+
+# 플랫폼 전략들 import
+from crawling.service.genie import GenieCrawlingStrategy
+from crawling.service.youtube import YouTubeCrawlingStrategy
+from crawling.service.youtube_music import YouTubeMusicCrawlingStrategy
+from crawling.service.melon import MelonCrawlingStrategy
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +26,7 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     단일 곡 크롤링 및 저장 (여러 곡과 동일한 로직, 곡 리스트만 1개)
     Args:
         song_dict (dict): {'song_id', 'title_ko', 'artist_ko', 'title_en', 'artist_en'}
-        save_csv (bool): CSV 저장 여부
+        save_csv (bool): CSV 저장 여부 (사용하지 않음, 호환성을 위해 유지)
         save_db (bool): DB 저장 여부
         platform (str or None): 특정 플랫폼만 실행 (None이면 전체)
     Returns:
@@ -39,6 +45,9 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     youtube_results = {}
     melon_results = []
 
+    # 로그 라이터 생성 (전략에서 사용)
+    log_writer = BatchCrawlingLogger()
+
     for plat in platforms_to_run:
         try:
             logger.info(f"🔍 {plat.upper()} 크롤링 시작")
@@ -53,8 +62,8 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                     'artist_en': song_dict['artist_en']
                 }]
                 
-                genie_crawler = create_crawler('genie')
-                genie_results = genie_crawler.crawl_songs(genie_data)
+                genie_strategy = GenieCrawlingStrategy()
+                genie_results = genie_strategy.crawl_platform(genie_data, log_writer)
                 
                 # 성공 여부 확인 및 결과 추가
                 if genie_results and len(genie_results) > 0:
@@ -73,8 +82,8 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                     'artist_en': song_dict['artist_en']
                 }]
                 
-                ytmusic_crawler = create_crawler('youtube_music')
-                ytmusic_results = ytmusic_crawler.crawl_songs(ytmusic_data)
+                ytmusic_strategy = YouTubeMusicCrawlingStrategy()
+                ytmusic_results = ytmusic_strategy.crawl_platform(ytmusic_data, log_writer)
                 
                 # 성공 여부 확인 및 결과 추가
                 if ytmusic_results and len(ytmusic_results) > 0:
@@ -89,10 +98,15 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                 youtube_url = song_dict.get('youtube_url')
                 
                 if youtube_url:
-                    youtube_data = [(youtube_url, song_dict['artist_ko'], song_dict['song_id'])]
+                    youtube_data = [{
+                        'song_id': song_dict['song_id'],
+                        'youtube_url': youtube_url,
+                        'artist_ko': song_dict['artist_ko'],
+                        'title_ko': song_dict['title_ko']
+                    }]
                     
-                    youtube_crawler = create_crawler('youtube')
-                    youtube_results = youtube_crawler.crawl_songs(youtube_data)
+                    youtube_strategy = YouTubeCrawlingStrategy()
+                    youtube_results = youtube_strategy.crawl_platform(youtube_data, log_writer)
                     
                     # 성공 여부 확인 및 결과 추가 (딕셔너리 구조에 맞게 판정)
                     if youtube_results and any(
@@ -142,8 +156,8 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
                         'melon_song_id': melon_song_id
                     }]
                     
-                    melon_crawler = create_crawler('melon')
-                    melon_results = melon_crawler.crawl_songs(melon_data)
+                    melon_strategy = MelonCrawlingStrategy()
+                    melon_results = melon_strategy.crawl_platform(melon_data, log_writer)
                     
                     # 성공 여부 확인 및 결과 추가
                     if melon_results and len(melon_results) > 0:

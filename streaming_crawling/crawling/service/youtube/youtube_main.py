@@ -3,7 +3,7 @@ YouTube 크롤링 메인 실행 파일
 """
 import logging
 from crawling.utils.driver import setup_driver
-from .youtube_logic import YouTubeCrawler
+from .youtube_crawler import YouTubeCrawler
 
 logger = logging.getLogger(__name__)
 
