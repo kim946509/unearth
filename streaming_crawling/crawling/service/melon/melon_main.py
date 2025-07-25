@@ -4,7 +4,6 @@ Melon 크롤링 메인 실행 파일 (API 기반)
 import logging
 import time
 from .melon_logic import MelonCrawler
-import random
 
 logger = logging.getLogger(__name__)
 

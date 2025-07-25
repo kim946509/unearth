@@ -10,11 +10,9 @@ import logging
 from datetime import date
 from typing import Dict, List, Any, Optional
 from abc import ABC, abstractmethod
-from crawling.repository.song_service import SongService
-from crawling.repository.db_writer import save_genie_to_db, save_youtube_to_db, save_youtube_music_to_db, save_melon_to_db, save_all_platforms_for_songs
 
-from crawling.entrypoint.platform_crawlers import create_crawler
-from crawling.utils.constants import Platforms
+from crawling.repository.song_service import SongService
+from crawling.managers.platform_crawlers import create_crawler
 from crawling.utils.batch_crawling_logger import BatchCrawlingLogger
 from crawling.repository.failure_service import FailureService
 

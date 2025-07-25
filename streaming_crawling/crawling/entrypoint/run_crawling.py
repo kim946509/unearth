@@ -52,7 +52,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from crawling.managers.crawling_manager import run_crawling
-from crawling.utils.constants import Platforms
 
 
 class DjangoInitializer:

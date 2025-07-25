@@ -5,10 +5,10 @@ import logging
 import time
 from typing import List, Dict, Any
 
-from crawling.view.genie.genie_main import run_genie_crawling
-from crawling.view.youtube.youtube_main import run_youtube_crawling
-from crawling.view.youtube_music.youtube_music_main import run_youtube_music_crawling
-from crawling.view.melon.melon_main import run_melon_crawling
+from crawling.service.genie.genie_main import run_genie_crawling
+from crawling.service.youtube.youtube_main import run_youtube_crawling
+from crawling.service.youtube_music.youtube_music_main import run_youtube_music_crawling
+from crawling.service.melon.melon_main import run_melon_crawling
 from crawling.models import SongInfo
 from crawling.utils.constants import Platforms
 

@@ -2,7 +2,6 @@
 YouTube 크롤링 및 파싱 로직
 """
 import time
-import random
 import logging
 import re
 from bs4 import BeautifulSoup

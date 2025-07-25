@@ -62,7 +62,7 @@ python manage.py runserver
 
 ```
 streaming_crawling/
-├── 📁 crawling_view/                    # 메인 크롤링 앱
+├── 📁 crawling/                    # 메인 크롤링 앱
 │   ├── 📁 models/                       # 데이터 모델
 │   │   ├── base.py                      # 기본 모델 클래스
 │   │   ├── song_info.py                 # 노래 정보 모델

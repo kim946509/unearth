@@ -9,8 +9,8 @@ from crawling.repository.db_writer import (
 )
 from crawling.utils.single_crawling_logger import create_summary_logger
 from crawling.repository.failure_service import FailureService
-from crawling.view.melon.melon_song_id_logic import MelonSongIdFinder
-from crawling.repository.melon_song_id_db_writer import save_melon_song_id_to_db, get_song_info_for_melon_search
+from crawling.service.melon.melon_song_id_logic import MelonSongIdFinder
+from crawling.repository.melon_song_id_db_writer import save_melon_song_id_to_db
 from crawling.utils.driver import setup_driver
 
 logger = logging.getLogger(__name__)

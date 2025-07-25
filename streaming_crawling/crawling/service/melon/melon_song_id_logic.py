@@ -4,14 +4,13 @@ Melon 곡 ID 자동 검색 및 추출 로직
 import time
 import random
 import logging
-import re
 from urllib.parse import urlparse, parse_qs
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from crawling.utils.constants import MelonSelectors, MelonSettings, CommonSettings
-from crawling.utils.utils import make_soup, normalize_text
+from crawling.utils.constants import MelonSelectors, MelonSettings
+from crawling.utils.utils import normalize_text
 from crawling.utils.matching import compare_song_info_multilang
 
 logger = logging.getLogger(__name__)

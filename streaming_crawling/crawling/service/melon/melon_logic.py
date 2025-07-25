@@ -2,8 +2,6 @@
 Melon 크롤링 및 파싱 로직 (API 기반)
 """
 import os
-import time
-import random
 import logging
 import requests
 import json
