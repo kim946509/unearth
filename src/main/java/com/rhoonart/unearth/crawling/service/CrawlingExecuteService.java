@@ -34,7 +34,8 @@ public class CrawlingExecuteService {
             // 운영체제별 명령어 생성
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
-                command = CrawlingCommandUtil.createWindowsCommand("crawling_view/controller/run_single_song_crawling.py", "--song_id",
+                command = CrawlingCommandUtil.createWindowsCommand(
+                        "crawling_view/controller/run_single_song_crawling.py", "--song_id",
                         songId);
                 log.info("Windows 환경에서 크롤링 실행: {}", command);
             } else {
@@ -144,6 +145,53 @@ public class CrawlingExecuteService {
 
             // 프로세스 실행
             Process process = processBuilder.start();
+
+            // 출력 스트림 읽기 (별도 스레드에서)
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        log.info("전체 크롤링 출력: {}", line);
+                    }
+                } catch (IOException e) {
+                    log.error("전체 크롤링 출력 읽기 오류", e);
+                }
+            }).start();
+
+            // 에러 스트림 읽기 (별도 스레드에서)
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(process.getErrorStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        // Django 로그는 대부분 정보성 메시지이므로 INFO 레벨로 로깅
+                        if (line.contains("ERROR") || line.contains("Exception") || line.contains("Traceback")) {
+                            log.error("전체 크롤링 에러: {}", line);
+                        } else {
+                            log.info("전체 크롤링 로그: {}", line);
+                        }
+                    }
+                } catch (IOException e) {
+                    log.error("전체 크롤링 에러 읽기 오류", e);
+                }
+            }).start();
+
+            // 비동기 실행 - 프로세스 시작 후 즉시 반환
+            log.info("전체 크롤링 실행 시작됨");
+
+            // 프로세스 완료를 별도 스레드에서 모니터링 (선택사항)
+            new Thread(() -> {
+                try {
+                    int exitCode = process.waitFor();
+                    if (exitCode == 0) {
+                        log.info("전체 크롤링 실행 완료");
+                    }
+                } catch (InterruptedException e) {
+                    log.error("전체 크롤링 프로세스 모니터링 중 인터럽트", e);
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
 
         } catch (IOException e) {
             log.error("전체 크롤링 프로세스 실행 오류", e);

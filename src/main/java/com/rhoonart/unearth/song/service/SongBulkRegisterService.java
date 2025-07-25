@@ -68,33 +68,51 @@ public class SongBulkRegisterService {
     }
 
     /**
-     * CSV 파일을 읽어서 데이터 리스트로 변환
+     * CSV 파일을 읽어서 데이터 리스트로 변환 (인코딩 fallback 및 헤더 한글 체크)
      */
     private List<CsvSongDataDto> readCsvFile(MultipartFile file) throws IOException {
         List<CsvSongDataDto> dataList = new ArrayList<>();
-
-        // 1. 파일을 byte[]로 먼저 읽음
         byte[] fileBytes = file.getBytes();
 
-        // 2. 인코딩 감지
+        // 1. 인코딩 후보 리스트 (감지값 + 대표 한글 인코딩)
         String detectedEncoding = EncodingDetector.detectEncoding(fileBytes);
         log.info("📑 감지된 인코딩: {}", detectedEncoding);
-        // 3. 인코딩에 맞춰 읽기
+
+        List<String> encodingsToTry = Arrays.asList(detectedEncoding, "CP949", "MS949", "EUC-KR", "UTF-8");
+        String validEncoding = null;
+        String headerLine = null;
+
+        for (String encoding : encodingsToTry) {
+            try (BufferedReader testReader = new BufferedReader(
+                    new InputStreamReader(new ByteArrayInputStream(fileBytes), encoding))) {
+                headerLine = testReader.readLine();
+                if (headerLine != null && headerLine.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*")) {
+                    log.info("✅ 한글 정상 인식(헤더): {}", encoding);
+                    validEncoding = encoding;
+                    break;
+                }
+            } catch (Exception e) {
+                // 무시하고 다음 인코딩 시도
+            }
+        }
+
+        if (validEncoding == null) {
+            throw new BaseException(ResponseCode.INVALID_INPUT, "CSV 인코딩을 감지할 수 없습니다.");
+        }
+
+        // 2. 정상 인코딩으로 전체 파일 읽기
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new ByteArrayInputStream(fileBytes), detectedEncoding))) {
+                new InputStreamReader(new ByteArrayInputStream(fileBytes), validEncoding))) {
 
-            String line;
             boolean isFirstLine = true;
-
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (isFirstLine) {
                     isFirstLine = false;
-                    continue;
+                    continue; // 헤더는 건너뜀
                 }
-
                 if (line.trim().isEmpty())
                     continue;
-
                 CsvSongDataDto csvData = parseCsvLine(line);
                 if (csvData != null) {
                     dataList.add(csvData);
