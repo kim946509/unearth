@@ -34,7 +34,8 @@ public class CrawlingExecuteService {
             // 운영체제별 명령어 생성
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
-                command = CrawlingCommandUtil.createWindowsCommand("crawling_view/controller/run_single_song_crawling.py", "--song_id",
+                command = CrawlingCommandUtil.createWindowsCommand(
+                        "crawling_view/controller/run_single_song_crawling.py", "--song_id",
                         songId);
                 log.info("Windows 환경에서 크롤링 실행: {}", command);
             } else {
@@ -185,8 +186,6 @@ public class CrawlingExecuteService {
                     int exitCode = process.waitFor();
                     if (exitCode == 0) {
                         log.info("전체 크롤링 실행 완료");
-                    } else {
-                        log.error("전체 크롤링 실행 실패: exitCode={}", exitCode);
                     }
                 } catch (InterruptedException e) {
                     log.error("전체 크롤링 프로세스 모니터링 중 인터럽트", e);
