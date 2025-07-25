@@ -10,7 +10,6 @@ import logging
 from datetime import date
 from typing import Dict, List, Any, Optional
 from abc import ABC, abstractmethod
-
 from crawling.repository.song_service import SongService
 from crawling.repository.db_writer import save_genie_to_db, save_youtube_to_db, save_youtube_music_to_db, save_melon_to_db, save_all_platforms_for_songs
 
