@@ -40,3 +40,4 @@ public class CrawlingFailureController {
         return "crawling/failures";
     }
 }
+

@@ -256,47 +256,6 @@ class YouTubeMusicSelectors:
     ARTIST_COLUMN = '.secondary-flex-columns yt-formatted-string'
     VIEW_COUNT_FLEX = 'yt-formatted-string.flex-column'
 
-# YouTube 관련 셀렉터
-class YouTubeSelectors:
-    TITLE_SELECTORS = [
-        'h1.style-scope.ytd-watch-metadata',
-        'h1.style-scope.ytd-watch-metadata > yt-formatted-string',
-        'yt-formatted-string.style-scope.ytd-watch-metadata',
-        'h1.title',
-        'h1.ytd-watch-metadata',
-        'h1#title'
-    ]
-    
-    VIEW_COUNT_SELECTORS = [
-        'yt-formatted-string#info span:first-child',  # 최신 구조: info id의 첫 번째 span
-        'yt-formatted-string#info > span:first-child',  # info id의 직계 자식 첫 번째 span
-        'yt-formatted-string#info > span', 
-        'span.view-count',
-        'span#view-count',
-        'div#count span.view-count',
-        'div#info span.view-count',
-        'span.ytd-video-view-count-renderer',
-        'yt-view-count-renderer span.view-count'
-    ]
-    
-    UPLOAD_DATE_SELECTORS = [
-        'div#info-strings yt-formatted-string',
-        'div#date yt-formatted-string',
-        'span.date',
-        'div#info-strings',
-        'yt-formatted-string#info-strings'
-    ]
-    
-    # 조회수 expand 버튼 셀렉터 (정확한 조회수 표시용)
-    EXPAND_BUTTON_SELECTORS = [
-        'tp-yt-paper-button#expand.button.style-scope.ytd-text-inline-expander',
-        '#expand.button.style-scope.ytd-text-inline-expander',
-        'tp-yt-paper-button#expand',
-        '#expand',
-        'button#expand',
-        'paper-button#expand'
-    ]
-
 # 플랫폼 관련 상수
 class Platforms:
     """지원하는 크롤링 플랫폼"""
