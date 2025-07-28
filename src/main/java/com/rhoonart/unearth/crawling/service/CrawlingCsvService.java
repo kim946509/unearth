@@ -65,7 +65,7 @@ public class CrawlingCsvService {
 
         // 한글 파일명 인코딩 (RFC 5987 형식)
         String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20");
+                .replace("+", "%20");
 
         return new CrawlingCsvDownloadDto(csvData, encodedFilename);
     }
@@ -95,7 +95,7 @@ public class CrawlingCsvService {
 
         // CSV 헤더 (단일 컬럼 방식) - UTF-8 인코딩 명시
         StringBuilder csvBuilder = new StringBuilder();
-        csvBuilder.append("날짜,아티스트명,노래제목,플랫폼,조회수,조회수증가,청취자수,청취자수증가,영상정보(채널명/제목/url/순서)\n");
+        csvBuilder.append("날짜,아티스트명,노래제목,플랫폼,조회수,조회수증가,청취자수,청취자수증가,영상정보(채널명/제목/url/순서/조회수)\n");
 
         // 날짜 정렬 (최신 날짜부터)
         List<LocalDate> sortedDates = dataByDate.keySet().stream()
@@ -108,21 +108,18 @@ public class CrawlingCsvService {
         for (LocalDate currentDate : sortedDates) {
             List<CrawlingData> currentDataList = dataByDate.get(currentDate);
 
-            // 영상 정보 조회 (시작일인 경우에만)
+            // 영상 정보 조회 (모든 날짜에 대해 조회)
             String videoInfo = "";
-            boolean isStartDate = crawlingPeriodService.isStartDate(songId, currentDate);
-            if (isStartDate) {
-                List<VideoInfoDto> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId,
-                        currentDate);
-                if (!videoInfos.isEmpty()) {
-                    videoInfo = videoInfos.stream()
-                            .map(v -> String.format("%s / %s / %s / %d",
-                                    v.getChannel(),
-                                    v.getYoutubeTitle(),
-                                    v.getYoutubeUrl(),
-                                    v.getSongOrder()))
-                            .collect(Collectors.joining(" | ")); // 여러 영상은 | 로 구분
-                }
+            List<VideoInfoDto> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
+            if (!videoInfos.isEmpty()) {
+                videoInfo = videoInfos.stream()
+                        .map(v -> String.format("%s / %s / %s / %d / %s",
+                                v.getChannel(),
+                                v.getYoutubeTitle(),
+                                v.getYoutubeUrl(),
+                                v.getSongOrder(),
+                                v.getViewCount() == -999 ? "Fail" : String.valueOf(v.getViewCount())))
+                        .collect(Collectors.joining(" | ")); // 여러 영상은 | 로 구분
             }
 
             // 플랫폼별로 정렬

@@ -17,10 +17,13 @@
            th:class="${activeMenu == 'crawlingFailures'} ? 'sidebar-menu active' : 'sidebar-menu'" 
            class="sidebar-menu">
             크롤링 실패 목록
-            <span th:if="${crawlingFailureCount > 0}" 
+            <span th:if="${crawlingFailureCount != '0'}" 
                   class="failure-count-badge" 
                   th:text="${crawlingFailureCount}"></span>
         </a>
+        <a th:href="@{/admin/password/change}" 
+           th:class="${activeMenu == 'adminPasswordChange'} ? 'sidebar-menu active' : 'sidebar-menu'" 
+           class="sidebar-menu">관리자 비밀번호 변경</a>
     </aside>
 </div>
 </body>

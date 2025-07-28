@@ -86,13 +86,9 @@ public class CrawlingDataService {
                 for (LocalDate currentDate : sortedDates) {
                         List<CrawlingData> currentDataList = dataByDate.get(currentDate);
 
-                        // 영상 정보 조회 (startDate인 날에만)
-                        List<VideoInfoDto> videoInfoList = new ArrayList<>();
-                        boolean isStartDate = crawlingPeriodService.isStartDate(songId, currentDate);
-
-                        if (isStartDate) {
-                                videoInfoList = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
-                        }
+                        // 영상 정보 조회 (모든 날짜에 대해 조회)
+                        List<VideoInfoDto> videoInfoList = crawlingPeriodService.getVideoInfosForDate(songId,
+                                        currentDate);
 
                         // 해당 날짜의 플랫폼별 데이터 생성
                         List<CrawlingDataDto> currentDateDataList = new ArrayList<>();

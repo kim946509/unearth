@@ -36,6 +36,21 @@ public interface CrawlingPeriodRepository extends JpaRepository<CrawlingPeriod, 
             @Param("startDate") LocalDate startDate);
 
     /**
+     * 특정 음원의 특정 날짜가 포함된 모든 크롤링 기간을 조회합니다.
+     */
+    @Query("""
+                SELECT cp FROM CrawlingPeriod cp
+                WHERE cp.song.id = :songId
+                AND cp.startDate <= :date
+                AND cp.endDate >= :date
+                AND cp.isActive = true
+                ORDER BY cp.songOrder ASC
+            """)
+    List<CrawlingPeriod> findBySongIdAndDateRange(
+            @Param("songId") String songId,
+            @Param("date") LocalDate date);
+
+    /**
      * 특정 음원의 모든 크롤링 기간을 조회합니다. (디버깅용)
      */
     @Query("""

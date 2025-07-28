@@ -273,7 +273,7 @@
 
 /* 날짜별 구분선 */
 .date-separator {
-    border-top: 2px solid #e5e7eb !important;
+    border-top: 2px solid #3f3f3f !important;
 }
 
 .date-cell {

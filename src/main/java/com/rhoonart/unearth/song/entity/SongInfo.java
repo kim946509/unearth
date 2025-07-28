@@ -41,16 +41,16 @@ public class SongInfo extends BaseEntity {
     @Column(name = "title_en", length = 255, nullable = false)
     private String titleEn;
 
-    @Column(name = "youtube_url", length = 500)
+    @Column(name = "youtube_url", length = 500, nullable = false)
     private String youtubeUrl;
 
     @Column(name = "melon_song_id", length = 100, unique = true, nullable = true)
     private String melonSongId;
 
-    @Column(name = "album_ko", length = 255)
+    @Column(name = "album_ko", length = 255, nullable = false)
     private String albumKo;
 
-    @Column(name = "album_en", length = 255)
+    @Column(name = "album_en", length = 255, nullable = false)
     private String albumEn;
 
     @ManyToOne(optional = false)

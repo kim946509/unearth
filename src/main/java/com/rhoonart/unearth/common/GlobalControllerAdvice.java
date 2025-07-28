@@ -15,14 +15,15 @@ public class GlobalControllerAdvice {
 
     /**
      * 사이드바 사용할 수 있는 크롤링 실패 개수를 제공합니다.
+     * 10개를 초과하면 "10+" 형태로 표시합니다.
      */
     @ModelAttribute("crawlingFailureCount")
-    public long addCrawlingFailureCount() {
+    public String addCrawlingFailureCount() {
         try {
-            return crawlingFailureService.getCrawlingFailureCount();
+            return crawlingFailureService.getLimitedCrawlingFailureCount();
         } catch (Exception e) {
             log.warn("크롤링 실패 개수 조회 중 오류 발생", e);
-            return 0L; // 오류 시 0으로 표시
+            return "0"; // 오류 시 0으로 표시
         }
     }
 }

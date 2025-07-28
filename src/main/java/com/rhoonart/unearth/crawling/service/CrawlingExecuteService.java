@@ -21,6 +21,10 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class CrawlingExecuteService {
 
+    private static final String DJANGO_PROJECT_PATH = "streaming_crawling";
+    private static final String SINGLE_SONG_CRAWLING_PATH = "crawling/entrypoint/run_single_song_crawling.py";
+    private static final String FULL_CRAWLING_PATH = "crawling/entrypoint/run_crawling.py";
+
     /**
      * 단일 곡 크롤링을 실행합니다.
      * 
@@ -29,19 +33,16 @@ public class CrawlingExecuteService {
     public void executeSingleSongCrawling(String songId) {
         try {
             // Django 프로젝트 경로 설정
-            Path djangoPath = Paths.get("streaming_crawling");
+            Path djangoPath = Paths.get(DJANGO_PROJECT_PATH);
 
             // 운영체제별 명령어 생성
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
                 command = CrawlingCommandUtil.createWindowsCommand(
-                        "crawling_view/controller/run_single_song_crawling.py", "--song_id",
-                        songId);
-                log.info("Windows 환경에서 크롤링 실행: {}", command);
+                        SINGLE_SONG_CRAWLING_PATH, "--song_id", songId);
             } else {
-                command = CrawlingCommandUtil.createLinuxCommand("crawling_view/controller/run_single_song_crawling.py",
+                command = CrawlingCommandUtil.createLinuxCommand(SINGLE_SONG_CRAWLING_PATH,
                         "--song_id", songId);
-                log.info("Linux/Ubuntu 환경에서 크롤링 실행: {}", command);
             }
 
             // ProcessBuilder 생성
@@ -58,10 +59,8 @@ public class CrawlingExecuteService {
             if (!CrawlingCommandUtil.isWindows()) {
                 Map<String, String> env = processBuilder.environment();
                 env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
-                env.put("PYTHONUNBUFFERED", "1"); // Python 출력 버퍼링 비활성화
+                env.put("PYTHONUNBUFFERED", "1");
             }
-
-            log.info("크롤링 실행 시작: songId={}", songId);
 
             // 프로세스 실행
             Process process = processBuilder.start();
@@ -112,16 +111,14 @@ public class CrawlingExecuteService {
     public void executeFullCrawling() {
         try {
             // Django 프로젝트 경로 설정
-            Path djangoPath = Paths.get("streaming_crawling");
+            Path djangoPath = Paths.get(DJANGO_PROJECT_PATH);
 
             // 운영체제별 명령어 생성
             List<String> command;
             if (CrawlingCommandUtil.isWindows()) {
-                command = CrawlingCommandUtil.createWindowsCommand("crawling_view/controller/run_crawling.py");
-                log.info("Windows 환경에서 전체 크롤링 실행: {}", command);
+                command = CrawlingCommandUtil.createWindowsCommand(FULL_CRAWLING_PATH);
             } else {
-                command = CrawlingCommandUtil.createLinuxCommand("crawling_view/controller/run_crawling.py");
-                log.info("Linux/Ubuntu 환경에서 전체 크롤링 실행: {}", command);
+                command = CrawlingCommandUtil.createLinuxCommand(FULL_CRAWLING_PATH);
             }
 
             // ProcessBuilder 생성
