@@ -20,5 +20,5 @@ public class VideoInfoDto {
     private String youtubeUrl;
     private int songOrder;
     private LocalDateTime uploadAt;
-    private int viewCount; // YouTube 조회수
+    private Integer viewCount; // YouTube 조회수 (null: 크롤링되지 않음, -999: 크롤링 실패)
 }

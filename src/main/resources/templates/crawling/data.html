@@ -150,8 +150,11 @@
                                             <div class="video-info-row">
                                                 <span class="video-label">조회수:</span>
                                                 <span class="video-value" 
+                                                      th:if="${videoInfo.viewCount != null}"
                                                       th:text="${videoInfo.viewCount == -999 ? 'Fail' : #numbers.formatInteger(videoInfo.viewCount, 0, 'COMMA')}"
                                                       th:class="${videoInfo.viewCount == -999 ? 'text-warning' : ''}"></span>
+                                                <span class="video-value text-muted" 
+                                                      th:if="${videoInfo.viewCount == null}">-</span>
                                             </div>
                                         </div>
                                     </div>

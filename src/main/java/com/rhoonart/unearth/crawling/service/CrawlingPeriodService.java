@@ -76,7 +76,7 @@ public class CrawlingPeriodService {
         return periods.stream()
                 .map(period -> {
                     // 해당 날짜의 조회수 조회
-                    int viewCount = -999; // 기본값
+                    Integer viewCount = null; // 기본값: 크롤링되지 않음
                     try {
                         YoutubeVideoViewCount viewCountData = youtubeVideoViewCountRepository
                                 .findByCrawlingPeriodIdAndDate(period.getId(), date)
