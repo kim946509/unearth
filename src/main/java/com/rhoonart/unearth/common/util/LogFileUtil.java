@@ -38,9 +38,8 @@ public class LogFileUtil {
             if (matcher.matches()) {
                 String dateStr = matcher.group(1);
                 LocalDate fileDate = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyyMMdd"));
-                if (fileDate.isBefore(today.minusDays(daysToKeep))) {
-                    if (file.delete())
-                        deleted++;
+                if (fileDate.isBefore(today.minusDays(daysToKeep))&&file.delete()) {
+                    deleted++;
                 }
             }
         }
