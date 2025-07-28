@@ -29,6 +29,109 @@ class YouTubeApiService:
         self.api_base_url = "https://www.googleapis.com/youtube/v3/videos"
         self.batch_size = 50  # YouTube API 최대 50개 ID까지 한 번에 조회 가능
     
+    def _get_video_statistics_batch(self, video_ids: List[str]) -> Dict[str, Dict]:
+        """
+        YouTube API를 사용하여 비디오 통계 정보를 배치로 가져오기
+        
+        Args:
+            video_ids (list): YouTube 비디오 ID 리스트
+            
+        Returns:
+            dict: {video_id: {'title': str, 'view_count': int, 'published_at': str}} 형태
+        """
+        results = {}
+        
+        # batch 단위로 나누어 처리
+        for i in range(0, len(video_ids), self.batch_size):
+            batch_video_ids = video_ids[i:i + self.batch_size]
+            
+            logger.info(f"🔄 Batch {i//self.batch_size + 1}: {len(batch_video_ids)}개 동영상 조회")
+            
+            # API 호출
+            batch_results = self._call_youtube_api_with_details(batch_video_ids)
+            results.update(batch_results)
+        
+        return results
+    
+    def _call_youtube_api_with_details(self, video_ids: List[str]) -> Dict[str, Dict]:
+        """
+        YouTube Data API 호출 (제목, 조회수, 업로드 날짜 포함)
+        
+        Args:
+            video_ids (list): 동영상 ID 리스트 (최대 50개)
+            
+        Returns:
+            dict: {video_id: {'title': str, 'view_count': int, 'published_at': str}} 형태
+        """
+        try:
+            # API 요청 파라미터 (제목, 통계, 날짜 정보 포함)
+            params = {
+                'part': 'snippet,statistics',
+                'id': ','.join(video_ids),
+                'key': self.api_key
+            }
+            
+            # API 호출
+            response = requests.get(self.api_base_url, params=params, timeout=30)
+            
+            if response.status_code != 200:
+                logger.error(f"❌ YouTube API 호출 실패: HTTP {response.status_code}")
+                return {video_id: {'title': '제목 없음', 'view_count': -999, 'published_at': None} for video_id in video_ids}
+            
+            # JSON 파싱
+            data = response.json()
+            
+            # 결과 추출
+            results = {}
+            found_video_ids = set()
+            
+            for item in data.get('items', []):
+                video_id = item.get('id')
+                snippet = item.get('snippet', {})
+                statistics = item.get('statistics', {})
+                
+                # 제목 추출
+                title = snippet.get('title', '제목 없음')
+                
+                # 조회수 추출
+                view_count_str = statistics.get('viewCount', '0')
+                try:
+                    view_count = int(view_count_str)
+                except ValueError:
+                    logger.warning(f"⚠️ 조회수 변환 실패: {video_id} - {view_count_str}")
+                    view_count = -999
+                
+                # 업로드 날짜 추출
+                published_at = snippet.get('publishedAt')
+                
+                results[video_id] = {
+                    'title': title,
+                    'view_count': view_count,
+                    'published_at': published_at
+                }
+                found_video_ids.add(video_id)
+                logger.debug(f"✅ {video_id}: {title} - {view_count:,} views")
+            
+            # 응답에 없는 동영상은 -999로 처리 (삭제된 동영상 등)
+            for video_id in video_ids:
+                if video_id not in found_video_ids:
+                    results[video_id] = {
+                        'title': '제목 없음',
+                        'view_count': -999,
+                        'published_at': None
+                    }
+                    logger.warning(f"⚠️ API 응답에 없는 동영상: {video_id}")
+            
+            logger.info(f"✅ API 호출 성공: {len(found_video_ids)}개 성공 / {len(video_ids)}개 중")
+            return results
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"❌ YouTube API 네트워크 오류: {e}")
+            return {video_id: {'title': '제목 없음', 'view_count': -999, 'published_at': None} for video_id in video_ids}
+        except Exception as e:
+            logger.error(f"❌ YouTube API 호출 중 오류: {e}")
+            return {video_id: {'title': '제목 없음', 'view_count': -999, 'published_at': None} for video_id in video_ids}
+    
     def update_youtube_viewcounts_for_period(self, start_date: date, end_date: date, target_date: date = None):
         """
         특정 기간의 CrawlingPeriod에서 YouTube 조회수를 수집하여 저장
@@ -129,7 +232,7 @@ class YouTubeApiService:
     
     def _call_youtube_api(self, video_ids: List[str]) -> Dict[str, int]:
         """
-        YouTube Data API 호출
+        YouTube Data API 호출 (조회수만)
         
         Args:
             video_ids (list): 동영상 ID 리스트 (최대 50개)
