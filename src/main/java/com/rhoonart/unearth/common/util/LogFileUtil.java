@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
 
 @Component
 public class LogFileUtil {
-    private static String logDirPath;
 
-    @Value("${log.crawling-dir:streaming_crawling/logs}")
-    public void setLogDirPath(String path) {
-        LogFileUtil.logDirPath = path;
+    private final String logDirPath;
+
+    public LogFileUtil(@Value("${log.crawling-dir:streaming_crawling/logs}") String logDirPath) {
+        this.logDirPath = logDirPath;
     }
 
     /**
@@ -24,7 +24,7 @@ public class LogFileUtil {
      * @param daysToKeep 최근 N일 이내 파일은 삭제하지 않음
      * @return 삭제된 파일 개수
      */
-    public static int deleteOldLogs(int daysToKeep) {
+    public int deleteOldLogs(int daysToKeep) {
         File logDir = new File(logDirPath);
         if (!logDir.exists() || !logDir.isDirectory())
             return 0;
@@ -45,9 +45,5 @@ public class LogFileUtil {
             }
         }
         return deleted;
-    }
-
-    public static String getLogDirPath() {
-        return logDirPath;
     }
 }
