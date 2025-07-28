@@ -23,9 +23,9 @@
 - [지원 플랫폼](#-지원-플랫폼)
 - [설치 및 실행](#️-설치-및-실행)
 - [데이터베이스 구조](#-데이터베이스-구조)
-- [API 문서](#-api-문서)
 - [개발 가이드](#-개발-가이드)
-- [문제 해결](#-문제-해결)
+- [로그 관리](#-로그-관리)
+- [최신 업데이트](#-최신-업데이트)
 
 ---
 
@@ -38,8 +38,11 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 - **다중 플랫폼 지원**: Genie, YouTube Music, YouTube, Melon 4개 플랫폼
 - **자동화된 크롤링**: 매일 오후 5시 자동 실행
 - **웹 기반 관리**: 직관적인 웹 인터페이스로 데이터 관리
-- **실시간 모니터링**: 크롤링 상태 및 결과 실시간 확인
-- **데이터 검증**: 곡명/아티스트명 매칭 검증 시스템
+- **실패 처리**: 크롤링 실패 시 복구 메커니즘
+- **성능 최적화**: 실패 개수 제한으로 UI 성능 향상
+- **API 기반 크롤링**: YouTube Data API 활용으로 안정성 향상
+- **관리자 기능**: 전용 비밀번호 변경 및 권한 관리
+- **로그 관리**: 자동 로그 정리 및 모니터링
 
 ### 🏢 비즈니스 가치
 
@@ -56,13 +59,13 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Web Browser   │    │  Spring Boot    │    │   Python        │
-│   (Frontend)    │◄──►│   (Backend)     │◄──►│   (Crawling)    │
+│   (Thymleaf)    │◄──►│   (Backend)     │◄──►│   (Crawling)    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                               │                        │
                               ▼                        ▼
                        ┌─────────────────┐    ┌─────────────────┐
-                       │     MySQL       │    │   Selenium      │
-                       │   Database      │    │   WebDriver     │
+                       │     MySQL       │    │   YouTube API   │
+                       │   Database      │    │   Selenium      │
                        └─────────────────┘    └─────────────────┘
 ```
 
@@ -80,7 +83,8 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 #### 크롤링 시스템 (Python/Django)
 
 - **Python 3.x** + **Django 4.2.21**
-- **Selenium** - 웹 브라우저 자동화
+- **YouTube Data API** - YouTube 데이터 수집
+- **Selenium** - 웹 브라우저 자동화 (Genie, Melon, YouTube Music)
 - **BeautifulSoup4** - HTML 파싱
 - **Pandas** - 데이터 처리
 - **mysqlclient** - MySQL 연결
@@ -100,6 +104,7 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 - **로그인/로그아웃**: 세션 기반 인증
 - **권한 관리**: 관리자/일반 사용자 구분
 - **비밀번호 변경**: 보안 강화
+- **관리자 전용 비밀번호 변경**: 별도 페이지에서 관리자 비밀번호 변경
 
 ### 👥 권리자 관리
 
@@ -119,15 +124,14 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 
 - **자동 스케줄링**: 매일 오후 5시 자동 실행
 - **수동 실행**: 즉시 크롤링 실행
-- **실시간 모니터링**: 크롤링 진행 상황 확인
 - **실패 처리**: 크롤링 실패 시 복구 메커니즘
+- **성능 최적화**: 실패 개수 제한으로 UI 성능 향상
 
 ### 📊 데이터 분석
 
 - **플랫폼별 통계**: 각 플랫폼별 수집 데이터 분석
 - **기간별 조회**: 날짜 범위별 데이터 조회
 - **CSV 다운로드**: 수집 데이터 엑셀 파일로 다운로드
-- **데이터 시각화**: 차트를 통한 데이터 시각화
 
 ---
 
@@ -138,21 +142,22 @@ Unearth는 **음원 스트리밍 플랫폼의 데이터를 자동으로 수집�
 - **검색 방식**: 곡명/아티스트명 기반 검색
 - **수집 데이터**: 조회수, 청취자 수
 - **특징**: 국문/영문 다국어 지원
-- **크롤링 방식**: 웹 페이지 직접 크롤링
+- **크롤링 방식**: 웹 페이지 직접 크롤링 (Selenium)
 
 ### 2. 🎵 YouTube Music
 
 - **검색 방식**: 곡명/아티스트명 기반 검색
 - **수집 데이터**: 조회수, 업로드 날짜
 - **특징**: 로그인 기반 크롤링
-- **크롤링 방식**: 쿠키 기반 세션 관리
+- **크롤링 방식**: 쿠키 기반 세션 관리 (Selenium)
 
 ### 3. 📺 YouTube
 
 - **검색 방식**: URL 기반 직접 크롤링
 - **수집 데이터**: 조회수, 업로드 날짜, 동영상 메타데이터
 - **특징**: 공개 동영상 데이터 수집
-- **크롤링 방식**: 동영상 페이지 직접 접근
+- **크롤링 방식**: **YouTube Data API v3** 활용
+- **장점**: 안정성 향상, 속도 개선, API 할당량 관리
 
 ### 4. 🍈 Melon (멜론)
 
@@ -180,94 +185,83 @@ git clone https://github.com/your-username/unearth.git
 cd unearth
 
 # 환경변수 파일 생성
-cp .env.example .env
+vim .env
 ```
 
-#### 환경변수 설정 (.env)
+#### 환경변수 설정 (.env) - docker-compose 파일과 동일 한 위치에 존재
 
 ```env
-# MySQL 설정
-MYSQL_ROOT_PASSWORD=your_secure_password
-MYSQL_DATABASE=streaming_db
-MYSQL_USER=admin
-MYSQL_PASSWORD=1234
-DB_HOST=localhost
+# MySQL 데이터베이스 설정
+MYSQL_ROOT_PASSWORD=example-root-password
+MYSQL_DATABASE=example_db
+MYSQL_USER=example_user
+MYSQL_PASSWORD=example-password
 
 # Django 설정
-DJANGO_SECRET_KEY=your_django_secret_key_here
+DJANGO_SECRET_KEY=django-insecure-example-secret-key
+YOUTUBE_MUSIC_ID=example@gmail.com
+YOUTUBE_MUSIC_PASSWORD=example-password
+MELON_API_URL=https://example.com/api/song/info.json
+DJANGO_SETTING_MODULE=config.settings
+PYTHONPATH=/app/example_project
 
-# Melon API 설정
-MELON_API_URL=https://www.melon.com/api
+# 데이터베이스 호스트 설정 (Docker 네트워크 내에서)
+DB_HOST=example_db_host
+DJANGO_DB_HOST=example_db_host
 
-# YouTube Music 로그인 정보
-YOUTUBE_MUSIC_ID=your_youtube_music_id
-YOUTUBE_MUSIC_PASSWORD=your_youtube_music_password
+# Spring Boot 애플리케이션 설정
+SERVER_PORT=8080
+SPRING_PROFILES_ACTIVE=dev
+SUPERADMIN_USERNAME=example_admin
+SUPERADMIN_PASSWORD=example_admin_password
 
-# 로깅 설정
-LOG_LEVEL=INFO
+# SLACK MESSAGE WEBHOOK URL
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/EXAMPLE/EXAMPLE/EXAMPLE_KEY
+
+# YouTube Data API
+YOUTUBE_API_KEY=AIzaSyEXAMPLE-KEY-FOR-YOUTUBE-API
 ```
 
-### 2️⃣ Docker Compose 실행 (권장)
+### 2️⃣ Docker Compose 실행
 
 ```bash
 # 전체 시스템 실행
 docker-compose up -d
-
-# 로그 확인
-docker-compose logs -f app
-
-# 특정 서비스 로그 확인
-docker-compose logs -f spring-app
-docker-compose logs -f python-crawler
 ```
 
-### 3️⃣ 개별 실행 (개발용)
+### 3️⃣ 업데이트 적용
 
-#### Spring Boot 실행
+✅ 1. 로컬에서 Docker 이미지 빌드
 
-```bash
-# Gradle 빌드
-./gradlew build
-
-# 애플리케이션 실행
-./gradlew bootRun
-
-# 또는 JAR 파일 실행
-java -jar build/libs/unearth-0.0.1-SNAPSHOT.jar
+```
+docker build -t example-user/example-app:latest .
 ```
 
-#### Python 크롤링 실행
+Dockerfile을 읽어 이미지 생성
 
-```bash
-# Python 환경 설정
-cd streaming_crawling
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+태그는 example-user/example-app:latest로 지정
 
-# 의존성 설치
-pip install -r requirements.txt
+✅ 2. Docker Hub로 이미지 푸시
 
-# Django 서버 실행
-python manage.py runserver
-
-# 크롤링 실행
-python manage.py crawl_one_song "아티스트명" "곡명"
+```
+docker push example-user/example-app:latest
 ```
 
-### 4️⃣ 초기 설정
+위에서 빌드한 이미지를 Docker Hub 저장소로 업로드
 
-```bash
-# 데이터베이스 마이그레이션
-docker-compose exec spring-app ./gradlew flywayMigrate
+✅ 3. 서버에서 최신 이미지 Pull
 
-# Django 마이그레이션
-docker-compose exec python-crawler python manage.py migrate
-
-# 관리자 계정 생성
-docker-compose exec spring-app ./gradlew createSuperAdmin
+```
+docker pull example-user/example-app:latest
 ```
 
----
+서버에서 최신 이미지를 받아서 준비
+
+✅ 4. 컨테이너 재시작 (예시)
+docker compose down
+docker compose up -d
+
+기존 컨테이너를 정지 및 삭제한 후, 최신 이미지를 기반으로 재실행
 
 ## 📊 데이터베이스 구조
 
@@ -280,7 +274,7 @@ CREATE TABLE users (
     id VARCHAR(36) PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('ADMIN', 'USER') NOT NULL,
+    role ENUM('SUPER_ADMIN', 'ADMIN', 'RIGHT_HOLDER') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -337,98 +331,46 @@ CREATE TABLE crawling_data (
 );
 ```
 
----
+#### crawling_period (크롤링 기간)
 
-## 🔧 API 문서
-
-### 🔐 인증 API
-
-#### 로그인
-
-```http
-POST /user/login
-Content-Type: application/x-www-form-urlencoded
-
-username=admin&password=password
+```sql
+CREATE TABLE crawling_period (
+    id VARCHAR(36) PRIMARY KEY,
+    song_id VARCHAR(36) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    youtube_url VARCHAR(500),
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (song_id) REFERENCES song_info(id)
+);
 ```
 
-#### 로그아웃
+#### youtube_video_viewcount (YouTube 조회수)
 
-```http
-POST /user/logout
+```sql
+CREATE TABLE youtube_video_viewcount (
+    id VARCHAR(36) PRIMARY KEY,
+    crawling_period_id VARCHAR(36) NOT NULL,
+    view_count BIGINT,
+    crawling_date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (crawling_period_id) REFERENCES crawling_period(id)
+);
 ```
 
-### 👥 권리자 API
+#### crawling_failure (크롤링 실패)
 
-#### 권리자 목록 조회
-
-```http
-GET /right-holder/list?page=1&size=10
-```
-
-#### 권리자 등록
-
-```http
-POST /right-holder/register
-Content-Type: application/json
-
-{
-    "holderName": "권리자명",
-    "holderType": "COMPANY",
-    "contractStartDate": "2024-01-01",
-    "contractEndDate": "2024-12-31"
-}
-```
-
-### 🎵 곡 정보 API
-
-#### 곡 목록 조회
-
-```http
-GET /song/list?page=1&size=10&artistKo=아티스트명
-```
-
-#### 곡 등록
-
-```http
-POST /song/register
-Content-Type: application/json
-
-{
-    "artistKo": "아티스트명",
-    "titleKo": "곡명",
-    "rightHolderName": "권리자명"
-}
-```
-
-#### CSV 대량 등록
-
-```http
-POST /song/bulk-register
-Content-Type: multipart/form-data
-
-file: [CSV 파일]
-```
-
-### 🕷️ 크롤링 API
-
-#### 크롤링 실행
-
-```http
-POST /crawling/execute
-Content-Type: application/json
-
-{
-    "platformType": "GENIE",
-    "startDate": "2024-01-01",
-    "endDate": "2024-01-31"
-}
-```
-
-#### 크롤링 데이터 조회
-
-```http
-GET /crawling/data?platformType=GENIE&startDate=2024-01-01&endDate=2024-01-31
+```sql
+CREATE TABLE crawling_failure (
+    id VARCHAR(36) PRIMARY KEY,
+    song_info_id VARCHAR(36) NOT NULL,
+    platform_type ENUM('GENIE', 'YOUTUBE_MUSIC', 'YOUTUBE', 'MELON') NOT NULL,
+    error_message TEXT,
+    failed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (song_info_id) REFERENCES song_info(id)
+);
 ```
 
 ---
@@ -447,25 +389,54 @@ unearth/
 │   ├── common/                    # 공통 유틸리티
 │   │   ├── CommonResponse.java    # 공통 응답 객체
 │   │   ├── ResponseCode.java      # 응답 코드
+│   │   ├── GlobalControllerAdvice.java # 전역 컨트롤러 어드바이스
 │   │   └── exception/             # 예외 처리
+│   │       ├── BaseException.java # 기본 예외
+│   │       └── GlobalExceptionHandler.java # 전역 예외 처리
 │   ├── user/                      # 사용자 관리
 │   │   ├── controller/            # 컨트롤러
+│   │   │   ├── LoginController.java # 로그인 컨트롤러
+│   │   │   └── AdminPasswordController.java # 관리자 비밀번호 변경
 │   │   ├── service/               # 서비스
+│   │   │   ├── LoginService.java  # 로그인 서비스
+│   │   │   └── AdminPasswordChangeService.java # 비밀번호 변경 서비스
 │   │   ├── repository/            # 리포지토리
-│   │   └── entity/                # 엔티티
+│   │   ├── entity/                # 엔티티
+│   │   └── dto/                   # DTO
 │   ├── right_holder/              # 권리자 관리
 │   ├── song/                      # 곡 정보 관리
 │   └── crawling/                  # 크롤링 관리
+│       ├── controller/            # 크롤링 컨트롤러
+│       ├── service/               # 크롤링 서비스
+│       ├── repository/            # 크롤링 리포지토리
+│       └── entity/                # 크롤링 엔티티
+├── src/main/resources/
+│   ├── templates/                 # Thymeleaf 템플릿
+│   │   ├── admin/                 # 관리자 페이지
+│   │   │   └── password-change.html # 비밀번호 변경 페이지
+│   │   ├── user/                  # 사용자 페이지
+│   │   │   └── login.html         # 로그인 페이지
+│   │   └── common/                # 공통 템플릿
+│   │       ├── header.html        # 헤더
+│   │       └── sidebar.html       # 사이드바
+│   └── static/                    # 정적 리소스
+│       └── css/                   # CSS 파일
+│           ├── base.css           # 기본 스타일
+│           ├── login.css          # 로그인 스타일
+│           └── admin_password_change.css # 관리자 비밀번호 변경 스타일
 ├── streaming_crawling/            # Python 크롤링 시스템
-│   ├── crawling_view/
-│   │   ├── view/                  # 플랫폼별 크롤러
+│   ├── crawling/
+│   │   ├── service/               # 플랫폼별 크롤러
 │   │   │   ├── genie/             # Genie 크롤러
 │   │   │   ├── melon/             # Melon 크롤러
-│   │   │   ├── youtube/           # YouTube 크롤러
+│   │   │   ├── youtube/           # YouTube 크롤러 (API 기반)
+│   │   │   │   ├── youtube_api_service.py # YouTube API 서비스
+│   │   │   │   ├── youtube_main.py # YouTube 메인 로직
+│   │   │   │   └── id_extractor.py # YouTube ID 추출
 │   │   │   └── youtube_music/     # YouTube Music 크롤러
-│   │   ├── data/                  # 데이터 저장
-│   │   ├── utils/                 # 유틸리티
-│   │   └── controller/            # 크롤링 컨트롤러
+│   │   ├── models/                # Django 모델
+│   │   ├── repository/            # 데이터 저장소
+│   │   └── managers/              # 크롤링 매니저
 │   ├── requirements.txt           # Python 의존성
 │   └── manage.py                  # Django 관리
 ├── docs/                          # 문서 및 스크린샷
@@ -483,50 +454,6 @@ unearth/
 2. **Gradle 동기화**: `View` → `Tool Windows` → `Gradle`
 3. **Java 17 설정**: `File` → `Project Structure` → `Project SDK`
 4. **Run Configuration**: `Run` → `Edit Configurations` → `Spring Boot`
-
-#### VS Code 설정
-
-1. **확장 프로그램 설치**:
-
-   - Extension Pack for Java
-   - Spring Boot Extension Pack
-   - Python
-   - Docker
-
-2. **settings.json**:
-
-```json
-{
-  "java.configuration.updateBuildConfiguration": "automatic",
-  "java.compile.nullAnalysis.mode": "automatic"
-}
-```
-
-### 🧪 테스트
-
-#### Spring Boot 테스트
-
-```bash
-# 전체 테스트 실행
-./gradlew test
-
-# 특정 테스트 실행
-./gradlew test --tests SongServiceTest
-
-# 테스트 커버리지 확인
-./gradlew jacocoTestReport
-```
-
-#### Python 테스트
-
-```bash
-# Django 테스트 실행
-cd streaming_crawling
-python manage.py test
-
-# 특정 테스트 실행
-python manage.py test crawling_view.test.test_platform_crawlers
-```
 
 ### 📝 코딩 컨벤션
 
@@ -546,158 +473,71 @@ python manage.py test crawling_view.test.test_platform_crawlers
 
 ---
 
-## 🚨 문제 해결
+## 📋 로그 관리
 
-### 🔧 일반적인 문제
+### 📁 로그 파일 구조
 
-#### 1. Docker 실행 오류
+크롤링 시스템은 다음과 같은 로그 파일들을 생성합니다:
 
-```bash
-# Docker 서비스 상태 확인
-docker --version
-docker-compose --version
-
-# 컨테이너 상태 확인
-docker-compose ps
-
-# 로그 확인
-docker-compose logs [서비스명]
+```
+streaming_crawling
+└── logs/                        # 시스템 로그
+    ├── crawling_{date}_{time}.log               # 데이터베이스 연결 로그
+    └── single_crawling_{date}{time}_{songId}.log              # 스케줄러 로그
 ```
 
-#### 2. 데이터베이스 연결 오류
+### 🧹 자동 로그 정리
 
-```bash
-# MySQL 컨테이너 상태 확인
-docker-compose exec mysql mysql -u root -p
+시스템은 **10일에 한 번씩 자동으로 10일보다 이전의 로그 데이터를 삭제**합니다.
 
-# 데이터베이스 생성 확인
-SHOW DATABASES;
-USE streaming_db;
-SHOW TABLES;
-```
+#### 로그 정리 스케줄
 
-#### 3. 크롤링 실패
+- **실행 주기**: 매달 1일, 10일, 20일, 30일 | 00시 01분
+- **보관 기간**: 10일
+- **정리 대상**: 모든 크롤링 로그 파일
+- **정리 방식**: 파일 삭제
 
-```bash
-# Python 환경 확인
-cd streaming_crawling
-python --version
-pip list
+## 🆕 최신 업데이트
 
-# Selenium 드라이버 확인
-python -c "from selenium import webdriver; print('Selenium OK')"
-```
+### 🔄 v2.1.0 (2024-07-28)
 
-### 📊 로그 분석
+#### ✨ 새로운 기능
 
-#### Spring Boot 로그
+- **YouTube Data API 통합**: Selenium 기반 크롤링에서 YouTube Data API v3로 전환
+- **관리자 비밀번호 변경**: 전용 페이지에서 관리자 비밀번호 변경 기능
+- **로그인 에러 처리 개선**: 알림창을 통한 사용자 친화적 에러 메시지
+- **크롤링 실패 개수 최적화**: UI 성능 향상을 위한 실패 개수 제한 (10+ 표시)
+- **자동 로그 정리**: 7일마다 자동으로 오래된 로그 파일 정리
 
-```bash
-# 애플리케이션 로그 확인
-docker-compose logs -f spring-app
+#### 🔧 기술적 개선
 
-# 특정 로그 필터링
-docker-compose logs spring-app | grep "ERROR"
-```
+- **YouTube 크롤링 안정성**: API 기반으로 전환하여 안정성 및 속도 향상
+- **데이터베이스 스키마 개선**: UUID 기반 ID 시스템으로 통일
+- **예외 처리 강화**: 전역 예외 처리 및 사용자 친화적 메시지
+- **CSS 모듈화**: 페이지별 독립적인 CSS 파일 구조
 
-#### Python 크롤링 로그
+#### 🐛 버그 수정
 
-```bash
-# 크롤링 로그 확인
-docker-compose logs -f python-crawler
+- **로그인 실패 처리**: HTTP 401 상태 코드 처리 개선
+- **YouTube 조회수 표시**: 모든 날짜의 조회수 데이터 표시
+- **크롤링 실패 감지**: 실패/미수집 상태 구분 개선
+- **데이터베이스 타입 불일치**: Django-Spring 간 ID 타입 통일
 
-# 로그 파일 확인
-docker-compose exec python-crawler ls -la /app/logs/
-```
+#### 📊 성능 최적화
 
-### 🔄 성능 최적화
+- **UI 응답성**: 크롤링 실패 개수 쿼리 최적화
+- **메모리 사용량**: 불필요한 Selenium 의존성 제거
+- **네트워크 효율성**: YouTube API 배치 처리 구현
+- **디스크 공간**: 자동 로그 정리로 디스크 공간 절약
 
-#### 데이터베이스 최적화
+### 🔄 v2.0.0 (2024-07-15)
 
-```sql
--- 인덱스 확인
-SHOW INDEX FROM song_info;
+#### ✨ 주요 기능
 
--- 쿼리 성능 분석
-EXPLAIN SELECT * FROM song_info WHERE artist_ko = '아티스트명';
-```
-
-#### 크롤링 성능 최적화
-
-```python
-# 병렬 크롤링 설정
-MAX_WORKERS = 4
-TIMEOUT = 30
-
-# 메모리 사용량 모니터링
-import psutil
-print(f"Memory usage: {psutil.virtual_memory().percent}%")
-```
-
----
-
-## 📈 모니터링 및 유지보수
-
-### 📊 모니터링 지표
-
-- **크롤링 성공률**: 95% 이상 유지
-- **응답 시간**: 평균 2초 이하
-- **데이터 정확도**: 99% 이상
-- **시스템 가용성**: 99.9% 이상
-
-### 🔄 정기 유지보수
-
-#### 일일 점검
-
-- [ ] 크롤링 성공률 확인
-- [ ] 에러 로그 확인
-- [ ] 데이터베이스 연결 상태 확인
-
-#### 주간 점검
-
-- [ ] 시스템 성능 분석
-- [ ] 데이터 정확도 검증
-- [ ] 보안 업데이트 확인
-
-#### 월간 점검
-
-- [ ] 전체 시스템 백업
-- [ ] 성능 최적화
-- [ ] 새로운 플랫폼 검토
-
----
-
-## 🤝 기여하기
-
-### 📝 기여 방법
-
-1. **Fork** 프로젝트
-2. **Feature Branch** 생성 (`git checkout -b feature/AmazingFeature`)
-3. **Commit** 변경사항 (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** 브랜치 (`git push origin feature/AmazingFeature`)
-5. **Pull Request** 생성
-
-### 🐛 버그 리포트
-
-버그를 발견하셨다면 [Issues](https://github.com/your-username/unearth/issues)에 등록해 주세요.
-
-### 💡 기능 제안
-
-새로운 기능 제안은 [Discussions](https://github.com/your-username/unearth/discussions)에서 논의해 주세요.
-
----
-
-## 📄 라이선스
-
-이 프로젝트는 **MIT License** 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
-
----
-
-## 📞 연락처
-
-- **프로젝트 관리자**: [your-email@example.com](mailto:your-email@example.com)
-- **기술 지원**: [tech-support@example.com](mailto:tech-support@example.com)
-- **프로젝트 홈페이지**: [https://github.com/your-username/unearth](https://github.com/your-username/unearth)
+- **다중 플랫폼 지원**: Genie, YouTube Music, YouTube, Melon
+- **자동 스케줄링**: 매일 오후 5시 자동 크롤링
+- **웹 기반 관리**: 직관적인 관리 인터페이스
+- **CSV 대량 등록**: 엑셀 파일을 통한 곡 정보 일괄 등록
 
 ---
 

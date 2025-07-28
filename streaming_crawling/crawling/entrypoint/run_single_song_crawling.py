@@ -17,14 +17,23 @@ from crawling.models import SongInfo
 from crawling.utils.constants import Platforms
 from crawling.managers.single_crawling_manager import run_single_song_crawling
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(f'logs/single_crawling_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
+def setup_logging(song_id):
+    """
+    단일 곡 크롤링을 위한 로깅 설정
+    song_id를 파일명에 포함하여 각 곡별로 로그 파일을 구분
+    """
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(
+                f'logs/single_crawling_{datetime.now().strftime("%Y%m%d_%H%M%S")}_{song_id}.log',
+                encoding='utf-8'
+            ),
+            logging.StreamHandler()
+        ]
+    )
+
 logger = logging.getLogger(__name__)
 
 def main():
@@ -34,6 +43,9 @@ def main():
     parser.add_argument('--save_csv', action='store_true', default=True, help='CSV 저장 여부 (기본값: 저장)')
     parser.add_argument('--save_db', action='store_true', default=True, help='DB 저장 여부 (기본값: 저장)')
     args = parser.parse_args()
+
+    # song_id로 로깅 설정
+    setup_logging(args.song_id)
 
     logger.info(f"🚀 단일 곡 크롤링 시작: song_id={args.song_id}, platform={args.platform or 'all'}, save_csv={args.save_csv}, save_db={args.save_db}")
 

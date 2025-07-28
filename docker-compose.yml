@@ -66,6 +66,9 @@ services:
       - DJANGO_SETTINGS_MODULE=${DJANGO_SETTING_MODULE}
       - PYTHONPATH=${PYTHONPATH}
 
+      # YOUTUBE_API 설정
+      - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
+
       # 기타 환경변수
       - PYTHONUNBUFFERED=1
       - TZ=Asia/Seoul
@@ -73,20 +76,20 @@ services:
       - ./streaming_crawling/logs:/app/streaming_crawling/logs
       - ./streaming_crawling/csv_folder:/app/streaming_crawling/csv_folder
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: unearth_phpmyadmin
-    networks:
-      - unearth
-    environment:
-      PMA_HOST: ${DB_HOST}
-      PMA_USER: ${MYSQL_USER}
-      PMA_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "10702:80"
-    depends_on:
-      - db
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   container_name: unearth_phpmyadmin
+  #   networks:
+  #     - unearth
+  #   environment:
+  #     PMA_HOST: ${DB_HOST}
+  #     PMA_USER: ${MYSQL_USER}
+  #     PMA_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #   ports:
+  #     - "10702:80"
+  #   depends_on:
+  #     - db
 
 volumes:
   db_data:
