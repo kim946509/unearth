@@ -16,6 +16,9 @@ from crawling.service.youtube import YouTubeCrawlingStrategy
 from crawling.service.youtube_music import YouTubeMusicCrawlingStrategy
 from crawling.service.melon import MelonCrawlingStrategy
 
+# YouTube 조회수 수집 서비스 import
+from crawling.service.youtube.youtube_api_service import update_youtube_viewcounts_for_period
+
 logger = logging.getLogger(__name__)
 
 
@@ -102,6 +105,19 @@ class CrawlingManager:
             
             # 로그 라이터 종료
             self.log_writer.end_crawling()
+            
+            # YouTube 조회수 수집 (후처리)
+            logger.info("🎥 YouTube 조회수 수집 시작 (후처리)")
+            try:
+                update_youtube_viewcounts_for_period(
+                    start_date=target_date or date.today(),
+                    end_date=target_date or date.today(),
+                    target_date=target_date or date.today()
+                )
+                logger.info("✅ YouTube 조회수 수집 완료")
+            except Exception as e:
+                logger.error(f"❌ YouTube 조회수 수집 실패: {e}")
+                # YouTube 조회수 수집 실패는 전체 크롤링 실패로 처리하지 않음
             
             # 결과 요약
             summary = self._create_summary(target_date, active_songs, crawling_results, db_results)

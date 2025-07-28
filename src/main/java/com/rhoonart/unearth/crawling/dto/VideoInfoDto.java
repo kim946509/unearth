@@ -20,4 +20,5 @@ public class VideoInfoDto {
     private String youtubeUrl;
     private int songOrder;
     private LocalDateTime uploadAt;
+    private int viewCount; // YouTube 조회수
 }

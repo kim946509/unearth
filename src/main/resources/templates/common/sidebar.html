@@ -17,7 +17,7 @@
            th:class="${activeMenu == 'crawlingFailures'} ? 'sidebar-menu active' : 'sidebar-menu'" 
            class="sidebar-menu">
             크롤링 실패 목록
-            <span th:if="${crawlingFailureCount > 0}" 
+            <span th:if="${crawlingFailureCount != '0'}" 
                   class="failure-count-badge" 
                   th:text="${crawlingFailureCount}"></span>
         </a>

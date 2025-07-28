@@ -5,7 +5,9 @@ import com.rhoonart.unearth.common.exception.BaseException;
 import com.rhoonart.unearth.crawling.dto.VideoInfoDto;
 import com.rhoonart.unearth.crawling.dto.CrawlingExecuteRequestDto;
 import com.rhoonart.unearth.crawling.entity.CrawlingPeriod;
+import com.rhoonart.unearth.crawling.entity.YoutubeVideoViewCount;
 import com.rhoonart.unearth.crawling.repository.CrawlingPeriodRepository;
+import com.rhoonart.unearth.crawling.repository.YoutubeVideoViewCountRepository;
 import com.rhoonart.unearth.song.entity.SongInfo;
 import com.rhoonart.unearth.song.exception.CannotFindSongException;
 import com.rhoonart.unearth.song.service.SongInfoService;
@@ -24,6 +26,7 @@ public class CrawlingPeriodService {
     private static final int CRAWLING_PERIOD_DAYS = 30;
 
     private final CrawlingPeriodRepository crawlingPeriodRepository;
+    private final YoutubeVideoViewCountRepository youtubeVideoViewCountRepository;
     private final SongInfoService songInfoService;
 
     /**
@@ -64,19 +67,36 @@ public class CrawlingPeriodService {
     }
 
     /**
-     * 특정 날짜의 영상 정보를 조회합니다.
+     * 특정 날짜의 영상 정보를 조회합니다. (모든 날짜에 대해 조회)
      */
     public List<VideoInfoDto> getVideoInfosForDate(String songId, LocalDate date) {
-        List<CrawlingPeriod> periods = crawlingPeriodRepository.findBySongIdAndStartDate(songId, date);
+        // 해당 날짜가 포함된 모든 크롤링 기간을 조회
+        List<CrawlingPeriod> periods = crawlingPeriodRepository.findBySongIdAndDateRange(songId, date);
 
         return periods.stream()
-                .map(period -> VideoInfoDto.builder()
-                        .channel(period.getChannel())
-                        .youtubeTitle(period.getYoutubeTitle())
-                        .youtubeUrl(period.getYoutubeUrl())
-                        .songOrder(period.getSongOrder())
-                        .uploadAt(period.getUploadAt())
-                        .build())
+                .map(period -> {
+                    // 해당 날짜의 조회수 조회
+                    int viewCount = -999; // 기본값
+                    try {
+                        YoutubeVideoViewCount viewCountData = youtubeVideoViewCountRepository
+                                .findByCrawlingPeriodIdAndDate(period.getId(), date)
+                                .orElse(null);
+                        if (viewCountData != null) {
+                            viewCount = viewCountData.getViewCount();
+                        }
+                    } catch (Exception e) {
+                        // 조회수 조회 실패 시 기본값 유지
+                    }
+
+                    return VideoInfoDto.builder()
+                            .channel(period.getChannel())
+                            .youtubeTitle(period.getYoutubeTitle())
+                            .youtubeUrl(period.getYoutubeUrl())
+                            .songOrder(period.getSongOrder())
+                            .uploadAt(period.getUploadAt())
+                            .viewCount(viewCount)
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 

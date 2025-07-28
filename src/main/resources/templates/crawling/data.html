@@ -147,6 +147,12 @@
                                                 <span class="video-label">업로드 날짜:</span>
                                                 <span class="video-value" th:text="${#temporals.format(videoInfo.uploadAt, 'yyyy-MM-dd HH:mm')}"></span>
                                             </div>
+                                            <div class="video-info-row">
+                                                <span class="video-label">조회수:</span>
+                                                <span class="video-value" 
+                                                      th:text="${videoInfo.viewCount == -999 ? 'Fail' : #numbers.formatInteger(videoInfo.viewCount, 0, 'COMMA')}"
+                                                      th:class="${videoInfo.viewCount == -999 ? 'text-warning' : ''}"></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div th:unless="${groupedData.hasVideoInfo()}" class="no-video-info">-</div>

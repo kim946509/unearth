@@ -11,8 +11,9 @@ class CrawlingPeriod(BaseModel):
     song_id = models.CharField(max_length=36, help_text="노래 ID (song_info.id 참조)")
     start_date = models.DateField(help_text="크롤링 시작일")
     end_date = models.DateField(help_text="크롤링 종료일")
-    is_active = models.BooleanField(default=True, help_text="활성화화 여부")
-
+    is_active = models.BooleanField(default=True, help_text="활성화 여부")
+    youtube_url = models.URLField(max_length=500, help_text="YouTube URL")
+    
     class Meta:
         db_table = 'crawling_period'
         ordering = ['-created_at']
