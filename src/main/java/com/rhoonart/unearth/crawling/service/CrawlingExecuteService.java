@@ -58,7 +58,7 @@ public class CrawlingExecuteService {
             // 환경 변수 설정 (Linux 환경에서만)
             if (!CrawlingCommandUtil.isWindows()) {
                 Map<String, String> env = processBuilder.environment();
-                env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
+                env.put("PYTHONPATH", djangoPath.resolve(DJANGO_PROJECT_PATH).toString());
                 env.put("PYTHONUNBUFFERED", "1");
             }
 
@@ -134,7 +134,7 @@ public class CrawlingExecuteService {
             // 환경 변수 설정 (Linux 환경에서만)
             if (!CrawlingCommandUtil.isWindows()) {
                 Map<String, String> env = processBuilder.environment();
-                env.put("PYTHONPATH", djangoPath.resolve("streaming_crawling").toString());
+                env.put("PYTHONPATH", djangoPath.resolve(DJANGO_PROJECT_PATH).toString());
                 env.put("PYTHONUNBUFFERED", "1"); // Python 출력 버퍼링 비활성화
             }
 

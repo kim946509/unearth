@@ -1,5 +1,8 @@
 package com.rhoonart.unearth.crawling.service;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class CalculateIncreaseDataService {
 
     public static long calculateIncrease(long currentValue, long previousValue) {

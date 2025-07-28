@@ -101,7 +101,7 @@ public class CrawlingCsvService {
         // 날짜 정렬 (최신 날짜부터)
         List<LocalDate> sortedDates = dataByDate.keySet().stream()
                 .sorted(Comparator.reverseOrder())
-                .collect(Collectors.toList());
+                .toList();
 
         for (LocalDate currentDate : sortedDates) {
             List<CrawlingData> currentDataList = dataByDate.get(currentDate);

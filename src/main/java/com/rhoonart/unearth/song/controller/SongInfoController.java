@@ -52,12 +52,6 @@ public class SongInfoController {
         var rightHolders = rightHolderUtilService.findAllForDropdown();
         model.addAttribute("rightHolders", rightHolders);
 
-        // 권리자가 없으면 경고 로그 출력 (디버깅용)
-        if (rightHolders.isEmpty()) {
-            System.out.println("⚠️ 등록된 권리자가 없습니다. 음원 등록을 위해서는 먼저 권리자를 등록해주세요.");
-        } else {
-            System.out.println("✅ 권리자 목록 로드 완료: " + rightHolders.size() + "개");
-        }
         return "song/list";
     }
 

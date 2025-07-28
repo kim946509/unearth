@@ -84,7 +84,7 @@ public class RightHolderController {
             HttpSession session,
             Model model) {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
-        UserDto user = SessionUserUtil.requireAdminRole(session);
+        SessionUserUtil.requireAdminRole(session);
         rightHolderService.register(dto);
         // 등록 성공 시 목록으로 이동
         return "redirect:/right-holder/list";
@@ -104,7 +104,7 @@ public class RightHolderController {
             HttpSession session,
             Model model) {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
-        UserDto user = SessionUserUtil.requireAdminRole(session);
+        SessionUserUtil.requireAdminRole(session);
         rightHolderService.update(rightHolderId, dto);
         // 수정 성공 시 목록으로 이동
         return "redirect:/right-holder/list";
@@ -124,7 +124,7 @@ public class RightHolderController {
             @Valid @RequestBody ContractExtendRequestDto dto,
             HttpSession session) {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
-        UserDto user = SessionUserUtil.requireAdminRole(session);
+        SessionUserUtil.requireAdminRole(session);
 
         rightHolderUpdateService.extendContract(rightHolderId, dto.getNewEndDate());
         return CommonResponse.success("계약이 성공적으로 연장되었습니다.");
@@ -144,7 +144,7 @@ public class RightHolderController {
             @Valid @RequestBody LoginToggleRequestDto dto,
             HttpSession session) {
         // SUPER_ADMIN 또는 ADMIN 권한 체크
-        UserDto user = SessionUserUtil.requireAdminRole(session);
+        SessionUserUtil.requireAdminRole(session);
 
         rightHolderService.rightHolderLoginStatusUpdate(rightHolderId, dto.getIsLoginEnabledAsBoolean());
         String action = dto.getIsLoginEnabledAsBoolean() ? "활성화" : "비활성화";

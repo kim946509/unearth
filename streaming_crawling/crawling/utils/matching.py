@@ -289,16 +289,6 @@ def _match_artist_names(artist1, artist2):
         if ratio >= 0.7:
             return True
     
-    # 4. 특별한 케이스 처리
-    special_cases = {
-        ('악뮤', '악동뮤지션'): True,
-        ('악동뮤지션', '악뮤'): True,
-        ('akmu', '악동뮤지션'): True,
-        ('악동뮤지션', 'akmu'): True,
-    }
-    if (artist1, artist2) in special_cases:
-        return special_cases[(artist1, artist2)]
-    
     return False
 
 def keyword_similarity_match(found_text, target_texts, found_artist, target_artists):

@@ -3,7 +3,9 @@ package com.rhoonart.unearth.crawling.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class CrawlingCommandUtil {
 
     /**

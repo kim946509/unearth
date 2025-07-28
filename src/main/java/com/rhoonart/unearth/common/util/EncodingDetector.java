@@ -1,9 +1,14 @@
 package com.rhoonart.unearth.common.util;
 
 import java.nio.charset.StandardCharsets;
+import lombok.experimental.UtilityClass;
 import org.mozilla.universalchardet.UniversalDetector;
 
-public class EncodingDetector {
+public final class EncodingDetector {
+
+    private EncodingDetector() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
 
     /**
      * 바이트 배열로부터 파일 인코딩을 감지

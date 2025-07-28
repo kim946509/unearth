@@ -188,7 +188,7 @@ public class SongBulkRegisterService {
     private String cleanString(String str) {
         if (str == null)
             return "";
-        return str.trim().replaceAll("^\"|\"$", "");
+        return str.trim().replaceAll("(^\"|\"$)", "");
     }
 
     /**

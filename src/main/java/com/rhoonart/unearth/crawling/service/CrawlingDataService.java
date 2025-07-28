@@ -81,7 +81,7 @@ public class CrawlingDataService {
                 // 날짜 순서대로 정렬 (최신순)
                 List<LocalDate> sortedDates = dataByDate.keySet().stream()
                                 .sorted((date1, date2) -> date2.compareTo(date1)) // 최신순
-                                .collect(Collectors.toList());
+                                .toList();
 
                 for (LocalDate currentDate : sortedDates) {
                         List<CrawlingData> currentDataList = dataByDate.get(currentDate);
