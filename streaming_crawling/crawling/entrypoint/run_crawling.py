@@ -167,7 +167,7 @@ class ExitCodeManager:
 
 def run_full_crawling(target_date=None):
     """
-    전체 크롤링 프로세스 실행 (운영용) - 기존 호환성을 위한 함수
+    전체 크롤링 프로세스 실행 (운영용)
     
     Args:
         target_date (date, optional): 크롤링 대상 날짜. None이면 오늘 날짜

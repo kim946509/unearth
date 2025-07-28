@@ -100,25 +100,25 @@
                                 
                                 <!-- 조회수 -->
                                 <td class="views-cell" 
-                                    th:text="${data.views == -1 ? '' : (data.views == -999 ? 'Fail' : #numbers.formatInteger(data.views, 0, 'COMMA'))}"
+                                    th:text="${data.views == -1 ? '-' : (data.views == -999 ? 'Fail' : #numbers.formatInteger(data.views, 0, 'COMMA'))}"
                                     th:class="${data.views == -1 ? 'text-muted' : (data.views == -999 ? 'text-warning' : '')}">
                                 </td>
                                 
                                 <!-- 조회수 증가 -->
                                 <td class="views-increase-cell"
-                                    th:text="${data.viewsIncrease == -1 ? '' : (data.viewsIncrease == -999 ? 'Fail' : (data.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.viewsIncrease, 0, 'COMMA'))}"
+                                    th:text="${data.viewsIncrease == -1 ? '-' : (data.viewsIncrease == -999 ? 'Fail' : (data.viewsIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.viewsIncrease, 0, 'COMMA'))}"
                                     th:class="${data.viewsIncrease == -1 ? 'text-muted' : (data.viewsIncrease == -999 ? 'text-warning' : (data.viewsIncrease > 0 ? 'text-success' : (data.viewsIncrease < 0 ? 'text-danger' : 'text-muted')))}">
                                 </td>
                                 
                                 <!-- 청취자 수 -->
                                 <td class="listeners-cell"
-                                    th:text="${data.listeners == -1 ? '' : (data.listeners == -999 ? 'Fail' : #numbers.formatInteger(data.listeners, 0, 'COMMA'))}"
+                                    th:text="${data.listeners == -1 ? '-' : (data.listeners == -999 ? 'Fail' : #numbers.formatInteger(data.listeners, 0, 'COMMA'))}"
                                     th:class="${data.listeners == -1 ? 'text-muted' : (data.listeners == -999 ? 'text-warning' : '')}">
                                 </td>
                                 
                                 <!-- 청취자 수 증가 -->
                                 <td class="listeners-increase-cell"
-                                    th:text="${data.listenersIncrease == -1 ? '' : (data.listenersIncrease == -999 ? 'Fail' : (data.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.listenersIncrease, 0, 'COMMA'))}"
+                                    th:text="${data.listenersIncrease == -1 ? '-' : (data.listenersIncrease == -999 ? 'Fail' : (data.listenersIncrease > 0 ? '+' : '') + #numbers.formatInteger(data.listenersIncrease, 0, 'COMMA'))}"
                                     th:class="${data.listenersIncrease == -1 ? 'text-muted' : (data.listenersIncrease == -999 ? 'text-warning' : (data.listenersIncrease > 0 ? 'text-success' : (data.listenersIncrease < 0 ? 'text-danger' : 'text-muted')))}">
                                 </td>
                                 
