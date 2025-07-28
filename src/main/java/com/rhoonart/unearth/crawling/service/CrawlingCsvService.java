@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -102,9 +103,6 @@ public class CrawlingCsvService {
                 .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
 
-        // 이전 날짜의 데이터를 저장할 맵 (플랫폼별)
-        Map<PlatformType, CrawlingData> previousDayData = new HashMap<>();
-
         for (LocalDate currentDate : sortedDates) {
             List<CrawlingData> currentDataList = dataByDate.get(currentDate);
 
@@ -114,11 +112,11 @@ public class CrawlingCsvService {
             if (!videoInfos.isEmpty()) {
                 videoInfo = videoInfos.stream()
                         .map(v -> String.format("%s / %s / %s / %d / %s",
-                                v.getChannel(),
-                                v.getYoutubeTitle(),
-                                v.getYoutubeUrl(),
+                                v.getChannel() != null ? v.getChannel() : "-",
+                                v.getYoutubeTitle() != null ? v.getYoutubeTitle() : "-",
+                                v.getYoutubeUrl() != null ? v.getYoutubeUrl() : "-",
                                 v.getSongOrder(),
-                                v.getViewCount() == -999 ? "Fail" : String.valueOf(v.getViewCount())))
+                                formatVideoViewCount(v.getViewCount())))
                         .collect(Collectors.joining(" | ")); // 여러 영상은 | 로 구분
             }
 
@@ -126,16 +124,25 @@ public class CrawlingCsvService {
             currentDataList.sort((a, b) -> a.getPlatform().compareTo(b.getPlatform()));
 
             for (CrawlingData currentData : currentDataList) {
-                // 조회수 증가량 계산
-                long viewsIncrease = -1;
-                long listenersIncrease = -1;
+                // 이전날 데이터를 DB에서 직접 조회
+                LocalDate previousDate = currentDate.minusDays(1);
+                Optional<CrawlingData> previousDataOpt = crawlingDataRepository
+                        .findBySongIdAndPlatformAndDate(songId, currentData.getPlatform(), previousDate);
 
-                CrawlingData previousData = previousDayData.get(currentData.getPlatform());
-                if (previousData != null) {
+                long viewsIncrease = -1; // 기본값: 이전 데이터 없음
+                long listenersIncrease = -1; // 기본값: 이전 데이터 없음
+
+                if (previousDataOpt.isPresent()) {
+                    CrawlingData previousData = previousDataOpt.get();
+
                     // 조회수 증가량 계산
-                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getViews(),
+                    viewsIncrease = CalculateIncreaseDataService.calculateIncrease(
+                            currentData.getViews(),
                             previousData.getViews());
-                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(currentData.getListeners(),
+
+                    // 청취자수 증가량 계산
+                    listenersIncrease = CalculateIncreaseDataService.calculateIncrease(
+                            currentData.getListeners(),
                             previousData.getListeners());
                 }
 
@@ -150,9 +157,6 @@ public class CrawlingCsvService {
                         formatNumericValue(currentData.getListeners()),
                         formatNumericValue(listenersIncrease),
                         escapeCsvField(videoInfo)));
-
-                // 다음 날 계산을 위해 현재 데이터 저장
-                previousDayData.put(currentData.getPlatform(), currentData);
             }
         }
 
@@ -204,15 +208,29 @@ public class CrawlingCsvService {
 
     /**
      * 숫자 값을 CSV 형식으로 변환
-     * -1: 공란, -999: "Fail", 그 외: 숫자 그대로
+     * -1: "-", -999: "Fail", 그 외: 숫자 그대로
      */
     private String formatNumericValue(long value) {
         if (value == -1) {
-            return ""; // 공란
+            return "-"; // 데이터 없음 (HTML과 일관성)
         } else if (value == -999) {
             return "Fail"; // 오류
         } else {
             return String.valueOf(value); // 숫자 그대로
+        }
+    }
+
+    /**
+     * 영상 조회수를 CSV 형식으로 변환
+     * null: "-", -999: "Fail", 그 외: 숫자 그대로
+     */
+    private String formatVideoViewCount(Integer viewCount) {
+        if (viewCount == null) {
+            return "-"; // 크롤링되지 않음
+        } else if (viewCount == -999) {
+            return "Fail"; // 크롤링 실패
+        } else {
+            return String.valueOf(viewCount); // 숫자 그대로
         }
     }
 }
