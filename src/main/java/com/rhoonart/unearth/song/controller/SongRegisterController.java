@@ -63,7 +63,7 @@ public class SongRegisterController {
      */
     @PostMapping("/bulk-register-ajax")
     @ResponseBody
-    public CommonResponse<?> bulkRegisterAjax(@RequestParam("file") MultipartFile file,
+    public CommonResponse<SongBulkRegisterResponseDto> bulkRegisterAjax(@RequestParam("file") MultipartFile file,
                                               HttpSession session) {
         SessionUserUtil.requireAdminRole(session);
 
