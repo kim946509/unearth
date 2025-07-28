@@ -44,11 +44,7 @@
                     body: params
                 });
                 
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                
                 const result = await response.json();
-                console.log('Response result:', result);
                 
                 // HTTP 상태 코드와 관계없이 응답 내용으로 판단
                 if (result.code === 'SUCCESS') {
@@ -68,7 +64,6 @@
                     alert(result.message || '로그인에 실패했습니다.');
                 }
             } catch (error) {
-                console.error('Login error:', error);
                 alert('로그인 중 오류가 발생했습니다.');
             }
         });
