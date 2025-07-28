@@ -46,7 +46,7 @@ COPY streaming_crawling/requirements.txt ./streaming_crawling/requirements.txt
 RUN pip3 install -r ./streaming_crawling/requirements.txt
 
 # Django 프로젝트 복사
-COPY streaming_crawling/crawling_view/ ./streaming_crawling/crawling_view/
+COPY streaming_crawling/crawling/ ./streaming_crawling/crawling/
 COPY streaming_crawling/config/ ./streaming_crawling/config/
 COPY streaming_crawling/manage.py ./streaming_crawling/
 COPY streaming_crawling/logging_setting.py ./streaming_crawling/
