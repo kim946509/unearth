@@ -8,7 +8,9 @@ import com.rhoonart.unearth.user.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Arrays;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class SessionUserUtil {
     private static final String LOGIN_USER_KEY = "LOGIN_USER";
 

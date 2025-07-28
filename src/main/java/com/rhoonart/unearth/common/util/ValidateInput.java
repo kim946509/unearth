@@ -2,7 +2,9 @@ package com.rhoonart.unearth.common.util;
 
 import com.rhoonart.unearth.user.exception.BadRequestException;
 import java.time.LocalDate;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class ValidateInput {
 
     public static LocalDate parseDate(String dateStr) {
