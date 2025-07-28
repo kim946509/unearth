@@ -51,7 +51,7 @@ public class SongInfoController {
         // 권리자 드롭다운용 목록
         var rightHolders = rightHolderUtilService.findAllForDropdown();
         model.addAttribute("rightHolders", rightHolders);
-        
+
         return "song/list";
     }
 
