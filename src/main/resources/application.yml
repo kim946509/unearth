@@ -41,15 +41,4 @@ management:
       exposure:
         include: "health,info,metrics,httptrace"
 
-# 테스트 데이터 설정
 test:
-  data:
-    enabled: true # true로 설정하면 테스트 데이터가 생성됩니다
-    song:
-      ids: # 여러 곡 ID를 리스트로 설정
-        - "20c1383a-33e1-4588-b704-1290a694ee3b"
-
-    start:
-      date: "2024-07-28"
-    end:
-      date: "2025-07-29"

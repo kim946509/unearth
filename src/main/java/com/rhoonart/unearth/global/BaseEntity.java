@@ -29,18 +29,18 @@ public abstract class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // 임시로 사용할 필드 (테스트 데이터용)
-    private LocalDateTime customCreatedAt;
+    // // 임시로 사용할 필드 (테스트 데이터용)
+    // private LocalDateTime customCreatedAt;
 
-    public void setCustomCreatedAt(LocalDateTime customCreatedAt) {
-        this.customCreatedAt = customCreatedAt;
-    }
+    // public void setCustomCreatedAt(LocalDateTime customCreatedAt) {
+    // this.customCreatedAt = customCreatedAt;
+    // }
 
-    @PrePersist
-    protected void onCreate() {
-        if (customCreatedAt != null) {
-            this.createdAt = customCreatedAt;
-            this.updatedAt = customCreatedAt;
-        }
-    }
+    // @PrePersist
+    // protected void onCreate() {
+    // if (customCreatedAt != null) {
+    // this.createdAt = customCreatedAt;
+    // this.updatedAt = customCreatedAt;
+    // }
+    // }
 }

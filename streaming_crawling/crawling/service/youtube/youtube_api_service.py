@@ -132,7 +132,7 @@ class YouTubeApiService:
             logger.error(f"❌ YouTube API 호출 중 오류: {e}")
             return {video_id: {'title': '제목 없음', 'view_count': -999, 'published_at': None} for video_id in video_ids}
     
-    def update_youtube_viewcounts_for_period(self, start_date: date, end_date: date, target_date: date = None):
+    def update_youtube_viewcounts_for_period(self, start_date: date, end_date: date, target_date: date = None, song_id: str = None):
         """
         특정 기간의 CrawlingPeriod에서 YouTube 조회수를 수집하여 저장
         
@@ -140,18 +140,25 @@ class YouTubeApiService:
             start_date (date): 크롤링 기간 시작일
             end_date (date): 크롤링 기간 종료일
             target_date (date, optional): 조회수 수집 날짜 (None이면 오늘 날짜)
+            song_id (str, optional): 특정 곡 ID (None이면 모든 곡)
         """
         if target_date is None:
             target_date = date.today()
         
-        logger.info(f"🎥 YouTube 조회수 수집 시작: {start_date} ~ {end_date} (수집일: {target_date})")
+        if song_id:
+            logger.info(f"🎥 YouTube 조회수 수집 시작 (단일 곡): {song_id} / {start_date} ~ {end_date} (수집일: {target_date})")
+        else:
+            logger.info(f"🎥 YouTube 조회수 수집 시작: {start_date} ~ {end_date} (수집일: {target_date})")
         
         try:
             # 1. 기간 내 CrawlingPeriod에서 YouTube URL이 있는 것만 조회
-            periods_with_urls = self._get_periods_with_youtube_urls(start_date, end_date)
+            periods_with_urls = self._get_periods_with_youtube_urls(start_date, end_date, song_id)
             
             if not periods_with_urls:
-                logger.warning("⚠️ YouTube URL이 있는 CrawlingPeriod가 없습니다.")
+                if song_id:
+                    logger.warning(f"⚠️ 곡 ID {song_id}에 대한 YouTube URL이 있는 CrawlingPeriod가 없습니다.")
+                else:
+                    logger.warning("⚠️ YouTube URL이 있는 CrawlingPeriod가 없습니다.")
                 return
             
             logger.info(f"📋 YouTube URL이 있는 곡: {len(periods_with_urls)}개")
@@ -182,17 +189,21 @@ class YouTubeApiService:
         except Exception as e:
             logger.error(f"❌ YouTube 조회수 수집 실패: {e}", exc_info=True)
     
-    def _get_periods_with_youtube_urls(self, start_date: date, end_date: date) -> List:
+    def _get_periods_with_youtube_urls(self, start_date: date, end_date: date, song_id: str = None) -> List:
         """기간 내 YouTube URL이 있는 CrawlingPeriod 조회"""
         try:
-            periods = CrawlingPeriod.objects.filter(
+            query = CrawlingPeriod.objects.filter(
                 start_date__lte=end_date,
                 end_date__gte=start_date,
                 is_active=True,
                 youtube_url__isnull=False
             ).exclude(youtube_url='')
             
-            return list(periods)
+            # song_id가 지정된 경우 해당 곡만 필터링
+            if song_id:
+                query = query.filter(song_id=song_id)
+            
+            return list(query)
             
         except Exception as e:
             logger.error(f"❌ CrawlingPeriod 조회 실패: {e}")
@@ -293,7 +304,7 @@ class YouTubeApiService:
             return {video_id: -999 for video_id in video_ids}
 
 # 편의 함수
-def update_youtube_viewcounts_for_period(start_date: date, end_date: date, target_date: date = None):
+def update_youtube_viewcounts_for_period(start_date: date, end_date: date, target_date: date = None, song_id: str = None):
     """
     YouTube 조회수 수집 편의 함수
     
@@ -301,6 +312,7 @@ def update_youtube_viewcounts_for_period(start_date: date, end_date: date, targe
         start_date (date): 크롤링 기간 시작일
         end_date (date): 크롤링 기간 종료일
         target_date (date, optional): 조회수 수집 날짜 (None이면 오늘 날짜)
+        song_id (str, optional): 특정 곡 ID (None이면 모든 곡)
     """
     service = YouTubeApiService()
-    service.update_youtube_viewcounts_for_period(start_date, end_date, target_date) 
+    service.update_youtube_viewcounts_for_period(start_date, end_date, target_date, song_id) 
