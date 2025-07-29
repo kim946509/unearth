@@ -40,3 +40,14 @@ management:
     web:
       exposure:
         include: "health,info,metrics,httptrace"
+
+# 테스트 데이터 설정
+test:
+  data:
+    enabled: true # true로 설정하면 테스트 데이터가 생성됩니다
+    song:
+      id: "a0cbe0c5-1808-4a1f-958e-01974a4716f8"
+    start:
+      date: "2024-07-28"
+    end:
+      date: "2025-07-29"
