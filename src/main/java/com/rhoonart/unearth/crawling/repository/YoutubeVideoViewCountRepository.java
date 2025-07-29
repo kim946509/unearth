@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,18 @@ public interface YoutubeVideoViewCountRepository extends JpaRepository<YoutubeVi
         Optional<YoutubeVideoViewCount> findByCrawlingPeriodIdAndDate(
                         @Param("crawlingPeriodId") String crawlingPeriodId,
                         @Param("date") LocalDate date);
+
+        /**
+         * 특정 크롤링 기간 목록의 날짜 범위에 해당하는 모든 조회수 데이터를 일괄 조회합니다. (N+1 문제 해결)
+         */
+        @Query("""
+                        SELECT yvvc FROM YoutubeVideoViewCount yvvc
+                        WHERE yvvc.crawlingPeriod.id IN :crawlingPeriodIds
+                        AND yvvc.date >= :startDate
+                        AND yvvc.date <= :endDate
+                        """)
+        List<YoutubeVideoViewCount> findByCrawlingPeriodIdsAndDateRange(
+                        @Param("crawlingPeriodIds") List<String> crawlingPeriodIds,
+                        @Param("startDate") LocalDate startDate,
+                        @Param("endDate") LocalDate endDate);
 }
