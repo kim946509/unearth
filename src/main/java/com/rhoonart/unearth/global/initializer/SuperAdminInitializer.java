@@ -18,10 +18,10 @@ public class SuperAdminInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${superadmin.username:unearth}")
+    @Value("${superadmin.username}")
     private String superAdminUsername;
 
-    @Value("${superadmin.password:1234}")
+@Value("${superadmin.password}")
     private String superAdminPassword;
 
     @Override

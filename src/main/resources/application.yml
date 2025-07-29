@@ -4,8 +4,8 @@ spring:
   session:
     timeout: 7200 # 세션 타임아웃 2시간 (7200초)
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:streaming_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8
-    username: ${DB_USERNAME:admin}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8
+    username: ${DB_USER:admin}
     password: ${DB_PASSWORD:1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
@@ -40,3 +40,7 @@ management:
     web:
       exposure:
         include: "health,info,metrics,httptrace"
+
+superadmin:
+    username: ${SUPERADMIN_USERNAME}
+    password: ${SUPERADMIN_PASSWORD}
