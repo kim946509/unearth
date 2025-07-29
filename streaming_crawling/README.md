@@ -21,14 +21,8 @@
 
 ## 🚀 설치 및 실행
 
-### 1. 저장소 클론
 
-```bash
-git clone https://github.com/minkyungbae/streaming_crawling.git
-cd streaming_crawling
-```
-
-### 2. 가상환경 생성 및 활성화
+### 1. 가상환경 생성 및 활성화
 
 ```bash
 # 가상환경 생성
@@ -41,24 +35,19 @@ env\Scripts\activate
 source env/bin/activate
 ```
 
-### 3. 패키지 설치
+### 2. 패키지 설치
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. 데이터베이스 마이그레이션
+### 3. 데이터베이스 마이그레이션
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 5. 개발 서버 실행
-
-```bash
-python manage.py runserver
-```
 
 ## 📁 프로젝트 구조
 
