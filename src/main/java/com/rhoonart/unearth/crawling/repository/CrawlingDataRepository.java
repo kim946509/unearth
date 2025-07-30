@@ -17,7 +17,6 @@ import java.util.Optional;
 @Repository
 public interface CrawlingDataRepository extends JpaRepository<CrawlingData, String> {
 
-
         @Query("""
                             SELECT cd FROM CrawlingData cd
                             WHERE cd.song.id = :songId

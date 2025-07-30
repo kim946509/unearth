@@ -26,9 +26,16 @@ public class SongUpdateService {
         SongInfo song = songInfoService.getSongInfoById(songId)
                 .orElseThrow(() -> new BaseException(ResponseCode.NOT_FOUND, "음원을 찾을 수 없습니다."));
 
-        // 2. melonSongId 중복 체크 (자신 제외)
-        if (!song.getMelonSongId().equals(dto.getMelonSongId()) &&
-                songInfoRepository.existsByMelonSongId(dto.getMelonSongId())) {
+        // 2. melonSongId 중복 체크 (자신 제외) - null 체크 추가
+        String currentMelonSongId = song.getMelonSongId();
+        String newMelonSongId = dto.getMelonSongId();
+
+        // null 체크를 포함한 안전한 비교
+        boolean melonSongIdChanged = (currentMelonSongId == null && newMelonSongId != null) ||
+                (currentMelonSongId != null && !currentMelonSongId.equals(newMelonSongId));
+
+        if (melonSongIdChanged && newMelonSongId != null &&
+                songInfoRepository.existsByMelonSongId(newMelonSongId)) {
             throw new BaseException(ResponseCode.INVALID_INPUT, "이미 등록된 멜론 곡 ID입니다.");
         }
 

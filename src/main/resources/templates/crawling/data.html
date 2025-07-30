@@ -6,6 +6,129 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/right_holder.css">
+    <style>
+        /* CSV 다운로드 로딩 스피너 */
+        .csv-loading-spinner {
+            --uib-size: 2.8rem;
+            --uib-speed: .9s;
+            --uib-color: #183153;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: var(--uib-size);
+            width: var(--uib-size);
+        }
+
+        .csv-loading-spinner__dot {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            width: 100%;
+        }
+
+        .csv-loading-spinner__dot::before {
+            content: '';
+            height: 20%;
+            width: 20%;
+            border-radius: 50%;
+            background-color: var(--uib-color);
+            transform: scale(0);
+            opacity: 0.5;
+            animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+        }
+
+        .csv-loading-spinner__dot:nth-child(2) {
+            transform: rotate(45deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(2)::before {
+            animation-delay: calc(var(--uib-speed) * -0.875);
+        }
+
+        .csv-loading-spinner__dot:nth-child(3) {
+            transform: rotate(90deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(3)::before {
+            animation-delay: calc(var(--uib-speed) * -0.75);
+        }
+
+        .csv-loading-spinner__dot:nth-child(4) {
+            transform: rotate(135deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(4)::before {
+            animation-delay: calc(var(--uib-speed) * -0.625);
+        }
+
+        .csv-loading-spinner__dot:nth-child(5) {
+            transform: rotate(180deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(5)::before {
+            animation-delay: calc(var(--uib-speed) * -0.5);
+        }
+
+        .csv-loading-spinner__dot:nth-child(6) {
+            transform: rotate(225deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(6)::before {
+            animation-delay: calc(var(--uib-speed) * -0.375);
+        }
+
+        .csv-loading-spinner__dot:nth-child(7) {
+            transform: rotate(270deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(7)::before {
+            animation-delay: calc(var(--uib-speed) * -0.25);
+        }
+
+        .csv-loading-spinner__dot:nth-child(8) {
+            transform: rotate(315deg);
+        }
+
+        .csv-loading-spinner__dot:nth-child(8)::before {
+            animation-delay: calc(var(--uib-speed) * -0.125);
+        }
+
+        @keyframes pulse0112 {
+            0%,
+            100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* CSV 다운로드 전체 화면 로딩 오버레이 */
+        .csv-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .csv-loading-overlay.show {
+            display: flex;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{common/header :: header}"></div>
@@ -223,6 +346,20 @@
     </section>
 </div>
 
+<!-- CSV 다운로드 로딩 오버레이 -->
+<div id="csvLoadingOverlay" class="csv-loading-overlay">
+    <div class="csv-loading-spinner">
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+        <div class="csv-loading-spinner__dot"></div>
+    </div>
+</div>
+
 <!-- CSV 다운로드 모달 -->
 <div id="csvDownloadModal" class="modal" th:data-song-id="${songId}">
     <div class="modal-content">
@@ -277,6 +414,10 @@ function downloadCsv() {
         return;
     }
     
+    // 로딩 오버레이 표시
+    const loadingOverlay = document.getElementById('csvLoadingOverlay');
+    loadingOverlay.classList.add('show');
+    
     // URL 생성
     let url = `/crawling/data/${songId}/csv`;
     const params = new URLSearchParams();
@@ -288,11 +429,23 @@ function downloadCsv() {
         url += '?' + params.toString();
     }
 
-    // 다운로드 실행
-    window.location.href = url;
-    
     // 모달 닫기
     closeCsvDownloadModal();
+    
+    // 다운로드 실행 (약간의 지연 후)
+    setTimeout(() => {
+        // iframe을 사용하여 다운로드 (페이지 이동 없이)
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+        
+        // 다운로드 완료 후 로딩 오버레이 숨김
+        setTimeout(() => {
+            loadingOverlay.classList.remove('show');
+            document.body.removeChild(iframe);
+        }, 3000); // 3초 후 로딩 오버레이 숨김 (다운로드 완료 예상)
+    }, 100);
 }
 </script>
 

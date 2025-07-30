@@ -18,6 +18,8 @@ from crawling.service.genie import GenieCrawlingStrategy
 from crawling.service.youtube import YouTubeCrawlingStrategy
 from crawling.service.youtube_music import YouTubeMusicCrawlingStrategy
 from crawling.service.melon import MelonCrawlingStrategy
+from crawling.service.youtube.youtube_api_service import update_youtube_viewcounts_for_period
+from datetime import date
 
 logger = logging.getLogger(__name__)
 
@@ -196,6 +198,21 @@ def run_single_song_crawling(song_dict, save_csv=True, save_db=True, platform=No
     summary = summary_logger.generate_summary()
     summary_logger.print_summary()
     
+    # YouTube 조회수 수집 (후처리)
+    logger.info("🎥 YouTube 조회수 수집 시작 (후처리)")
+    try:
+        today = date.today()
+        update_youtube_viewcounts_for_period(
+            start_date=today,
+            end_date=today,
+            target_date=today,
+            song_id=song_dict['song_id']  # 특정 곡 ID 전달
+        )
+        logger.info("✅ YouTube 조회수 수집 완료")
+    except Exception as e:
+        logger.error(f"❌ YouTube 조회수 수집 실패: {e}")
+        # YouTube 조회수 수집 실패는 전체 크롤링 실패로 처리하지 않음
+
     # 실패 처리 - DB에 저장된 -999 값을 확인하여 실패 처리
     if save_db:
         logger.info(f"🔍 실패 곡 목록 확인 및 업데이트: {song_dict['song_id']}")
