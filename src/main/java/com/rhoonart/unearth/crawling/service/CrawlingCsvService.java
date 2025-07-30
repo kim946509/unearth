@@ -16,6 +16,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -103,12 +104,35 @@ public class CrawlingCsvService {
                 .sorted(Comparator.reverseOrder())
                 .toList();
 
+        // 영상 정보를 일괄 조회 (N+1 문제 해결)
+        Map<LocalDate, List<VideoInfoDto>> allVideoInfos = crawlingPeriodService
+                .getVideoInfosForDateRange(songId, startDate, endDate);
+
+        // 이전 날짜 데이터를 일괄 조회 (N+1 문제 해결)
+        Map<String, CrawlingData> previousDataMap = new HashMap<>();
+        if (!sortedDates.isEmpty()) {
+            // 모든 날짜의 이전 날짜 중 가장 이른 날짜부터 가장 늦은 날짜까지 조회
+            LocalDate earliestPreviousDate = sortedDates.get(sortedDates.size() - 1).minusDays(1);
+            LocalDate latestPreviousDate = sortedDates.get(0).minusDays(1);
+
+            List<CrawlingData> allPreviousData = crawlingDataRepository
+                    .findBySongIdAndDateRange(songId, null, earliestPreviousDate, latestPreviousDate);
+
+            // 플랫폼별, 날짜별로 맵핑
+            previousDataMap = allPreviousData.stream()
+                    .collect(Collectors.toMap(
+                            data -> data.getPlatform().name() + "_" + data.getCreatedAt().toLocalDate().toString(),
+                            data -> data,
+                            (existing, replacement) -> existing // 중복 시 기존 값 유지
+                    ));
+        }
+
         for (LocalDate currentDate : sortedDates) {
             List<CrawlingData> currentDataList = dataByDate.get(currentDate);
 
-            // 영상 정보 조회 (모든 날짜에 대해 조회)
+            // 영상 정보 조회 (일괄 조회된 데이터에서 가져오기)
             String videoInfo = "";
-            List<VideoInfoDto> videoInfos = crawlingPeriodService.getVideoInfosForDate(songId, currentDate);
+            List<VideoInfoDto> videoInfos = allVideoInfos.getOrDefault(currentDate, new ArrayList<>());
             if (!videoInfos.isEmpty()) {
                 videoInfo = videoInfos.stream()
                         .map(v -> String.format("%s / %s / %s / %d / %s",
@@ -124,17 +148,15 @@ public class CrawlingCsvService {
             currentDataList.sort((a, b) -> a.getPlatform().compareTo(b.getPlatform()));
 
             for (CrawlingData currentData : currentDataList) {
-                // 이전날 데이터를 DB에서 직접 조회
+                // 이전날 데이터를 일괄 조회된 데이터에서 가져오기
                 LocalDate previousDate = currentDate.minusDays(1);
-                Optional<CrawlingData> previousDataOpt = crawlingDataRepository
-                        .findBySongIdAndPlatformAndDate(songId, currentData.getPlatform(), previousDate);
+                String previousDataKey = currentData.getPlatform().name() + "_" + previousDate.toString();
+                CrawlingData previousData = previousDataMap.get(previousDataKey);
 
                 long viewsIncrease = -1; // 기본값: 이전 데이터 없음
                 long listenersIncrease = -1; // 기본값: 이전 데이터 없음
 
-                if (previousDataOpt.isPresent()) {
-                    CrawlingData previousData = previousDataOpt.get();
-
+                if (previousData != null) {
                     // 조회수 증가량 계산
                     viewsIncrease = CalculateIncreaseDataService.calculateIncrease(
                             currentData.getViews(),

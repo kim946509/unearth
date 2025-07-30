@@ -75,10 +75,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public CommonResponse<Void> handleException(Exception ex) {
-        return CommonResponse.fail(ResponseCode.SERVER_ERROR, ex.getMessage());
+    public Object handleException(Exception ex, HttpServletRequest request) {
+        // CSV 다운로드 요청인지 확인
+        if (isCsvDownloadRequest(request)) {
+            // CSV 다운로드 요청은 텍스트로 응답
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Content-Type", "text/plain; charset=UTF-8")
+                    .body("서버 오류가 발생했습니다: " + ex.getMessage());
+        }
+
+        // 일반 요청은 JSON으로 응답
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(CommonResponse.fail(ResponseCode.SERVER_ERROR, ex.getMessage()));
     }
 
     /**
@@ -93,6 +101,14 @@ public class GlobalExceptionHandler {
         return (acceptHeader != null && acceptHeader.contains("application/json")) ||
                 "XMLHttpRequest".equals(xRequestedWith) ||
                 (contentType != null && contentType.contains("application/json"));
+    }
+
+    /**
+     * CSV 다운로드 요청인지 확인하는 메서드
+     */
+    private boolean isCsvDownloadRequest(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        return requestURI != null && requestURI.contains("/csv");
     }
 
     /**
