@@ -6,6 +6,7 @@ import com.rhoonart.unearth.user.entity.User;
 import com.rhoonart.unearth.user.exception.BadRequestException;
 import com.rhoonart.unearth.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class UserSignUpService {
 
     private final UserInfoService userInfoService;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User signUp(String username, String password, Role role) {
 
@@ -25,7 +27,7 @@ public class UserSignUpService {
         // 2. User 생성 및 저장
         User user = User.builder()
                 .username(username)
-                .password(password) // 비밀번호 암호화
+                .password(passwordEncoder.encode(password)) // 비밀번호 암호화
                 .role(role)
                 .isLoginEnabled(true)
                 .build();
