@@ -218,8 +218,6 @@
                             <label class="form-label">권리자명 <span class="required-star">*</span></label>
                             <input type="text" name="holderName" class="form-control" required />
                         </div>
-                        <input type="hidden" name="username" />
-                        <input type="hidden" name="password" value="1234" />
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -486,9 +484,7 @@ if (form) {
             e.preventDefault();
             return false;
         }
-        // username=holderName, password=1234 자동 설정
-        form.elements['username'].value = form.elements['holderName'].value;
-        form.elements['password'].value = '1234';
+
         // 등록 확인
         if (!confirm('등록하시겠습니까?')) {
             e.preventDefault();

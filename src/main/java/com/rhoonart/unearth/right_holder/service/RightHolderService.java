@@ -28,6 +28,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RightHolderService {
+
+    private static final String INITIAL_PASSWORD = "1234";
+
     private final RightHolderRepository rightHolderRepository;
     private final SongInfoRepository songInfoRepository;
     private final UserSignUpService userSignUpService;
@@ -37,18 +40,20 @@ public class RightHolderService {
 
     /**
      * 권리자 등록
+     * 
      * @param dto
      */
     @Transactional
     public void register(RightHolderRegisterRequestDto dto) {
-        // 1. user 생성
-        User user = userSignUpService.signUp(dto.getUsername(),dto.getPassword(),Role.RIGHT_HOLDER);
+        // 1. user 생성 (권리자명을 username으로 사용, 초기 비밀번호는 1234)
+        User user = userSignUpService.signUp(dto.getHolderName(), INITIAL_PASSWORD, Role.RIGHT_HOLDER);
 
         // 2. 권리자 생성
         rightHolderCreateService.createRightHolder(dto, user);
     }
 
-    public Page<RightHolderListResponseDto> findRightHolders(String holderTypeStr,String contractDateStr, String holderName, int page, int size) {
+    public Page<RightHolderListResponseDto> findRightHolders(String holderTypeStr, String contractDateStr,
+            String holderName, int page, int size) {
 
         // 빈 문자열이면 null로 변환
         HolderType holderType = null;
@@ -97,7 +102,7 @@ public class RightHolderService {
         rightHolderUpdateService.update(rightHolder, dto);
 
         // 3. username 업데이트
-        userUpdateService.updateUsername(rightHolder.getUser(),dto.getHolderName());
+        userUpdateService.updateUsername(rightHolder.getUser(), dto.getHolderName());
     }
 
     @Transactional

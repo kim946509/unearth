@@ -25,10 +25,4 @@ public class RightHolderRegisterRequestDto {
 
     @NotBlank(message = "사업자 이름은 필수입니다.")
     private String holderName;
-
-    @NotBlank(message = "로그인 아이디는 필수입니다.")
-    private String username;
-
-    @NotBlank(message = "로그인 비밀번호는 필수입니다.")
-    private String password;
 }
