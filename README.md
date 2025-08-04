@@ -539,14 +539,3 @@ streaming_crawling
 - **웹 기반 관리**: 직관적인 관리 인터페이스
 - **CSV 대량 등록**: 엑셀 파일을 통한 곡 정보 일괄 등록
 
----
-
-<div align="center">
-
-**Made with ❤️ by the Unearth Team**
-
-[![GitHub stars](https://img.shields.io/github/stars/kim946509/unearth?style=social)](https://github.com/kim946509/unearth/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/kim946509/unearth?style=social)](https://github.com/kim946509/unearth/network)
-[![GitHub issues](https://img.shields.io/github/issues/kim946509/unearth)](https://github.com/kim946509/unearth/issues)
-
-</div>
